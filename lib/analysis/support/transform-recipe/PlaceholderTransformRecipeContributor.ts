@@ -24,7 +24,11 @@ import {
     PushAwareParametersInvocation,
 } from "@atomist/sdm";
 import * as yaml from "yamljs";
-import { ParamInfo, TransformRecipe, TransformRecipeContributor } from "../../../..";
+import {
+    ParamInfo,
+    TransformRecipe,
+    TransformRecipeContributor,
+} from "../../../..";
 
 /**
  * Path to YAML template definitions file
