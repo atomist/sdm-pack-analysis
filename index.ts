@@ -94,3 +94,4 @@ export {
     PreferencesElement,
     preferencesScanner,
 } from "./lib/element/preferences/preferencesScanner";
+export * from "./lib/analysis/support/transform-recipe/PlaceholderTransformRecipeContributor";
