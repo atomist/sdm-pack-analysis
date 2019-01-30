@@ -78,15 +78,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withInterpreter(...interpreters: Interpreter[]): this {
-        for (const interpreter of interpreters) {
-            this.interpreters.push(interpreter);
-            if (isAutofixRegisteringInterpreter(interpreter)) {
-                this.possibleAutofixes.push(...interpreter.autofixes);
-            }
-            if (isCodeInspectionRegisteringInterpreter(interpreter)) {
-                this.possibleCodeInspections.push(...interpreter.codeInspections);
-            }
+    public withInterpreter(interpreter: Interpreter): this {
+        this.interpreters.push(interpreter);
+        if (isAutofixRegisteringInterpreter(interpreter)) {
+            this.possibleAutofixes.push(...interpreter.autofixes);
+        }
+        if (isCodeInspectionRegisteringInterpreter(interpreter)) {
+            this.possibleCodeInspections.push(...interpreter.codeInspections);
         }
         return this;
     }
@@ -95,9 +93,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         if (!!stackSupport.interpreter) {
             this.withInterpreter(stackSupport.interpreter);
         }
-        if (!!stackSupport.transformRecipeContributor) {
-            this.withTransformRecipeContributor(stackSupport.transformRecipeContributor);
-        }
+        (stackSupport.transformRecipeContributors || [])
+            .forEach(trc => this.withTransformRecipeContributor(trc));
         return this.withScanner(stackSupport.scanner);
     }
 

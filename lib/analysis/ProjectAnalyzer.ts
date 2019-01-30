@@ -49,7 +49,7 @@ import { TransformRecipeContributionRegistration } from "./TransformRecipeContri
 export interface ProjectAnalyzer {
 
     /**
-     * Analyze the given project
+     * Analyze the given project in sufficient detail to back delivery.
      * @param {Project} p
      * @param {SdmContext} sdmContext
      * @return {Promise<FullProjectAnalysis>}
@@ -83,7 +83,11 @@ export interface ProjectAnalyzer {
 }
 
 /**
- * Integratated support for a new stack
+ * Integrated support for a new stack.
+ * A scanner is always required.
+ * An Intrepeter is optional, as are
+ * any number of transform recipe contributors to
+ * facilitate use as a seed project.
  */
 export interface StackSupport<T extends TechnologyElement> {
 
@@ -91,7 +95,7 @@ export interface StackSupport<T extends TechnologyElement> {
 
     interpreter?: Interpreter;
 
-    transformRecipeContributor?: TransformRecipeContributionRegistration;
+    transformRecipeContributors?: TransformRecipeContributionRegistration[];
 }
 
 export interface ProjectAnalyzerBuilder {
@@ -106,11 +110,13 @@ export interface ProjectAnalyzerBuilder {
 
     /**
      * Add an interpreter that can interpret the analysis.
-     * Ordering is important
+     * Ordering is important, as interpreters registered later
+     * can choose to stand down if relevant goals have already been
+     * computed by higher priority interpreters.
      * @param {Interpreter} interpreter
      * @return {ProjectAnalyzerBuilder}
      */
-    withInterpreter(...interpreter: Interpreter[]): ProjectAnalyzerBuilder;
+    withInterpreter(interpreter: Interpreter): ProjectAnalyzerBuilder;
 
     /**
      * Add a contributor that can analyze this project as a potential seed
