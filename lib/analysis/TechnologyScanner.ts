@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Atomist, Inc.
+ * Copyright © 2019 Atomist, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-import {
-    ExtensionPack,
-    metadata,
-} from "@atomist/sdm";
+import { Project } from "@atomist/automation-client";
+import { SdmContext } from "@atomist/sdm";
+import { TechnologyElement } from "./ProjectAnalysis";
 
-export const SeedSupport: ExtensionPack = {
-    ...metadata(),
-    configure: sdm => {
-        return sdm;
-    },
-};
+/**
+ * Scan the given project for a particular element
+ */
+export type TechnologyScanner<T extends TechnologyElement> = (p: Project, ctx: SdmContext) => Promise<T | undefined>;

@@ -1,8 +1,12 @@
 {
-  "name": "sdm-pack-analysis",
+  "name": "@atomist/sdm-pack-analysis",
   "version": "0.1.0",
-  "description": "my new project",
-  "author": "cdupuis",
+  "description": "Extension pack for an Atomist SDM to analyze projects and extract technology stacks",
+  "author": {
+    "name": "Atomist",
+    "email": "support@atomist.com",
+    "url": "https://atomist.com/"
+  },
   "license": "Apache-2.0",
   "homepage": "https://github.com/atomist/sdm-pack-analysis#readme",
   "repository": {
@@ -21,16 +25,25 @@
   ],
   "main": "./index.js",
   "types": "./index.d.ts",
-  "dependencies": {},
+  "dependencies": {
+    "@types/git-url-parse": "^9.0.0",
+    "@types/package-json": "^4.0.1",
+    "@types/yamljs": "^0.2.30",
+    "fs-extra": "^7.0.1",
+    "git-url-parse": "^11.1.2",
+    "lodash": "^4.17.11",
+    "ts-essentials": "^1.0.2",
+    "yamljs": "^0.3.0"
+  },
   "peerDependencies": {
     "@atomist/automation-client": "*",
     "@atomist/sdm": "*",
     "@atomist/sdm-core": "*"
   },
   "devDependencies": {
-    "@atomist/automation-client": "^1.2.0",
-    "@atomist/sdm": "^1.2.0",
-    "@atomist/sdm-core": "^1.2.0",
+    "@atomist/automation-client": "1.3.0-master.20190127064847",
+    "@atomist/sdm": "1.3.0-master.20190129205714",
+    "@atomist/sdm-core": "1.3.0-master.20190129203235",
     "@types/mocha": "^5.2.5",
     "@types/power-assert": "^1.5.0",
     "espower-typescript": "^9.0.0",

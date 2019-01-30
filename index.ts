@@ -14,4 +14,83 @@
  * limitations under the License.
  */
 
-export { SeedSupport } from "./lib/seed";
+export { analysis } from "./lib/pack";
+export {
+    assessInspection,
+    ResultDisplayer,
+} from "./lib/analysis/command/assess";
+export { DefaultProjectAnalyzerBuilder } from "./lib/analysis/support/DefaultProjectAnalyzerBuilder";
+export {
+    ElementsGoalsKey,
+    ElementsEnrichGoal,
+} from "./lib/analysis/support/enrichGoal";
+export {
+    registerAutofixes,
+    registerCodeInspections,
+} from "./lib/analysis/support/interpretationDriven";
+export {
+    presenceTestedElementScanner,
+} from "./lib/analysis/support/presenceTestedElementScanner";
+export {
+    allTechnologyElements,
+    isUsableAsSeed,
+} from "./lib/analysis/support/projectAnalysisUtils";
+export {
+    analyzerBuilder,
+} from "./lib/analysis/analyzerBuilder";
+export {
+    testGoals,
+    buildGoals,
+    AutofixRegisteringInterpreter,
+    checkGoals,
+    CodeInspectionRegisteringInterpreter,
+    containerGoals,
+    controlGoals,
+    Interpretation,
+    Interpreter,
+    isAutofixRegisteringInterpreter,
+    isCodeInspectionRegisteringInterpreter,
+} from "./lib/analysis/Interpretation";
+export {
+    BuildPhase,
+    CheckPhase,
+    CiPhases,
+    ContainerPhase,
+    DeployPhase,
+    StartupPhase,
+} from "./lib/analysis/phases";
+export {
+    TechnologyElement,
+    NamedParameter,
+    Dependency,
+    Elements,
+    FullProjectAnalysis,
+    ParamInfo,
+    ProjectAnalysis,
+    SeedAnalysis,
+    Service,
+    Services,
+    TransformRecipe,
+    TransformRecipeRequest,
+} from "./lib/analysis/ProjectAnalysis";
+export {
+    performSeedAnalysis,
+    ProjectAnalyzer,
+    ProjectAnalyzerBuilder,
+    StackSupport,
+} from "./lib/analysis/ProjectAnalyzer";
+export {
+    TechnologyScanner,
+} from "./lib/analysis/TechnologyScanner";
+export {
+    isTechnologyStack,
+    TechnologyStack,
+} from "./lib/analysis/TechnologyStack";
+export {
+    TransformRecipeContributionRegistration,
+    TransformRecipeContributor,
+} from "./lib/analysis/TransformRecipeContributor";
+export {
+    PreferencesElement,
+    preferencesScanner,
+} from "./lib/element/preferences/preferencesScanner";
