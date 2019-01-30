@@ -1,5 +1,8 @@
 # @atomist/sdm-pack-analysis
 
+[![atomist sdm goals](https://badge.atomist.com/T29E48P34/atomist/sdm-pack-analysis/861fefe5-af44-4445-b1b7-7f364712e386)](https://app.atomist.com/workspace/T29E48P34)
+[![npm version](https://img.shields.io/npm/v/@atomist/sdm-pack-analysis.svg)](https://www.npmjs.com/package/@atomist/sdm-pack-anaylsis)
+
 *tba*
 
 ## Getting started
