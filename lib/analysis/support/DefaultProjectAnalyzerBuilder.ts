@@ -128,10 +128,19 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
      * @return
      */
     public async analyze(p: Project, sdmContext: SdmContext): Promise<ProjectAnalysis> {
-        const scanned = (await Promise.all(this.scanners.map(i => i(p, sdmContext)))).filter(r => !!r);
         const elements: Elements = {};
         let services: Services = {};
         const dependencies: Dependency[] = [];
+        const analysis: ProjectAnalysis = {
+            id: p.id as RemoteRepoRef,
+            elements,
+            services,
+            dependencies,
+        };
+
+        const scanned = (await Promise.all(this.scanners.map(i => i(p, sdmContext, analysis))))
+            .filter(r => !!r);
+
         for (const s of scanned) {
             elements[s.name] = s;
             if (!!s.services) {
@@ -144,12 +153,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 dependencies.push(...s.dependencies);
             }
         }
-        return {
-            id: p.id as RemoteRepoRef,
-            elements,
-            services,
-            dependencies,
-        };
+        return analysis;
     }
 
     public async analyzeFully(p: Project, sdmContext: SdmContext): Promise<FullProjectAnalysis> {

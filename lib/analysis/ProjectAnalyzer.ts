@@ -102,7 +102,9 @@ export interface ProjectAnalyzerBuilder {
 
     /**
      * Add a scanner that can discern a technology stack.
-     * Ordering is important
+     * Ordering is important. Later analyzers can see the work
+     * of previous analyzers. This ensure that expensive parsing
+     * can be done only once.
      * @param {TechnologyScanner<T extends TechnologyElement>} i
      * @return {ProjectAnalyzerBuilder}
      */

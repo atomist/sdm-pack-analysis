@@ -16,9 +16,11 @@
 
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
-import { TechnologyElement } from "./ProjectAnalysis";
+import { ProjectAnalysis, TechnologyElement } from "./ProjectAnalysis";
 
 /**
- * Scan the given project for a particular element
+ * Scan the given project for a particular element.
+ * Ordering is significant, as we can see the analysis to date.
  */
-export type TechnologyScanner<T extends TechnologyElement> = (p: Project, ctx: SdmContext) => Promise<T | undefined>;
+export type TechnologyScanner<T extends TechnologyElement> =
+    (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis) => Promise<T | undefined>;
