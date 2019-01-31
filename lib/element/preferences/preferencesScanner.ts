@@ -37,7 +37,6 @@ export const preferencesScanner: TechnologyScanner<PreferencesElement> = async (
     const preferences: PreferencesElement = {
         name: "preferences",
         tags: [],
-        referencedEnvironmentVariables: [],
         disabledGoals: [],
     };
 

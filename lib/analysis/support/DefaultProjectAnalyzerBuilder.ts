@@ -54,6 +54,8 @@ import {
     registerCodeInspections,
 } from "./interpretationDriven";
 
+import * as _ from "lodash";
+
 /**
  * Inspect repos to find tech stack and CI info
  */
@@ -131,11 +133,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         const elements: Elements = {};
         let services: Services = {};
         const dependencies: Dependency[] = [];
+        let referencedEnvironmentVariables: string[] = [];
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
             elements,
             services,
             dependencies,
+            referencedEnvironmentVariables,
         };
 
         const scanned = (await Promise.all(this.scanners.map(i => i(p, sdmContext, analysis))))
@@ -151,6 +155,10 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
             if (!!s.dependencies) {
                 dependencies.push(...s.dependencies);
+            }
+            if (!!s.referencedEnvironmentVariables) {
+                referencedEnvironmentVariables.push(...s.referencedEnvironmentVariables);
+                referencedEnvironmentVariables = _.uniq(referencedEnvironmentVariables);
             }
         }
         return analysis;

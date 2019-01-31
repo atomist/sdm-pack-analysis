@@ -61,6 +61,11 @@ export interface ProjectAnalysis {
 
     dependencies: Dependency[];
 
+    /**
+     * Environment variables referenced in all stacks
+     */
+    referencedEnvironmentVariables: string[];
+
 }
 
 /**
@@ -94,7 +99,7 @@ export interface TechnologyElement {
     /**
      * Names of environment variables referenced by this stack.
      */
-    readonly referencedEnvironmentVariables: string[];
+    readonly referencedEnvironmentVariables?: string[];
 
     readonly services?: Services;
 

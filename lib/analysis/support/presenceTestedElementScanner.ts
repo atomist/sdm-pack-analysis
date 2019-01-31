@@ -32,7 +32,6 @@ export function presenceTestedElementScanner(
         const satisfied = await test(p);
         return satisfied ? {
             ...elementIdentification,
-            referencedEnvironmentVariables: [],
         } :
             undefined;
     };

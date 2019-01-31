@@ -26,7 +26,7 @@ import {
  */
 export interface TechnologyStack extends TechnologyElement {
 
-    readonly projectName: string;
+    readonly projectName?: string;
 
     readonly dependencies?: Dependency[];
 
