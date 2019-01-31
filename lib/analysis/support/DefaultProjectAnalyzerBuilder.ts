@@ -131,9 +131,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
      */
     public async analyze(p: Project, sdmContext: SdmContext): Promise<ProjectAnalysis> {
         const elements: Elements = {};
-        let services: Services = {};
+        const services: Services = {};
         const dependencies: Dependency[] = [];
-        let referencedEnvironmentVariables: string[] = [];
+        const referencedEnvironmentVariables: string[] = [];
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
             elements,
@@ -148,17 +148,14 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         for (const s of scanned) {
             elements[s.name] = s;
             if (!!s.services) {
-                services = {
-                    ...services,
-                    ...s.services,
-                };
+                _.merge(services, s.services);
             }
             if (!!s.dependencies) {
                 dependencies.push(...s.dependencies);
             }
             if (!!s.referencedEnvironmentVariables) {
-                referencedEnvironmentVariables.push(...s.referencedEnvironmentVariables);
-                referencedEnvironmentVariables = _.uniq(referencedEnvironmentVariables);
+                referencedEnvironmentVariables.push(
+                    ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
             }
         }
         return analysis;
