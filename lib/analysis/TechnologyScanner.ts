@@ -16,7 +16,10 @@
 
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
-import { ProjectAnalysis, TechnologyElement } from "./ProjectAnalysis";
+import {
+    ProjectAnalysis,
+    TechnologyElement,
+} from "./ProjectAnalysis";
 
 /**
  * Scan the given project for a particular element.
