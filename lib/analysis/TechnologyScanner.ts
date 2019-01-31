@@ -24,6 +24,10 @@ import {
 /**
  * Scan the given project for a particular element.
  * Ordering is significant, as we can see the analysis to date.
+ * It is important that scanners are efficient, because many may be
+ * invoked on every push. Thus a scanner should determine as quickly
+ * as possible if it should run expensive checks such as parsing,
+ * and should use results in the analysis so far if possible.
  */
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis) => Promise<T | undefined>;
