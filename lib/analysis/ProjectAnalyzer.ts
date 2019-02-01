@@ -42,6 +42,28 @@ import { TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
 /**
+ * Register a TechnologyScanner, specifying when it should be invoked.
+ */
+export interface TechnologyScannerRegistration<T extends TechnologyElement> {
+
+    scanner: TechnologyScanner<T>;
+
+    /**
+     * Test for when this scanner should run,
+     * depending on analysis options.
+     * Default is always.
+     * @param {ProjectAnalysisOptions} options
+     * @return {boolean}
+     */
+    runWhen: (options: ProjectAnalysisOptions) => boolean;
+}
+
+export function isTechnologyScannerRegistration(a: any): a is TechnologyScannerRegistration<any> {
+    const maybe = a as TechnologyScannerRegistration<any>;
+    return !!maybe.scanner;
+}
+
+/**
  * Type with ability to analyze individual projects and determine their delivery.
  * We use a fixed set of goals created ahead of time with function implementations
  * that are parameterized based on analyzing and interpreting the project on push.
@@ -56,15 +78,12 @@ export interface ProjectAnalyzer {
 
     /**
      * Interpret the project, analyzing it first if necessary
-     * @param {Project | FullProjectAnalysis} p
-     * @param {SdmContext} sdmContext
-     * @return {Promise<Interpretation>}
      */
     interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext): Promise<Interpretation>;
 
     readonly interpreters: Interpreter[];
 
-    readonly scanners: Array<TechnologyScanner<any>>;
+    readonly scannerRegistrations: Array<TechnologyScannerRegistration<any>>;
 
     readonly possibleAutofixes: AutofixRegistration[];
 
@@ -84,13 +103,16 @@ export interface ProjectAnalyzer {
  */
 export interface StackSupport<T extends TechnologyElement> {
 
-    scanners: Array<TechnologyScanner<T>>;
+    scanners: Array<TechnologyScanner<T> | TechnologyScannerRegistration<T>>;
 
     interpreters: Interpreter[];
 
     transformRecipeContributors: TransformRecipeContributionRegistration[];
 }
 
+/**
+ * Fluent builder interface we can use to build an immutable ProjectAnalyzer
+ */
 export interface ProjectAnalyzerBuilder {
 
     /**
@@ -98,10 +120,8 @@ export interface ProjectAnalyzerBuilder {
      * Ordering is important. Later analyzers can see the work
      * of previous analyzers. This ensure that expensive parsing
      * can be done only once.
-     * @param {TechnologyScanner<T extends TechnologyElement>} i
-     * @return {ProjectAnalyzerBuilder}
      */
-    withScanner<T extends TechnologyElement>(i: TechnologyScanner<T>): ProjectAnalyzerBuilder;
+    withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

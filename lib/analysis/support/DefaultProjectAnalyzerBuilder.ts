@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-import {
-    Project,
-    RemoteRepoRef,
-} from "@atomist/automation-client";
+import { Project, RemoteRepoRef } from "@atomist/automation-client";
 import { isProject } from "@atomist/automation-client/lib/project/Project";
-import {
-    AutoCodeInspection,
-    Autofix,
-    AutofixRegistration,
-    AutoInspectRegistration,
-    SdmContext,
-} from "@atomist/sdm";
+import { AutoCodeInspection, Autofix, AutofixRegistration, AutoInspectRegistration, SdmContext } from "@atomist/sdm";
 import {
     Interpretation,
     Interpreter,
@@ -42,17 +33,16 @@ import {
     TechnologyElement,
 } from "../ProjectAnalysis";
 import {
+    isTechnologyScannerRegistration,
     performSeedAnalysis,
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
     StackSupport,
+    TechnologyScannerRegistration,
 } from "../ProjectAnalyzer";
 import { TechnologyScanner } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
-import {
-    registerAutofixes,
-    registerCodeInspections,
-} from "./interpretationDriven";
+import { registerAutofixes, registerCodeInspections } from "./interpretationDriven";
 
 import * as _ from "lodash";
 
@@ -61,7 +51,7 @@ import * as _ from "lodash";
  */
 export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAnalyzerBuilder {
 
-    public readonly scanners: Array<TechnologyScanner<any>> = [];
+    public readonly scannerRegistrations: Array<TechnologyScannerRegistration<any>> = [];
 
     public readonly interpreters: Interpreter[] = [];
 
@@ -75,8 +65,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
 
-    public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T>): this {
-        this.scanners.push(scanner);
+    public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): this {
+        this.scannerRegistrations.push(isTechnologyScannerRegistration(scanner) ? scanner : {
+            scanner,
+            runWhen: () => true,
+        });
         return this;
     }
 
@@ -142,7 +135,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             referencedEnvironmentVariables,
         };
 
-        const scanned = (await Promise.all(this.scanners.map(i => i(p, sdmContext, analysis, options))))
+        const scanned = (await Promise.all(this.scannerRegistrations
+            .filter(s => s.runWhen(options))
+            .map(s => s.scanner(p, sdmContext, analysis, options))))
             .filter(r => !!r);
 
         for (const s of scanned) {
