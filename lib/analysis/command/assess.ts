@@ -19,23 +19,23 @@ import {
     CommandListenerInvocation,
 } from "@atomist/sdm";
 import { Interpretation } from "../Interpretation";
-import { FullProjectAnalysis } from "../ProjectAnalysis";
+import { ProjectAnalysis } from "../ProjectAnalysis";
 import { ProjectAnalyzer } from "../ProjectAnalyzer";
 import {
     allTechnologyElements,
     isUsableAsSeed,
 } from "../support/projectAnalysisUtils";
 
-export type ResultDisplayer = (analysis: FullProjectAnalysis, interpret: Interpretation, i: CommandListenerInvocation) => Promise<void>;
+export type ResultDisplayer = (analysis: ProjectAnalysis, interpret: Interpretation, i: CommandListenerInvocation) => Promise<void>;
 
 export function assessInspection(
     analyzer: ProjectAnalyzer,
-    resultDisplayer: ResultDisplayer = displayToSlack): CodeInspectionRegistration<FullProjectAnalysis> {
+    resultDisplayer: ResultDisplayer = displayToSlack): CodeInspectionRegistration<ProjectAnalysis> {
     return {
         name: "assess",
         intent: ["assess", "assess project"],
         inspection: async (p, i) => {
-            return analyzer.analyzeFully(p, i);
+            return analyzer.analyze(p, i, { full: true });
         },
         onInspectionResults: async (results, i) => {
             for (const result of results) {

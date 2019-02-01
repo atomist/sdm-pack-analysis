@@ -36,8 +36,8 @@ import { interpretWith } from "../interpreter";
 import {
     Dependency,
     Elements,
-    FullProjectAnalysis,
     ProjectAnalysis,
+    ProjectAnalysisOptions,
     Services,
     TechnologyElement,
 } from "../ProjectAnalysis";
@@ -129,20 +129,22 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
      * Return a CodeInspection gathering all data
      * @return
      */
-    public async analyze(p: Project, sdmContext: SdmContext): Promise<ProjectAnalysis> {
+    public async analyze(p: Project, sdmContext: SdmContext,
+                         options: ProjectAnalysisOptions = { full: false }): Promise<ProjectAnalysis> {
         const elements: Elements = {};
         const services: Services = {};
         const dependencies: Dependency[] = [];
         const referencedEnvironmentVariables: string[] = [];
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
+            options,
             elements,
             services,
             dependencies,
             referencedEnvironmentVariables,
         };
 
-        const scanned = (await Promise.all(this.scanners.map(i => i(p, sdmContext, analysis))))
+        const scanned = (await Promise.all(this.scanners.map(i => i(p, sdmContext, analysis, options))))
             .filter(r => !!r);
 
         for (const s of scanned) {
@@ -158,10 +160,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
             }
         }
-        return analysis;
-    }
 
-    public async analyzeFully(p: Project, sdmContext: SdmContext): Promise<FullProjectAnalysis> {
         const initialAnalysis = await this.analyze(p, sdmContext);
         const seedAnalysis = await performSeedAnalysis(p, initialAnalysis, this.transformRecipeContributorRegistrations, sdmContext);
         return {

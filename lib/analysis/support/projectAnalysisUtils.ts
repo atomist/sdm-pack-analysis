@@ -15,7 +15,6 @@
  */
 
 import {
-    FullProjectAnalysis,
     ProjectAnalysis,
     TechnologyElement,
 } from "../ProjectAnalysis";
@@ -30,7 +29,10 @@ export function allTechnologyElements(projectAnalysis: ProjectAnalysis): Technol
 /**
  * Is this project usable as a seed?
  */
-export function isUsableAsSeed(fpa: FullProjectAnalysis): boolean {
+export function isUsableAsSeed(fpa: ProjectAnalysis): boolean {
+    if (!fpa.seedAnalysis) {
+        return false;
+    }
     const parameters = _.flatten(fpa.seedAnalysis.transformRecipes.filter(tr => tr.optional).map(tr => tr.recipe.parameters));
     return parameters.length > 0;
 }

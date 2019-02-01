@@ -44,11 +44,24 @@ export interface Dependency {
 }
 
 /**
+ * Options with which the analysis was performed
+ */
+export interface ProjectAnalysisOptions {
+    full: boolean;
+}
+
+/**
  * An analysis of the various facets of a project.
  * An analysis doesn't involve decisions about how to process the project:
  * That is the role of an Interpretation.
  */
 export interface ProjectAnalysis {
+
+    /**
+     * Options used to perform this analysis.
+     * Will determine whether optional fields are available.
+     */
+    options: ProjectAnalysisOptions;
 
     readonly id: RemoteRepoRef;
 
@@ -57,24 +70,19 @@ export interface ProjectAnalysis {
     /**
      * Services we depend on
      */
-    services: Services;
+    readonly services: Services;
 
-    dependencies: Dependency[];
+    readonly dependencies: Dependency[];
 
     /**
      * Environment variables referenced in all stacks
      */
-    referencedEnvironmentVariables: string[];
+    readonly referencedEnvironmentVariables: string[];
 
-}
-
-/**
- * Full analysis for purposes beyond delivery, adding seed analysis.
- * Can be persisted.
- */
-export interface FullProjectAnalysis extends ProjectAnalysis {
-
-    readonly seedAnalysis: SeedAnalysis;
+    /**
+     * Only available on a full analysis
+     */
+    readonly seedAnalysis?: SeedAnalysis;
 
 }
 

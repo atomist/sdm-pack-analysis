@@ -18,6 +18,7 @@ import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
 import {
     ProjectAnalysis,
+    ProjectAnalysisOptions,
     TechnologyElement,
 } from "./ProjectAnalysis";
 
@@ -28,6 +29,7 @@ import {
  * invoked on every push. Thus a scanner should determine as quickly
  * as possible if it should run expensive checks such as parsing,
  * and should use results in the analysis so far if possible.
+ * Scanners that can analyse to varying depth should check the options parameter.
  */
 export type TechnologyScanner<T extends TechnologyElement> =
-    (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis) => Promise<T | undefined>;
+    (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;

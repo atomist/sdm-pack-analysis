@@ -64,7 +64,6 @@ export {
     NamedParameter,
     Dependency,
     Elements,
-    FullProjectAnalysis,
     ParamInfo,
     ProjectAnalysis,
     SeedAnalysis,

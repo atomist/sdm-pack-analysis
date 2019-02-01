@@ -31,8 +31,8 @@ import {
     Interpreter,
 } from "./Interpretation";
 import {
-    FullProjectAnalysis,
     ProjectAnalysis,
+    ProjectAnalysisOptions,
     SeedAnalysis,
     TechnologyElement,
     TransformRecipe,
@@ -49,17 +49,13 @@ import { TransformRecipeContributionRegistration } from "./TransformRecipeContri
 export interface ProjectAnalyzer {
 
     /**
-     * Analyze the given project in sufficient detail to back delivery.
+     * Analyze the given project. Analysis will always be in sufficient detail to back delivery.
+     * If options are provided and specify a full analysis, go deeper.
      * @param {Project} p
      * @param {SdmContext} sdmContext
      * @return {Promise<FullProjectAnalysis>}
      */
-    analyze(p: Project, sdmContext: SdmContext): Promise<ProjectAnalysis>;
-
-    /**
-     * Perform a full analysis of the project, going beyond what is necessary for delivery.
-     */
-    analyzeFully(p: Project, sdmContext: SdmContext): Promise<FullProjectAnalysis>;
+    analyze(p: Project, sdmContext: SdmContext, options?: ProjectAnalysisOptions): Promise<ProjectAnalysis>;
 
     /**
      * Interpret the project, analyzing it first if necessary
