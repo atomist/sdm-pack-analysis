@@ -24,7 +24,10 @@ import {
     PushAwareParametersInvocation,
 } from "@atomist/sdm";
 import * as yaml from "yamljs";
-import { ParamInfo, TransformRecipe } from "../../ProjectAnalysis";
+import {
+    ParamInfo,
+    TransformRecipe,
+} from "../../ProjectAnalysis";
 import { TransformRecipeContributor } from "../../TransformRecipeContributor";
 
 /**
