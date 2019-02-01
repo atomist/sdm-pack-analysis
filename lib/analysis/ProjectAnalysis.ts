@@ -53,7 +53,9 @@ export interface ProjectAnalysisOptions {
 /**
  * An analysis of the various facets of a project.
  * An analysis doesn't involve decisions about how to process the project:
- * That is the role of an Interpretation.
+ * That is the role of an Interpretation. It merely provides the background information,
+ * so that Interpreters don't need to refer to the project.
+ * Analyses can be persisted.
  */
 export interface ProjectAnalysis {
 
@@ -65,6 +67,9 @@ export interface ProjectAnalysis {
 
     readonly id: RemoteRepoRef;
 
+    /**
+     * Techology elements we've found in this project.
+     */
     readonly elements: Elements;
 
     /**
@@ -72,21 +77,24 @@ export interface ProjectAnalysis {
      */
     readonly services: Services;
 
+    /**
+     * Dependencies of this project.
+     */
     readonly dependencies: Dependency[];
 
     /**
-     * Environment variables referenced in all stacks
+     * Environment variables referenced in all elements
      */
     readonly referencedEnvironmentVariables: string[];
 
     /**
+     * Analysis of this project as a potential seed
      * Only available on a full analysis
      */
     seedAnalysis?: SeedAnalysis;
 
 }
 
-// TODO align with fingerprints
 /**
  * Instance of a known element type, such as NodeTechnologyElement,
  * in a specific project.
@@ -109,6 +117,9 @@ export interface TechnologyElement {
      */
     readonly referencedEnvironmentVariables?: string[];
 
+    /**
+     * Any services required by this element
+     */
     readonly services?: Services;
 
 }

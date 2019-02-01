@@ -21,7 +21,7 @@ import {
     AutoInspectRegistration,
     goals,
     Goals,
-    GoalWithPrecondition,
+    GoalWithPrecondition, PushTest,
     SdmContext,
 } from "@atomist/sdm";
 import { PreferencesElement } from "../element/preferences/preferencesScanner";
@@ -44,13 +44,20 @@ export interface Interpretation extends CiPhases {
         readonly chosenInterpreters: Interpreter[];
     };
 
+    /**
+     * If this is set, determines if a push constitutes a material
+     * change to the repo. This varies depending on the technology stack.
+     * Allows consistent handling of non-material changes across
+     * all technologies.
+     */
+    readonly materialChangePushTest?: PushTest;
+
     readonly autofixes: AutofixRegistration[];
     readonly inspections: Array<AutoInspectRegistration<any, any>>;
 
     readonly autofixGoal: Autofix;
     readonly codeInspectionGoal: AutoCodeInspection;
 
-    // TODO consider invariants
 }
 
 /**
