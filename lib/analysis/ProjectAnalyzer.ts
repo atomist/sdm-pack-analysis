@@ -78,7 +78,7 @@ export interface ProjectAnalyzer {
 /**
  * Integrated support for a new stack.
  * At least one scanner is always required.
- * Interpeters are optional, as are
+ * Interpreters are optional, as are
  * any number of transform recipe contributors to
  * facilitate use as a seed project.
  */
