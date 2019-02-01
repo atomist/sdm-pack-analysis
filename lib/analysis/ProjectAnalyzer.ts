@@ -77,18 +77,18 @@ export interface ProjectAnalyzer {
 
 /**
  * Integrated support for a new stack.
- * A scanner is always required.
- * An Intrepeter is optional, as are
+ * At least one scanner is always required.
+ * Interpeters are optional, as are
  * any number of transform recipe contributors to
  * facilitate use as a seed project.
  */
 export interface StackSupport<T extends TechnologyElement> {
 
-    scanner: TechnologyScanner<T>;
+    scanners: Array<TechnologyScanner<T>>;
 
-    interpreter?: Interpreter;
+    interpreters: Interpreter[];
 
-    transformRecipeContributors?: TransformRecipeContributionRegistration[];
+    transformRecipeContributors: TransformRecipeContributionRegistration[];
 }
 
 export interface ProjectAnalyzerBuilder {

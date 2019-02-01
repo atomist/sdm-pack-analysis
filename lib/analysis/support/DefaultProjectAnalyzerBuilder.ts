@@ -92,12 +92,10 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public withStack<T extends TechnologyElement>(stackSupport: StackSupport<T>): this {
-        if (!!stackSupport.interpreter) {
-            this.withInterpreter(stackSupport.interpreter);
-        }
-        (stackSupport.transformRecipeContributors || [])
-            .forEach(trc => this.withTransformRecipeContributor(trc));
-        return this.withScanner(stackSupport.scanner);
+        stackSupport.scanners.forEach(this.withScanner);
+        stackSupport.interpreters.forEach(this.withInterpreter);
+        stackSupport.transformRecipeContributors.forEach(this.withTransformRecipeContributor);
+        return this;
     }
 
     public withTransformRecipeContributor(trc: TransformRecipeContributionRegistration): this {
