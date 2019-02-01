@@ -82,7 +82,7 @@ export interface ProjectAnalysis {
     /**
      * Only available on a full analysis
      */
-    readonly seedAnalysis?: SeedAnalysis;
+    seedAnalysis?: SeedAnalysis;
 
 }
 

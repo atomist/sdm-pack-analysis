@@ -161,11 +161,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        const initialAnalysis = await this.analyze(p, sdmContext);
-        const seedAnalysis = await performSeedAnalysis(p, initialAnalysis, this.transformRecipeContributorRegistrations, sdmContext);
-        return {
-            ...initialAnalysis,
-            seedAnalysis,
-        };
+        if (options && options.full) {
+            analysis.seedAnalysis = await performSeedAnalysis(p, analysis, this.transformRecipeContributorRegistrations, sdmContext);
+        }
+        return analysis;
     }
 }

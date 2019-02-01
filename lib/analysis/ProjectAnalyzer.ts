@@ -51,9 +51,6 @@ export interface ProjectAnalyzer {
     /**
      * Analyze the given project. Analysis will always be in sufficient detail to back delivery.
      * If options are provided and specify a full analysis, go deeper.
-     * @param {Project} p
-     * @param {SdmContext} sdmContext
-     * @return {Promise<FullProjectAnalysis>}
      */
     analyze(p: Project, sdmContext: SdmContext, options?: ProjectAnalysisOptions): Promise<ProjectAnalysis>;
 
