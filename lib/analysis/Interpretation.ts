@@ -21,7 +21,8 @@ import {
     AutoInspectRegistration,
     goals,
     Goals,
-    GoalWithPrecondition, PushTest,
+    GoalWithPrecondition,
+    PushTest,
     SdmContext,
 } from "@atomist/sdm";
 import { PreferencesElement } from "../element/preferences/preferencesScanner";
