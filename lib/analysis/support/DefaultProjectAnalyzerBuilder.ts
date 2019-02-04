@@ -123,8 +123,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public async interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext): Promise<Interpretation> {
-        const analysis = isProject(p) ? await this.analyze(p, sdmContext) : p;
+    public async interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext,
+                           options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
+        const analysis = isProject(p) ? await this.analyze(p, sdmContext, options) : p;
         return interpretWith(this, analysis, sdmContext);
     }
 

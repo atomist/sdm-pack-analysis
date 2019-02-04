@@ -79,7 +79,7 @@ export interface ProjectAnalyzer {
     /**
      * Interpret the project, analyzing it first if necessary
      */
-    interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext): Promise<Interpretation>;
+    interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext, options?: ProjectAnalysisOptions): Promise<Interpretation>;
 
     readonly interpreters: Interpreter[];
 
