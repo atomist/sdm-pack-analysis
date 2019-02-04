@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-import { astUtils, MicrogrammarBasedFileParser } from "@atomist/automation-client";
-import { Grammar, microgrammar, skipTo } from "@atomist/microgrammar";
+import {
+    astUtils,
+    MicrogrammarBasedFileParser,
+} from "@atomist/automation-client";
+import {
+    Grammar,
+    microgrammar,
+    skipTo,
+} from "@atomist/microgrammar";
 import { CodeTransform } from "@atomist/sdm";
 import { TransformRecipe } from "../../ProjectAnalysis";
 import { TransformRecipeContributor } from "../../TransformRecipeContributor";
