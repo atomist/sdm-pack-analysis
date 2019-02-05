@@ -35,6 +35,7 @@ export async function interpretWith(projectAnalyzer: ProjectAnalyzer,
         },
         autofixes: [],
         inspections: [],
+        materialChangePushTests: [],
 
         autofixGoal: projectAnalyzer.autofixGoal,
         codeInspectionGoal: projectAnalyzer.codeInspectionGoal,

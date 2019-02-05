@@ -46,12 +46,12 @@ export interface Interpretation extends CiPhases {
     };
 
     /**
-     * If this is set, determines if a push constitutes a material
-     * change to the repo. This varies depending on the technology stack.
+     * List of push tests determining if a change is a marterial change.
+     * This varies depending on the technology stack.
      * Allows consistent handling of non-material changes across
      * all technologies.
      */
-    readonly materialChangePushTest?: PushTest;
+    readonly materialChangePushTests: PushTest[];
 
     readonly autofixes: AutofixRegistration[];
     readonly inspections: Array<AutoInspectRegistration<any, any>>;
