@@ -68,7 +68,7 @@ export interface ProjectAnalysis {
     readonly id: RemoteRepoRef;
 
     /**
-     * Techology elements we've found in this project.
+     * Technology elements we've found in this project.
      */
     readonly elements: Elements;
 
