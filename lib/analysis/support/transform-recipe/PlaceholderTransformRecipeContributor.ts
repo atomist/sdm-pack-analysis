@@ -115,7 +115,7 @@ export class PlaceholderTransformRecipeContributor implements TransformRecipeCon
      * Create a new PlaceholderTransformRecipeContributor.
      * It is possible to define alternative or additional placeholder expansions
      * and additional well known parameters.
-     * @param {RegExp[]} placeholder pattenrs. Placeholders must be specified with /g
+     * @param {RegExp[]} placeholders placeholder patterns. Placeholders must be specified with /g
      * and must define a single capture group for the actual value.
      * @param customParameterDefinitions definitions of additional well known parameters
      */
@@ -185,5 +185,5 @@ function addWellKnownParameters(wellKnownParameterDefinitions: WellKnownParamete
 }
 
 function toPlaceholderParameters(defs: WellKnownParameterDefinition[]): Array<WellKnownParameterDefinition & PlaceholderParameter> {
-    return defs.map(def => ({ ...def, literal: "$" + def.name + "$" }));
+    return defs.map(def => ({ ...def, literal: "$$" + def.name + "$$" }));
 }
