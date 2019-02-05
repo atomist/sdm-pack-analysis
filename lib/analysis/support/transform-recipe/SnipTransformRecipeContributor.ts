@@ -35,7 +35,7 @@ export interface SnipOptions {
     rightDelim: string;
 }
 
-function snipTransform(opts: SnipOptions): CodeTransform {
+export function snipTransform(opts: SnipOptions): CodeTransform {
     return async p => {
         await astUtils.zapAllMatches(p,
             new MicrogrammarBasedFileParser("file", "toSnip", toSnip(opts)),
