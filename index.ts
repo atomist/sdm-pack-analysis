@@ -27,6 +27,7 @@ export {
 export {
     registerAutofixes,
     registerCodeInspections,
+    materialChange,
 } from "./lib/analysis/support/interpretationDriven";
 export {
     presenceTestedElementScanner,

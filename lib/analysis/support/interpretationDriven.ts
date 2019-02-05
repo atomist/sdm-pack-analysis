@@ -17,13 +17,17 @@
 import {
     allSatisfied,
     AnyPush,
+    anySatisfied,
     AutoCodeInspection,
     Autofix,
     AutofixRegistration,
     AutoInspectRegistration,
+    not,
     pushTest,
     PushTest,
+    StatefulPushListenerInvocation,
 } from "@atomist/sdm";
+import { Interpretation } from "../Interpretation";
 import { ProjectAnalyzer } from "../ProjectAnalyzer";
 
 function interpretationAutofixPushTest(thisTransform: AutofixRegistration, analyzer: ProjectAnalyzer): PushTest {
@@ -59,5 +63,13 @@ export function registerCodeInspections(codeInspectionGoal: AutoCodeInspection, 
                 interpretationCodeInspectionPushTest(codeInspectionRegistration, analyzer),
                 codeInspectionRegistration.pushTest || AnyPush),
         });
+    }
+}
+
+export async function materialChange(pu: StatefulPushListenerInvocation<{interpretation: Interpretation}>): Promise<boolean> {
+    if (!!pu.facts.interpretation.materialChangePushTests && pu.facts.interpretation.materialChangePushTests.length > 0) {
+        return not(anySatisfied(...pu.facts.interpretation.materialChangePushTests)).mapping(pu);
+    } else {
+        return false;
     }
 }
