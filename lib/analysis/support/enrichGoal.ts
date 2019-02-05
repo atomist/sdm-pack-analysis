@@ -22,7 +22,7 @@ import {
 } from "@atomist/sdm";
 import * as _ from "lodash";
 
-export const ElementsGoalsKey = "atomist:sdm/technologyAnalysis/elements";
+export const ElementsGoalsKey = "@atomist/sdm-pack-analysis/elements";
 
 export const ElementsEnrichGoal: EnrichGoal = async (goal: SdmGoalMessage, pli: PushListenerInvocation) => {
     // Add recorded elements into the goal for later retrieval
