@@ -23,12 +23,14 @@ import {
 import * as _ from "lodash";
 
 export const ElementsGoalsKey = "@atomist/sdm-pack-analysis/elements";
+export const ServicesGoalsKey = "@atomist/sdm-pack-analysis/services";
 
 export const ElementsEnrichGoal: EnrichGoal = async (goal: SdmGoalMessage, pli: PushListenerInvocation) => {
     // Add recorded elements into the goal for later retrieval
     if (!!(pli as StatefulPushListenerInvocation<any>).facts) {
         const data: any = {};
         data[ElementsGoalsKey] = _.get(pli, "facts.interpretation.reason.analysis.elements");
+        data[ServicesGoalsKey] = _.get(pli, "facts.interpretation.reason.analysis.services");
         goal.data = JSON.stringify(data);
     }
     return goal;
