@@ -3,7 +3,20 @@
 [![atomist sdm goals](https://badge.atomist.com/T29E48P34/atomist/sdm-pack-analysis/861fefe5-af44-4445-b1b7-7f364712e386)](https://app.atomist.com/workspace/T29E48P34)
 [![npm version](https://img.shields.io/npm/v/@atomist/sdm-pack-analysis.svg)](https://www.npmjs.com/package/@atomist/sdm-pack-anaylsis)
 
-*tba*
+This project defines two stages of project analysis, which can be used to
+drive delivery decisions and to classify projects.
+
+The two stages are:
+
+- _Project Analysis_: First phase. Takes the project source code and
+builds an analysis that may be persisted. The most important part of
+a `ProjectAnalysis` is the `elements` property, whose value is an indexed type which values
+of type `TechnologyElement`. Because a `ProjectAnalysis` is designed to be
+serialized and persisted it contains only data, and no functions.
+- _Interpretation_: Second phase. Requires a `ProjectAnalysis` but not source
+code, so can be run on persisted analyses. An `Interpretation` is computed
+when necessary and not serialized to JSON, so it can specify functions and
+delivery goals.
 
 ## Getting started
 
