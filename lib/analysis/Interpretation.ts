@@ -75,7 +75,7 @@ export interface Interpreter {
     setAnalyzer?(analyzer: ProjectAnalyzer): void;
 
     /**
-     *
+     * Enrich the given interpretation
      * @param {Interpretation} interpretation
      * @param sdmContext context to compute in
      * @return {Promise<boolean>} whether enrichment was made

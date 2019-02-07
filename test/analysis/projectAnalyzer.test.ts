@@ -15,34 +15,80 @@
  */
 
 import { InMemoryProject } from "@atomist/automation-client";
+import { goals } from "@atomist/sdm";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
+import { Interpreter } from "../../lib/analysis/Interpretation";
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 
 describe("projectAnalyzer", () => {
 
-    it("should pull up services", async () => {
-        const p = InMemoryProject.of();
-        const analysis = await analyzerBuilder().withScanner(toyScanner).build()
-            .analyze(p, undefined);
-        assert.deepStrictEqual(analysis.elements.toy.services, {
-            riak: {},
-            rabbitmq: {},
-            memcached: {},
+    describe("analysis", () => {
+
+        it("should pull up services", async () => {
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder().withScanner(toyScanner).build()
+                .analyze(p, undefined);
+            assert.deepStrictEqual(analysis.elements.toy.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+            assert.deepStrictEqual(analysis.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
         });
-        assert.deepStrictEqual(analysis.services, {
-            riak: {},
-            rabbitmq: {},
-            memcached: {},
+
+        it("should merge environment variables without duplication", async () => {
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder().withScanner(toyScanner).withScanner(toy2Scanner).build()
+                .analyze(p, undefined);
+            assert.deepStrictEqual(analysis.referencedEnvironmentVariables, ["frogs", "dogs"]);
         });
+
     });
 
-    it("should merge environment variables without duplication", async () => {
-        const p = InMemoryProject.of();
-        const analysis = await analyzerBuilder().withScanner(toyScanner).withScanner(toy2Scanner).build()
-            .analyze(p, undefined);
-        assert.deepStrictEqual(analysis.referencedEnvironmentVariables, ["frogs", "dogs"]);
+    describe("interpretation", () => {
+
+        it("should expose analysis", async () => {
+            const p = InMemoryProject.of();
+            const interpretation = await analyzerBuilder().withScanner(toyScanner).build()
+                .interpret(p, undefined);
+            assert.deepStrictEqual(interpretation.reason.analysis.elements.toy.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+            assert.deepStrictEqual(interpretation.reason.analysis.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+        });
+
+        it("should attach goal", async () => {
+            let count = 0;
+            const bi: Interpreter = {
+                enrich: async i => {
+                    ++count;
+                    if (!!i.reason.analysis.elements.toy) {
+                        assert(!i.deployGoals);
+                        i.deployGoals = goals("whatever");
+                        return true;
+                    }
+                    return false;
+                },
+            };
+            const p = InMemoryProject.of();
+            const interpretation = await analyzerBuilder().withScanner(toyScanner).withInterpreter(bi).build()
+                .interpret(p, undefined);
+            assert.strictEqual(count, 1, "Should have invoked interpreter");
+            assert(interpretation.deployGoals, "Interpreter should have set deploy goal");
+        });
+
     });
 
 });

@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-import {
-    Project,
-    RemoteRepoRef,
-} from "@atomist/automation-client";
+import { Project, RemoteRepoRef } from "@atomist/automation-client";
 import { isProject } from "@atomist/automation-client/lib/project/Project";
 import {
     AutoCodeInspection,
     Autofix,
     AutofixRegistration,
     AutoInspectRegistration,
+    Queue,
     SdmContext,
 } from "@atomist/sdm";
 import {
@@ -32,7 +30,6 @@ import {
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
-import { interpretWith } from "../interpreter";
 import {
     Dependency,
     Elements,
@@ -51,10 +48,7 @@ import {
 } from "../ProjectAnalyzer";
 import { TechnologyScanner } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
-import {
-    registerAutofixes,
-    registerCodeInspections,
-} from "./interpretationDriven";
+import { registerAutofixes, registerCodeInspections } from "./interpretationDriven";
 
 import * as _ from "lodash";
 
@@ -76,6 +70,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     public readonly autofixGoal: Autofix = new Autofix({ isolate: true });
 
     public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
+
+    private readonly queueGoal: Queue = new Queue({ concurrent: 2, fetch: 20 });
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): this {
         this.scannerRegistrations.push(isTechnologyScannerRegistration(scanner) ? scanner : {
@@ -126,7 +122,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     public async interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext,
                            options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
         const analysis = isProject(p) ? await this.analyze(p, sdmContext, options) : p;
-        return interpretWith(this, analysis, sdmContext);
+        return this.runInterpretation(analysis, sdmContext);
     }
 
     /**
@@ -173,4 +169,32 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
         return analysis;
     }
+
+    private async runInterpretation(
+        analysis: ProjectAnalysis,
+        sdmContext: SdmContext): Promise<Interpretation | undefined> {
+        const interpretation: Interpretation = {
+            reason: {
+                analysis,
+                availableInterpreters: this.interpreters,
+                chosenInterpreters: [],
+            },
+            autofixes: [],
+            inspections: [],
+            materialChangePushTests: [],
+            autofixGoal: this.autofixGoal,
+            codeInspectionGoal: this.codeInspectionGoal,
+            queueGoal: this.queueGoal,
+        };
+
+        for (const interpreter of this.interpreters) {
+            const enriched = await interpreter.enrich(interpretation, sdmContext);
+            if (enriched) {
+                interpretation.reason.chosenInterpreters.push(interpreter);
+            }
+        }
+
+        return interpretation;
+    }
+
 }

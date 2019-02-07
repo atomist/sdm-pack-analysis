@@ -37,6 +37,9 @@ export type Services = Record<string, Service>;
 
 export type Elements = Record<string, TechnologyElement>;
 
+/**
+ * Cross-platform representation of a dependency
+ */
 export interface Dependency {
     group?: string;
     artifact: string;
