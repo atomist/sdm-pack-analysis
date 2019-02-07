@@ -133,7 +133,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
      * Return a CodeInspection gathering all data
      * @return
      */
-    public async analyze(p: Project, sdmContext: SdmContext,
+    public async analyze(p: Project,
+                         sdmContext: SdmContext,
                          options: ProjectAnalysisOptions = { full: false }): Promise<ProjectAnalysis> {
         const elements: Elements = {};
         const services: Services = {};
