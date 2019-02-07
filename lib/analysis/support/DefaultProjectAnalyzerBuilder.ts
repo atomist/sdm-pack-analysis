@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { Project, RemoteRepoRef } from "@atomist/automation-client";
+import {
+    Project,
+    RemoteRepoRef,
+} from "@atomist/automation-client";
 import { isProject } from "@atomist/automation-client/lib/project/Project";
 import {
     AutoCodeInspection,
@@ -48,7 +51,10 @@ import {
 } from "../ProjectAnalyzer";
 import { TechnologyScanner } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
-import { registerAutofixes, registerCodeInspections } from "./interpretationDriven";
+import {
+    registerAutofixes,
+    registerCodeInspections,
+} from "./interpretationDriven";
 
 import * as _ from "lodash";
 
