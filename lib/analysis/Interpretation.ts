@@ -46,7 +46,7 @@ export interface Interpretation extends CiPhases {
     };
 
     /**
-     * List of push tests determining if a change is a marterial change.
+     * List of push tests determining if a change is a material change.
      * This varies depending on the technology stack.
      * Allows consistent handling of non-material changes across
      * all technologies.
