@@ -47,6 +47,7 @@ export {
     CodeInspectionRegisteringInterpreter,
     containerGoals,
     controlGoals,
+    deployGoals,
     Interpretation,
     Interpreter,
     isAutofixRegisteringInterpreter,
