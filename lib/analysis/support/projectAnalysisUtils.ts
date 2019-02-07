@@ -33,6 +33,8 @@ export function isUsableAsSeed(fpa: ProjectAnalysis): boolean {
     if (!fpa.seedAnalysis) {
         return false;
     }
-    const parameters = _.flatten(fpa.seedAnalysis.transformRecipes.filter(tr => tr.optional).map(tr => tr.recipe.parameters));
+    const parameters = _.flatten(fpa.seedAnalysis.transformRecipes
+        .filter(tr => !tr.optional)
+        .map(tr => tr.recipe.parameters));
     return parameters.length > 0;
 }
