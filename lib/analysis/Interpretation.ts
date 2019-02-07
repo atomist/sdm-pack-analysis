@@ -162,7 +162,8 @@ export function containerGoals(interpretation: Interpretation, analyzer: Project
 }
 
 export function deployGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
-    const preCondition = containerGoals(interpretation, analyzer) || testGoals(interpretation, analyzer) || buildGoals(interpretation, analyzer) || checkGoals(interpretation, analyzer);
+    const preCondition = containerGoals(interpretation, analyzer) || testGoals(interpretation, analyzer)
+        || buildGoals(interpretation, analyzer) || checkGoals(interpretation, analyzer);
     const startup = controlGoals(interpretation);
     if (!!interpretation.deployGoals) {
         interpretation.deployGoals.goals.forEach(
