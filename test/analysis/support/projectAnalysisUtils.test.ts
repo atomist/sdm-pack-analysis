@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import * as assert from "assert";
 import { ProjectAnalysis } from "../../../lib/analysis/ProjectAnalysis";
 import { isUsableAsSeed } from "../../../lib/analysis/support/projectAnalysisUtils";
-import * as assert from "assert";
 
 describe("projectAnalysisUtils", () => {
 
