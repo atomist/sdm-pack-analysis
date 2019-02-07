@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-import { logger, Project } from "@atomist/automation-client";
-import { AutoCodeInspection, Autofix, AutofixRegistration, AutoInspectRegistration, SdmContext } from "@atomist/sdm";
+import {
+    logger,
+    Project,
+} from "@atomist/automation-client";
+import {
+    AutoCodeInspection,
+    Autofix,
+    AutofixRegistration,
+    AutoInspectRegistration,
+    SdmContext,
+} from "@atomist/sdm";
 import * as _ from "lodash";
-import { Interpretation, Interpreter } from "./Interpretation";
+import {
+    Interpretation,
+    Interpreter,
+} from "./Interpretation";
 import {
     ProjectAnalysis,
     ProjectAnalysisOptions,
