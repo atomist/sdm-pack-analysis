@@ -19,6 +19,7 @@ import { goals } from "@atomist/sdm";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
 import { Interpreter } from "../../lib/analysis/Interpretation";
+import { Scorer } from "../../lib/analysis/ProjectAnalyzer";
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 
@@ -87,6 +88,24 @@ describe("projectAnalyzer", () => {
                 .interpret(p, undefined);
             assert.strictEqual(count, 1, "Should have invoked interpreter");
             assert(interpretation.deployGoals, "Interpreter should have set deploy goal");
+        });
+
+        it("should attach single score with default weight", async () => {
+            let count = 0;
+            const bi: Scorer = async i => {
+                ++count;
+                assert(!i.scores.thing);
+                return {
+                    name: "thing",
+                    score: 4,
+                };
+            };
+            const p = InMemoryProject.of();
+            const interpretation = await analyzerBuilder().withScorer(bi).build()
+                .interpret(p, undefined);
+            assert.strictEqual(count, 1, "Should have invoked scorer");
+            assert(interpretation.scores.thing, "Score should have been attached");
+            assert.strictEqual(interpretation.scores.thing.score, 4);
         });
 
     });

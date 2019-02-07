@@ -29,6 +29,7 @@ import { PreferencesElement } from "../element/preferences/preferencesScanner";
 import { CiPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
+import { Scores } from "./Score";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
@@ -58,6 +59,8 @@ export interface Interpretation extends CiPhases {
 
     readonly autofixGoal: Autofix;
     readonly codeInspectionGoal: AutoCodeInspection;
+
+    readonly scores: Scores;
 
 }
 

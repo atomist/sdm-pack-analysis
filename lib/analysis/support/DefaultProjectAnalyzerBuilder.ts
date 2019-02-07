@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    Project,
-    RemoteRepoRef,
-} from "@atomist/automation-client";
+import { Project, RemoteRepoRef } from "@atomist/automation-client";
 import { isProject } from "@atomist/automation-client/lib/project/Project";
 import {
     AutoCodeInspection,
@@ -46,15 +43,13 @@ import {
     performSeedAnalysis,
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
+    Scorer,
     StackSupport,
     TechnologyScannerRegistration,
 } from "../ProjectAnalyzer";
 import { TechnologyScanner } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
-import {
-    registerAutofixes,
-    registerCodeInspections,
-} from "./interpretationDriven";
+import { registerAutofixes, registerCodeInspections } from "./interpretationDriven";
 
 import * as _ from "lodash";
 
@@ -77,6 +72,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
 
+    private readonly scorers: Scorer[] = [];
+
     private readonly queueGoal: Queue = new Queue({ concurrent: 2, fetch: 20 });
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): this {
@@ -98,10 +95,16 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
+    public withScorer(scorer: Scorer): ProjectAnalyzerBuilder {
+        this.scorers.push(scorer);
+        return this;
+    }
+
     public withStack<T extends TechnologyElement>(stackSupport: StackSupport<T>): this {
         stackSupport.scanners.forEach(s => this.withScanner(s));
         stackSupport.interpreters.forEach(i => this.withInterpreter(i));
         stackSupport.transformRecipeContributors.forEach(trc => this.withTransformRecipeContributor(trc));
+        (stackSupport.scorers || []).forEach(scorer => this.withScorer(scorer));
         return this;
     }
 
@@ -191,6 +194,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             autofixGoal: this.autofixGoal,
             codeInspectionGoal: this.codeInspectionGoal,
             queueGoal: this.queueGoal,
+            scores: {},
         };
 
         for (const interpreter of this.interpreters) {
@@ -198,6 +202,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             if (enriched) {
                 interpretation.reason.chosenInterpreters.push(interpreter);
             }
+        }
+
+        for (const scorer of this.scorers) {
+            const score = await scorer(interpretation, sdmContext);
+            interpretation.scores[score.name] = score;
         }
 
         return interpretation;

@@ -14,22 +14,10 @@
  * limitations under the License.
  */
 
-import {
-    logger,
-    Project,
-} from "@atomist/automation-client";
-import {
-    AutoCodeInspection,
-    Autofix,
-    AutofixRegistration,
-    AutoInspectRegistration,
-    SdmContext,
-} from "@atomist/sdm";
+import { logger, Project } from "@atomist/automation-client";
+import { AutoCodeInspection, Autofix, AutofixRegistration, AutoInspectRegistration, SdmContext } from "@atomist/sdm";
 import * as _ from "lodash";
-import {
-    Interpretation,
-    Interpreter,
-} from "./Interpretation";
+import { Interpretation, Interpreter } from "./Interpretation";
 import {
     ProjectAnalysis,
     ProjectAnalysisOptions,
@@ -38,6 +26,7 @@ import {
     TransformRecipe,
     TransformRecipeRequest,
 } from "./ProjectAnalysis";
+import { Score } from "./Score";
 import { TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
@@ -62,6 +51,8 @@ export function isTechnologyScannerRegistration(a: any): a is TechnologyScannerR
     const maybe = a as TechnologyScannerRegistration<any>;
     return !!maybe.scanner;
 }
+
+export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
 
 /**
  * Type with ability to analyze individual projects and determine their delivery.
@@ -108,6 +99,8 @@ export interface StackSupport<T extends TechnologyElement> {
     interpreters: Interpreter[];
 
     transformRecipeContributors: TransformRecipeContributionRegistration[];
+
+    scorers?: Scorer[];
 }
 
 /**
@@ -132,6 +125,11 @@ export interface ProjectAnalyzerBuilder {
      * @return {ProjectAnalyzerBuilder}
      */
     withInterpreter(interpreter: Interpreter): ProjectAnalyzerBuilder;
+
+    /**
+     * Add a scorer to this analyzer
+     */
+    withScorer(scorer: Scorer): ProjectAnalyzerBuilder;
 
     /**
      * Add a contributor that can analyze this project as a potential seed
