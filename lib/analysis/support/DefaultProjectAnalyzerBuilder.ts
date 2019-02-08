@@ -26,7 +26,10 @@ import {
     AutoInspectRegistration,
     Queue,
     SdmContext,
+    SoftwareDeliveryMachine,
 } from "@atomist/sdm";
+
+import * as _ from "lodash";
 import {
     Interpretation,
     Interpreter,
@@ -57,8 +60,6 @@ import {
     registerCodeInspections,
 } from "./interpretationDriven";
 
-import * as _ from "lodash";
-
 /**
  * Inspect repos to find tech stack and CI info
  */
@@ -80,7 +81,18 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     private readonly scorers: Scorer[] = [];
 
-    private readonly queueGoal: Queue = new Queue({ concurrent: 2, fetch: 20 });
+    private readonly queueGoal: Queue;
+
+    constructor(private readonly sdm: SoftwareDeliveryMachine) {
+        const queueConfig = _.get(sdm, "configuration.sdm.goal.queue");
+        if (!!queueConfig && queueConfig.enabled === true) {
+            this.queueGoal = new Queue(
+                {
+                    concurrent: queueConfig.concurrent || 2,
+                    fetch: queueConfig.fetch || 20,
+                });
+        }
+    }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): this {
         this.scannerRegistrations.push(isTechnologyScannerRegistration(scanner) ? scanner : {

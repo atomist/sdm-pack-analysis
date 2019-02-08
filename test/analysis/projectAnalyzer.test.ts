@@ -29,7 +29,7 @@ describe("projectAnalyzer", () => {
 
         it("should pull up services", async () => {
             const p = InMemoryProject.of();
-            const analysis = await analyzerBuilder().withScanner(toyScanner).build()
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
                 .analyze(p, undefined);
             assert.deepStrictEqual(analysis.elements.toy.services, {
                 riak: {},
@@ -45,7 +45,7 @@ describe("projectAnalyzer", () => {
 
         it("should merge environment variables without duplication", async () => {
             const p = InMemoryProject.of();
-            const analysis = await analyzerBuilder().withScanner(toyScanner).withScanner(toy2Scanner).build()
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).withScanner(toy2Scanner).build()
                 .analyze(p, undefined);
             assert.deepStrictEqual(analysis.referencedEnvironmentVariables, ["frogs", "dogs"]);
         });
@@ -56,7 +56,7 @@ describe("projectAnalyzer", () => {
 
         it("should expose analysis", async () => {
             const p = InMemoryProject.of();
-            const interpretation = await analyzerBuilder().withScanner(toyScanner).build()
+            const interpretation = await analyzerBuilder({} as any).withScanner(toyScanner).build()
                 .interpret(p, undefined);
             assert.deepStrictEqual(interpretation.reason.analysis.elements.toy.services, {
                 riak: {},
@@ -84,7 +84,7 @@ describe("projectAnalyzer", () => {
                 },
             };
             const p = InMemoryProject.of();
-            const interpretation = await analyzerBuilder().withScanner(toyScanner).withInterpreter(bi).build()
+            const interpretation = await analyzerBuilder({} as any).withScanner(toyScanner).withInterpreter(bi).build()
                 .interpret(p, undefined);
             assert.strictEqual(count, 1, "Should have invoked interpreter");
             assert(interpretation.deployGoals, "Interpreter should have set deploy goal");
@@ -101,7 +101,7 @@ describe("projectAnalyzer", () => {
                 };
             };
             const p = InMemoryProject.of();
-            const interpretation = await analyzerBuilder().withScorer(bi).build()
+            const interpretation = await analyzerBuilder({} as any).withScorer(bi).build()
                 .interpret(p, undefined);
             assert.strictEqual(count, 1, "Should have invoked scorer");
             assert(interpretation.scores.thing, "Score should have been attached");

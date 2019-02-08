@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { ProjectAnalyzerBuilder } from "./ProjectAnalyzer";
 import { DefaultProjectAnalyzerBuilder } from "./support/DefaultProjectAnalyzerBuilder";
 
-export function analyzerBuilder(): ProjectAnalyzerBuilder {
-    return new DefaultProjectAnalyzerBuilder();
+export function analyzerBuilder(sdm: SoftwareDeliveryMachine): ProjectAnalyzerBuilder {
+    return new DefaultProjectAnalyzerBuilder(sdm);
 }
