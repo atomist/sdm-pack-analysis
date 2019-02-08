@@ -40,7 +40,7 @@ export const preferencesScanner: TechnologyScanner<PreferencesElement> = async (
         disabledGoals: [],
     };
 
-    const optionalGoals = configurationValue<Goal[]>("sdm.goals.optional", []);
+    const optionalGoals = configurationValue<Goal[]>("sdm.goal.optional", []);
 
     for (const optionalGoal of optionalGoals) {
         const displayName = optionalGoal.definition.displayName;
