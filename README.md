@@ -18,6 +18,30 @@ code, so can be run on persisted analyses. An `Interpretation` is computed
 when necessary and not serialized to JSON, so it can specify functions and
 delivery goals.
 
+Analysis and interpretation is designed to be extensible. Additional "scanners"
+and "interpreters" can be added wtihout affecting existing capabilities.
+
+Two additional concepts are principally relevant to offline use, to classify projects
+and provide a basis for project querying:
+
+- _Seed analysis_: The ability to use multiple `TransformRecipeContributor` implementations
+to contribute parameters and transforms that can enable any project to
+be used as a seed. This "contribution" model ensures that we avoid the Cartesian product
+problem with seeds: E.g. if we care about AWS Lambda and Kubernetes, Node and Spring,
+we don't need 4 distinct generators (Lambda/Node, Lambda/Spring, Kube/Node and Kube/Spring),
+but can use one "universal" generator that applies whichever contributions are
+relevant to the current seed.
+- _Project scoring_: The ability to attach scores to an interpretation for
+various dimensions of a project, and to calculate a weighted composite score
+based on individual scores.
+
+Seed analysis is only performed when a project analysis is performed with the `full` option flag
+set to true. Scanner registrations that return technology elements can also specify
+whether or not they should fire depending on the invocation options. This is important
+for scanners that are expensive, such as calculation of the number of lines of code
+in a repository, which requires reading every file. Typically, such analyses
+are performed only infrequently, and persisted for future use.
+
 ## Getting started
 
 See the [Developer Quick Start][atomist-quick] to jump straight to
