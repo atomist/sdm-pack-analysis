@@ -79,7 +79,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
 
-    private readonly scorers: Scorer[] = [];
+    private readonly scorers: Array<ConditionalRegistration<Scorer>> = [];
 
     private readonly queueGoal: Queue;
 
@@ -113,8 +113,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withScorer(scorer: Scorer): ProjectAnalyzerBuilder {
-        this.scorers.push(scorer);
+    public withScorer(scorer: Scorer | ConditionalRegistration<Scorer>): ProjectAnalyzerBuilder {
+        this.scorers.push(isConditionalRegistration(scorer) ? scorer: {
+            action: scorer,
+            runWhen: () => true,
+        });
         return this;
     }
 
@@ -149,7 +152,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     public async interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext,
                            options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
         const analysis = isProject(p) ? await this.analyze(p, sdmContext, options) : p;
-        return this.runInterpretation(analysis, sdmContext);
+        return this.runInterpretation(analysis, sdmContext, options);
     }
 
     /**
@@ -199,7 +202,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     private async runInterpretation(
         analysis: ProjectAnalysis,
-        sdmContext: SdmContext): Promise<Interpretation | undefined> {
+        sdmContext: SdmContext,
+        options: ProjectAnalysisOptions): Promise<Interpretation | undefined> {
         const interpretation: Interpretation = {
             reason: {
                 analysis,
@@ -223,8 +227,10 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
 
         for (const scorer of this.scorers) {
-            const score = await scorer(interpretation, sdmContext);
-            interpretation.scores[score.name] = score;
+            if (scorer.runWhen(options, sdmContext)) {
+                const score = await scorer.action(interpretation, sdmContext);
+                interpretation.scores[score.name] = score;
+            }
         }
 
         return interpretation;

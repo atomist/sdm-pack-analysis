@@ -42,6 +42,10 @@ import { Score } from "./Score";
 import { TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
+/**
+ * Registration of a TechnologyScanner, Interpreter etc that should run conditionally
+ * depending on analysis options and SdmContext.
+ */
 export interface ConditionalRegistration<W> {
 
     /**
@@ -142,7 +146,7 @@ export interface ProjectAnalyzerBuilder {
     /**
      * Add a scorer to this analyzer
      */
-    withScorer(scorer: Scorer): ProjectAnalyzerBuilder;
+    withScorer(scorer: Scorer | ConditionalRegistration<Scorer>): ProjectAnalyzerBuilder;
 
     /**
      * Add a contributor that can analyze this project as a potential seed
