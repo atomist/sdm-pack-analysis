@@ -51,12 +51,13 @@ export interface TechnologyScannerRegistration<T extends TechnologyElement> {
 
     /**
      * Test for when this scanner should run,
-     * depending on analysis options.
-     * Default is always.
+     * depending on analysis options and the current SDM context
+     * (allowing for feature flagging).
+     * Default is always run.
      * @param {ProjectAnalysisOptions} options
      * @return {boolean}
      */
-    runWhen: (options: ProjectAnalysisOptions) => boolean;
+    runWhen: (options: ProjectAnalysisOptions, sdmContext: SdmContext) => boolean;
 }
 
 export function isTechnologyScannerRegistration(a: any): a is TechnologyScannerRegistration<any> {

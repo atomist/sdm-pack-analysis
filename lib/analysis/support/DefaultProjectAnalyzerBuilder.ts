@@ -173,7 +173,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         };
 
         const scanned = (await Promise.all(this.scannerRegistrations
-            .filter(s => s.runWhen(options))
+            .filter(s => s.runWhen(options, sdmContext))
             .map(s => s.scanner(p, sdmContext, analysis, options))))
             .filter(r => !!r);
 
