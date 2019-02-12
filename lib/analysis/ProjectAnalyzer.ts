@@ -42,15 +42,15 @@ import { Score } from "./Score";
 import { TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
-/**
- * Register a TechnologyScanner, specifying when it should be invoked.
- */
-export interface TechnologyScannerRegistration<T extends TechnologyElement> {
-
-    scanner: TechnologyScanner<T>;
+export interface ConditionalRegistration<W> {
 
     /**
-     * Test for when this scanner should run,
+     * Thing we are registering, such as a TechnologyScanner or Interpreter
+     */
+    action: W;
+
+    /**
+     * Test for when this thing should run,
      * depending on analysis options and the current SDM context
      * (allowing for feature flagging).
      * Default is always run.
@@ -60,9 +60,9 @@ export interface TechnologyScannerRegistration<T extends TechnologyElement> {
     runWhen: (options: ProjectAnalysisOptions, sdmContext: SdmContext) => boolean;
 }
 
-export function isTechnologyScannerRegistration(a: any): a is TechnologyScannerRegistration<any> {
-    const maybe = a as TechnologyScannerRegistration<any>;
-    return !!maybe.scanner;
+export function isConditionalRegistration(a: any): a is ConditionalRegistration<any> {
+    const maybe = a as ConditionalRegistration<any>;
+    return !!maybe.action;
 }
 
 export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
@@ -87,7 +87,7 @@ export interface ProjectAnalyzer {
 
     readonly interpreters: Interpreter[];
 
-    readonly scannerRegistrations: Array<TechnologyScannerRegistration<any>>;
+    readonly scannerRegistrations: Array<ConditionalRegistration<TechnologyScanner<any>>>;
 
     readonly possibleAutofixes: AutofixRegistration[];
 
@@ -107,7 +107,7 @@ export interface ProjectAnalyzer {
  */
 export interface StackSupport<T extends TechnologyElement> {
 
-    scanners: Array<TechnologyScanner<T> | TechnologyScannerRegistration<T>>;
+    scanners: Array<TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>>;
 
     interpreters: Interpreter[];
 
@@ -127,7 +127,7 @@ export interface ProjectAnalyzerBuilder {
      * of previous analyzers. This ensure that expensive parsing
      * can be done only once.
      */
-    withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): ProjectAnalyzerBuilder;
+    withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

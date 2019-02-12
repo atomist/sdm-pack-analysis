@@ -45,13 +45,13 @@ import {
     TechnologyElement,
 } from "../ProjectAnalysis";
 import {
-    isTechnologyScannerRegistration,
+    isConditionalRegistration,
     performSeedAnalysis,
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
     Scorer,
     StackSupport,
-    TechnologyScannerRegistration,
+    ConditionalRegistration,
 } from "../ProjectAnalyzer";
 import { TechnologyScanner } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
@@ -65,7 +65,7 @@ import {
  */
 export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAnalyzerBuilder {
 
-    public readonly scannerRegistrations: Array<TechnologyScannerRegistration<any>> = [];
+    public readonly scannerRegistrations: Array<ConditionalRegistration<TechnologyScanner<any>>> = [];
 
     public readonly interpreters: Interpreter[] = [];
 
@@ -94,9 +94,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
     }
 
-    public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | TechnologyScannerRegistration<T>): this {
-        this.scannerRegistrations.push(isTechnologyScannerRegistration(scanner) ? scanner : {
-            scanner,
+    public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {
+        this.scannerRegistrations.push(isConditionalRegistration(scanner) ? scanner : {
+            action: scanner,
             runWhen: () => true,
         });
         return this;
@@ -174,7 +174,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         const scanned = (await Promise.all(this.scannerRegistrations
             .filter(s => s.runWhen(options, sdmContext))
-            .map(s => s.scanner(p, sdmContext, analysis, options))))
+            .map(s => s.action(p, sdmContext, analysis, options))))
             .filter(r => !!r);
 
         for (const s of scanned) {
