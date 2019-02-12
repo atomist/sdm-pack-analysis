@@ -89,7 +89,7 @@ export interface ProjectAnalyzer {
      */
     interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext, options?: ProjectAnalysisOptions): Promise<Interpretation>;
 
-    readonly interpreters: Interpreter[];
+    readonly interpreters: Array<ConditionalRegistration<Interpreter>>;
 
     readonly scannerRegistrations: Array<ConditionalRegistration<TechnologyScanner<any>>>;
 
@@ -113,11 +113,11 @@ export interface StackSupport<T extends TechnologyElement> {
 
     scanners: Array<TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>>;
 
-    interpreters: Interpreter[];
+    interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
 
     transformRecipeContributors: TransformRecipeContributionRegistration[];
 
-    scorers?: Scorer[];
+    scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 }
 
 /**
@@ -141,7 +141,7 @@ export interface ProjectAnalyzerBuilder {
      * @param {Interpreter} interpreter
      * @return {ProjectAnalyzerBuilder}
      */
-    withInterpreter(interpreter: Interpreter): ProjectAnalyzerBuilder;
+    withInterpreter(interpreter: Interpreter | ConditionalRegistration<Interpreter>): ProjectAnalyzerBuilder;
 
     /**
      * Add a scorer to this analyzer

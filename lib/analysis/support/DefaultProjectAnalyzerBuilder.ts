@@ -45,13 +45,13 @@ import {
     TechnologyElement,
 } from "../ProjectAnalysis";
 import {
+    ConditionalRegistration,
     isConditionalRegistration,
     performSeedAnalysis,
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
     Scorer,
     StackSupport,
-    ConditionalRegistration,
 } from "../ProjectAnalyzer";
 import { TechnologyScanner } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
@@ -61,13 +61,14 @@ import {
 } from "./interpretationDriven";
 
 /**
+ * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
  * Inspect repos to find tech stack and CI info
  */
 export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAnalyzerBuilder {
 
     public readonly scannerRegistrations: Array<ConditionalRegistration<TechnologyScanner<any>>> = [];
 
-    public readonly interpreters: Interpreter[] = [];
+    public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
     public readonly transformRecipeContributorRegistrations: TransformRecipeContributionRegistration[] = [];
 
@@ -102,8 +103,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withInterpreter(interpreter: Interpreter): this {
-        this.interpreters.push(interpreter);
+    public withInterpreter(raw: Interpreter | ConditionalRegistration<Interpreter>): this {
+        const reg = isConditionalRegistration(raw) ? raw : {
+            action: raw,
+            runWhen: () => true,
+        };
+        const interpreter = reg.action;
+        this.interpreters.push(reg);
         if (isAutofixRegisteringInterpreter(interpreter)) {
             this.possibleAutofixes.push(...interpreter.autofixes);
         }
@@ -114,7 +120,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public withScorer(scorer: Scorer | ConditionalRegistration<Scorer>): ProjectAnalyzerBuilder {
-        this.scorers.push(isConditionalRegistration(scorer) ? scorer: {
+        this.scorers.push(isConditionalRegistration(scorer) ? scorer : {
             action: scorer,
             runWhen: () => true,
         });
@@ -140,8 +146,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
      */
     public build(): ProjectAnalyzer {
         for (const interpreter of this.interpreters) {
-            if (!!interpreter.setAnalyzer) {
-                interpreter.setAnalyzer(this);
+            if (!!interpreter.action.setAnalyzer) {
+                interpreter.action.setAnalyzer(this);
             }
         }
         registerAutofixes(this.autofixGoal, this);
@@ -207,7 +213,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         const interpretation: Interpretation = {
             reason: {
                 analysis,
-                availableInterpreters: this.interpreters,
+                availableInterpreters: this.interpreters.map(i => i.action),
                 chosenInterpreters: [],
             },
             autofixes: [],
@@ -220,9 +226,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         };
 
         for (const interpreter of this.interpreters) {
-            const enriched = await interpreter.enrich(interpretation, sdmContext);
-            if (enriched) {
-                interpretation.reason.chosenInterpreters.push(interpreter);
+            if (interpreter.runWhen(options, sdmContext)) {
+                const enriched = await interpreter.action.enrich(interpretation, sdmContext);
+                if (enriched) {
+                    interpretation.reason.chosenInterpreters.push(interpreter.action);
+                }
             }
         }
 
