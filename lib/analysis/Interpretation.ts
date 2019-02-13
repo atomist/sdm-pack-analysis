@@ -21,7 +21,8 @@ import {
     AutoInspectRegistration,
     goals,
     Goals,
-    GoalWithPrecondition, PushListenerInvocation,
+    GoalWithPrecondition,
+    PushListenerInvocation,
     PushTest,
     SdmContext,
 } from "@atomist/sdm";

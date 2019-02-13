@@ -15,7 +15,10 @@
  */
 
 import { InMemoryProject } from "@atomist/automation-client";
-import { goals, PushListenerInvocation } from "@atomist/sdm";
+import {
+    goals,
+    PushListenerInvocation,
+} from "@atomist/sdm";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
 import { Interpreter } from "../../lib/analysis/Interpretation";

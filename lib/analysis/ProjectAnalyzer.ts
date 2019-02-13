@@ -15,9 +15,22 @@
  */
 
 import { Project } from "@atomist/automation-client";
-import { AutoCodeInspection, Autofix, AutofixRegistration, AutoInspectRegistration, SdmContext } from "@atomist/sdm";
-import { Interpretation, Interpreter } from "./Interpretation";
-import { ProjectAnalysis, ProjectAnalysisOptions, TechnologyElement } from "./ProjectAnalysis";
+import {
+    AutoCodeInspection,
+    Autofix,
+    AutofixRegistration,
+    AutoInspectRegistration,
+    SdmContext,
+} from "@atomist/sdm";
+import {
+    Interpretation,
+    Interpreter,
+} from "./Interpretation";
+import {
+    ProjectAnalysis,
+    ProjectAnalysisOptions,
+    TechnologyElement,
+} from "./ProjectAnalysis";
 import { Score } from "./Score";
 import { TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
