@@ -104,13 +104,13 @@ export interface ProjectAnalyzer {
  * any number of transform recipe contributors to
  * facilitate use as a seed project.
  */
-export interface StackSupport<T extends TechnologyElement> {
+export interface StackSupport {
 
     /**
      * Scanner or scanners that identify the new stack. Necessary to drive
      * any Interpreters, TransformRecipeContributors or Scorers.
      */
-    scanners: Array<TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>>;
+    scanners: Array<TechnologyScanner<any> | ConditionalRegistration<TechnologyScanner<any>>>;
 
     interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
 
@@ -158,7 +158,7 @@ export interface ProjectAnalyzerBuilder {
     /**
      * Add support for a new stack
      */
-    withStack<T extends TechnologyElement>(stackSupport: StackSupport<T>): this;
+    withStack<T extends TechnologyElement>(stackSupport: StackSupport): this;
 
     /**
      * Create a ProjectAnalyzer instance
