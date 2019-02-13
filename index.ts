@@ -19,7 +19,6 @@ export {
     assessInspection,
     ResultDisplayer,
 } from "./lib/analysis/command/assess";
-export { DefaultProjectAnalyzerBuilder } from "./lib/analysis/support/DefaultProjectAnalyzerBuilder";
 export {
     ElementsGoalsKey,
     ElementsEnrichGoal,

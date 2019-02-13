@@ -18,6 +18,11 @@ import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { ProjectAnalyzerBuilder } from "./ProjectAnalyzer";
 import { DefaultProjectAnalyzerBuilder } from "./support/DefaultProjectAnalyzerBuilder";
 
+/**
+ * Return the default ProjectAnalyzerBuilder so we don't need to know about the implementing class.
+ * @param {SoftwareDeliveryMachine} sdm
+ * @return {ProjectAnalyzerBuilder}
+ */
 export function analyzerBuilder(sdm: SoftwareDeliveryMachine): ProjectAnalyzerBuilder {
     return new DefaultProjectAnalyzerBuilder(sdm);
 }

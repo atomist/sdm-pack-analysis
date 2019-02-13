@@ -15,7 +15,7 @@
  */
 
 import { InMemoryProject } from "@atomist/automation-client";
-import { goals } from "@atomist/sdm";
+import { goals, PushListenerInvocation } from "@atomist/sdm";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
 import { Interpreter } from "../../lib/analysis/Interpretation";
@@ -68,6 +68,14 @@ describe("projectAnalyzer", () => {
                 rabbitmq: {},
                 memcached: {},
             });
+        });
+
+        it("should expose PushListenerInvocation if available", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const interpretation = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .interpret(p, pli);
+            assert.strictEqual(interpretation.reason.pushListenerInvocation, pli);
         });
 
         it("should attach goal", async () => {

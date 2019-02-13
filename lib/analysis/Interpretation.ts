@@ -21,7 +21,7 @@ import {
     AutoInspectRegistration,
     goals,
     Goals,
-    GoalWithPrecondition,
+    GoalWithPrecondition, PushListenerInvocation,
     PushTest,
     SdmContext,
 } from "@atomist/sdm";
@@ -33,7 +33,7 @@ import { Scores } from "./Score";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
- * intended to be persisted.
+ * intended to be persisted, but is only held in memory.
  */
 export interface Interpretation extends CiPhases {
 
@@ -41,9 +41,22 @@ export interface Interpretation extends CiPhases {
      * The data on which we arrived at this interpretation
      */
     readonly reason: {
+
+        /**
+         * The analysis this Interpretation is based on
+         */
         readonly analysis: ProjectAnalysis;
+
         readonly availableInterpreters: Interpreter[];
+
         readonly chosenInterpreters: Interpreter[];
+
+        /**
+         * If this interpretation was initiated in response to
+         * a push, the invocation that triggered it. This allows us to
+         * look at information about the branch, committer etc.
+         */
+        readonly pushListenerInvocation?: PushListenerInvocation;
     };
 
     /**

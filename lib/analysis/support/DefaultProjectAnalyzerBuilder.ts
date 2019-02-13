@@ -24,7 +24,7 @@ import {
     AutoCodeInspection,
     Autofix,
     AutofixRegistration,
-    AutoInspectRegistration,
+    AutoInspectRegistration, PushListenerInvocation,
     Queue,
     SdmContext,
     SoftwareDeliveryMachine,
@@ -216,6 +216,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 analysis,
                 availableInterpreters: this.interpreters.map(i => i.action),
                 chosenInterpreters: [],
+                pushListenerInvocation: !!sdmContext && !!(sdmContext as PushListenerInvocation).push ?
+                    sdmContext as PushListenerInvocation :
+                    undefined,
             },
             autofixes: [],
             inspections: [],
