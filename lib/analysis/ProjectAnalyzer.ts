@@ -49,12 +49,12 @@ import { TransformRecipeContributionRegistration } from "./TransformRecipeContri
 export interface ConditionalRegistration<W> {
 
     /**
-     * Thing we are registering, such as a TechnologyScanner or Interpreter
+     * Action we are registering, such as a TechnologyScanner or Interpreter
      */
     action: W;
 
     /**
-     * Test for when this thing should run,
+     * Test for when this action should run,
      * depending on analysis options and the current SDM context
      * (allowing for feature flagging).
      * Default is always run.
@@ -91,7 +91,9 @@ export interface ProjectAnalyzer {
 
     readonly interpreters: Array<ConditionalRegistration<Interpreter>>;
 
-    readonly scannerRegistrations: Array<ConditionalRegistration<TechnologyScanner<any>>>;
+    readonly scanners: Array<ConditionalRegistration<TechnologyScanner<any>>>;
+
+    readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
     readonly possibleAutofixes: AutofixRegistration[];
 
@@ -111,13 +113,18 @@ export interface ProjectAnalyzer {
  */
 export interface StackSupport<T extends TechnologyElement> {
 
+    /**
+     * Scanner or scanners that identify the new stack. Necessary to drive
+     * any Interpreters, TransformRecipeContributors or Scorers.
+     */
     scanners: Array<TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>>;
 
     interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
 
+    scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
+
     transformRecipeContributors: TransformRecipeContributionRegistration[];
 
-    scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 }
 
 /**

@@ -66,7 +66,7 @@ import {
  */
 export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAnalyzerBuilder {
 
-    public readonly scannerRegistrations: Array<ConditionalRegistration<TechnologyScanner<any>>> = [];
+    public readonly scanners: Array<ConditionalRegistration<TechnologyScanner<any>>> = [];
 
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
@@ -80,7 +80,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
 
-    private readonly scorers: Array<ConditionalRegistration<Scorer>> = [];
+    public readonly scorers: Array<ConditionalRegistration<Scorer>> = [];
 
     private readonly queueGoal: Queue;
 
@@ -96,7 +96,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {
-        this.scannerRegistrations.push(isConditionalRegistration(scanner) ? scanner : {
+        this.scanners.push(isConditionalRegistration(scanner) ? scanner : {
             action: scanner,
             runWhen: () => true,
         });
@@ -181,7 +181,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             referencedEnvironmentVariables,
         };
 
-        const scanned = (await Promise.all(this.scannerRegistrations
+        const scanned = (await Promise.all(this.scanners
             .filter(s => s.runWhen(options, sdmContext))
             .map(s => s.action(p, sdmContext, analysis, options))))
             .filter(r => !!r);
