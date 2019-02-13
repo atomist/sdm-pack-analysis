@@ -15,6 +15,7 @@
  */
 
 import {
+    logger,
     Project,
     RemoteRepoRef,
 } from "@atomist/automation-client";
@@ -40,14 +41,13 @@ import {
     Dependency,
     Elements,
     ProjectAnalysis,
-    ProjectAnalysisOptions,
+    ProjectAnalysisOptions, SeedAnalysis,
     Services,
-    TechnologyElement,
+    TechnologyElement, TransformRecipe, TransformRecipeRequest,
 } from "../ProjectAnalysis";
 import {
     ConditionalRegistration,
     isConditionalRegistration,
-    performSeedAnalysis,
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
     Scorer,
@@ -155,7 +155,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public async interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext,
+    public async interpret(p: Project | ProjectAnalysis,
+                           sdmContext: SdmContext,
                            options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
         const analysis = isProject(p) ? await this.analyze(p, sdmContext, options) : p;
         return this.runInterpretation(analysis, sdmContext, options);
@@ -244,4 +245,40 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return interpretation;
     }
 
+}
+
+/**
+ * Use expert system to analyze a potential seed
+ * and work out which transforms are appropriate and what parameters
+ * they need. Uses multiple sub analyzers to compose facets.
+ */
+async function performSeedAnalysis(
+    project: Project,
+    analysis: ProjectAnalysis,
+    contributorRegistrations: TransformRecipeContributionRegistration[],
+    sdmContext: SdmContext): Promise<SeedAnalysis> {
+    const transformRecipes: TransformRecipeRequest[] = [];
+    for (const contributor of contributorRegistrations) {
+        const rawRecipe = await contributor.contributor.analyze(project, analysis, sdmContext);
+        if (rawRecipe) {
+            const recipe: TransformRecipe = {
+                // Remove duplicates
+                parameters: rawRecipe.parameters.filter(p =>
+                    !_.flatten(transformRecipes.map(t => t.recipe.parameters)).some(existing => existing.name === p.name)),
+                transforms: rawRecipe.transforms.filter(p =>
+                    !_.flatten(transformRecipes.map(t => t.recipe.transforms)).some(existing => existing.name === p.name)),
+            };
+            transformRecipes.push({
+                originator: contributor.originator,
+                optional: contributor.optional,
+                recipe,
+            });
+        }
+    }
+    const result = {
+        transformRecipes,
+    };
+    logger.info("Analysis for project at %s is %j, seed analysis is %j",
+        project.id.url, analysis, result);
+    return result;
 }

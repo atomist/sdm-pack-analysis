@@ -75,7 +75,6 @@ export {
     TransformRecipeRequest,
 } from "./lib/analysis/ProjectAnalysis";
 export {
-    performSeedAnalysis,
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
     StackSupport,
