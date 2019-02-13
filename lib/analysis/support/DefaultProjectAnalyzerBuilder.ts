@@ -53,7 +53,8 @@ import {
     ConditionalRegistration,
     isConditionalRegistration,
     ProjectAnalyzer,
-    ProjectAnalyzerBuilder, RunCondition,
+    ProjectAnalyzerBuilder,
+    RunCondition,
     Scorer,
     StackSupport,
 } from "../ProjectAnalyzer";

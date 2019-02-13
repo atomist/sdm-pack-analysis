@@ -22,7 +22,10 @@ import {
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
 import { Interpreter } from "../../lib/analysis/Interpretation";
-import { Scorer, StackSupport } from "../../lib/analysis/ProjectAnalyzer";
+import {
+    Scorer,
+    StackSupport,
+} from "../../lib/analysis/ProjectAnalyzer";
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 
