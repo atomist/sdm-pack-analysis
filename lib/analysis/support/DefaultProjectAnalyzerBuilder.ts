@@ -53,7 +53,7 @@ import {
     ConditionalRegistration,
     isConditionalRegistration,
     ProjectAnalyzer,
-    ProjectAnalyzerBuilder,
+    ProjectAnalyzerBuilder, RunCondition,
     Scorer,
     StackSupport,
 } from "../ProjectAnalyzer";
@@ -100,18 +100,12 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {
-        this.scanners.push(isConditionalRegistration(scanner) ? scanner : {
-            action: scanner,
-            runWhen: () => true,
-        });
+        this.scanners.push(isConditionalRegistration(scanner) ? scanner : runOnCondition(scanner));
         return this;
     }
 
     public withInterpreter(raw: Interpreter | ConditionalRegistration<Interpreter>): this {
-        const reg = isConditionalRegistration(raw) ? raw : {
-            action: raw,
-            runWhen: () => true,
-        };
+        const reg = isConditionalRegistration(raw) ? raw : runOnCondition(raw);
         const interpreter = reg.action;
         this.interpreters.push(reg);
         if (isAutofixRegisteringInterpreter(interpreter)) {
@@ -124,18 +118,23 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public withScorer(scorer: Scorer | ConditionalRegistration<Scorer>): ProjectAnalyzerBuilder {
-        this.scorers.push(isConditionalRegistration(scorer) ? scorer : {
-            action: scorer,
-            runWhen: () => true,
-        });
+        this.scorers.push(isConditionalRegistration(scorer) ? scorer : runOnCondition(scorer));
         return this;
     }
 
-    public withStack<T extends TechnologyElement>(stackSupport: StackSupport): this {
-        stackSupport.scanners.forEach(s => this.withScanner(s));
-        stackSupport.interpreters.forEach(i => this.withInterpreter(i));
+    public withStack(stackSupport: StackSupport): this {
+        // Conditionalize if necessary
+        const scanners: Array<ConditionalRegistration<TechnologyScanner<any>>> =
+            stackSupport.scanners.map(s => isConditionalRegistration(s) ? s : runOnCondition(s, stackSupport.condition));
+        const interpreters: Array<ConditionalRegistration<Interpreter>> =
+            stackSupport.interpreters.map(i => isConditionalRegistration(i) ? i : runOnCondition(i, stackSupport.condition));
+        const scorers: Array<ConditionalRegistration<Scorer>> =
+            (stackSupport.scorers || []).map(s => isConditionalRegistration(s) ? s : runOnCondition(s, stackSupport.condition));
+
+        scanners.forEach(s => this.withScanner(s));
+        interpreters.forEach(i => this.withInterpreter(i));
         stackSupport.transformRecipeContributors.forEach(trc => this.withTransformRecipeContributor(trc));
-        (stackSupport.scorers || []).forEach(scorer => this.withScorer(scorer));
+        scorers.forEach(scorer => this.withScorer(scorer));
         return this;
     }
 
@@ -288,4 +287,11 @@ async function performSeedAnalysis(
     logger.info("Analysis for project at %s is %j, seed analysis is %j",
         project.id.url, analysis, result);
     return result;
+}
+
+function runOnCondition<W>(action: W, runWhen: RunCondition = () => true): ConditionalRegistration<W> {
+    return {
+        action,
+        runWhen,
+    };
 }

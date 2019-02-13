@@ -36,6 +36,11 @@ import { TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
 /**
+ * When an action should be run
+ */
+export type RunCondition = (options: ProjectAnalysisOptions, sdmContext: SdmContext) => boolean;
+
+/**
  * Registration of a TechnologyScanner, Interpreter etc that should run conditionally
  * depending on analysis options and SdmContext.
  */
@@ -54,7 +59,7 @@ export interface ConditionalRegistration<W> {
      * @param {ProjectAnalysisOptions} options
      * @return {boolean}
      */
-    runWhen: (options: ProjectAnalysisOptions, sdmContext: SdmContext) => boolean;
+    runWhen: RunCondition;
 }
 
 export function isConditionalRegistration(a: any): a is ConditionalRegistration<any> {
@@ -118,6 +123,11 @@ export interface StackSupport {
 
     transformRecipeContributors: TransformRecipeContributionRegistration[];
 
+    /**
+     * If this is set, it will conditionalize all registrations except those with their own explicit conditions.
+     */
+    condition?: RunCondition;
+
 }
 
 /**
@@ -158,7 +168,7 @@ export interface ProjectAnalyzerBuilder {
     /**
      * Add support for a new stack
      */
-    withStack<T extends TechnologyElement>(stackSupport: StackSupport): this;
+    withStack(stackSupport: StackSupport): this;
 
     /**
      * Create a ProjectAnalyzer instance

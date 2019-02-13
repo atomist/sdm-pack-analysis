@@ -22,7 +22,7 @@ import {
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
 import { Interpreter } from "../../lib/analysis/Interpretation";
-import { Scorer } from "../../lib/analysis/ProjectAnalyzer";
+import { Scorer, StackSupport } from "../../lib/analysis/ProjectAnalyzer";
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 
@@ -60,6 +60,27 @@ describe("projectAnalyzer", () => {
         it("should expose analysis", async () => {
             const p = InMemoryProject.of();
             const interpretation = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .interpret(p, undefined);
+            assert.deepStrictEqual(interpretation.reason.analysis.elements.toy.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+            assert.deepStrictEqual(interpretation.reason.analysis.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+        });
+
+        it("should add via non-conditional stack", async () => {
+            const p = InMemoryProject.of();
+            const stack: StackSupport = {
+                scanners: [toyScanner],
+                interpreters: [],
+                transformRecipeContributors: [],
+            };
+            const interpretation = await analyzerBuilder({} as any).withStack(stack).build()
                 .interpret(p, undefined);
             assert.deepStrictEqual(interpretation.reason.analysis.elements.toy.services, {
                 riak: {},
