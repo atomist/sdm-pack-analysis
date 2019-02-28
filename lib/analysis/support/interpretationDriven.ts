@@ -66,6 +66,11 @@ export function registerCodeInspections(codeInspectionGoal: AutoCodeInspection, 
     }
 }
 
+/**
+ * Is this a material change? I.e. did none of the material change push tests spot a material change.
+ * @param {StatefulPushListenerInvocation<{interpretation: Interpretation}>} pu
+ * @return {Promise<boolean>}
+ */
 export async function materialChange(pu: StatefulPushListenerInvocation<{interpretation: Interpretation}>): Promise<boolean> {
     if (!!pu.facts.interpretation.materialChangePushTests && pu.facts.interpretation.materialChangePushTests.length > 0) {
         return not(anySatisfied(...pu.facts.interpretation.materialChangePushTests)).mapping(pu);

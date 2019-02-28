@@ -62,6 +62,8 @@ export interface Interpretation extends CiPhases {
 
     /**
      * List of push tests determining if a change is a material change.
+     * Any one of these returning true will cause the change to be
+     * deemed material.
      * This varies depending on the technology stack.
      * Allows consistent handling of non-material changes across
      * all technologies.
@@ -100,11 +102,29 @@ export interface Interpreter {
     enrich(interpretation: Interpretation, sdmContext: SdmContext): Promise<boolean>;
 }
 
+/**
+ * Extended by interpreters that can add autofixes. The enrich method should be
+ * implemented to add to the Interpretation's autofixes, from those
+ * return by the autofixes method.
+ */
 export interface AutofixRegisteringInterpreter extends Interpreter {
-    autofixes: AutofixRegistration[];
+
+    /**
+     * This must be a stable value for possible autofixes, returned on all calls
+     */
+    readonly autofixes: AutofixRegistration[];
 }
 
+/**
+ * Extended by interpreters that can add code inspections. The enrich method should be
+ * implemented to add to the Interpretation's inspections, from those
+ * return by the codeInspections method.
+ */
 export interface CodeInspectionRegisteringInterpreter extends Interpreter {
+
+    /**
+     * This must be a stable value for possible code inspections, returned on all calls
+     */
     codeInspections: Array<AutoInspectRegistration<any, any>>;
 }
 
