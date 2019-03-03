@@ -47,6 +47,7 @@ export {
     containerGoals,
     controlGoals,
     deployGoals,
+    releaseGoals,
     Interpretation,
     Interpreter,
     isAutofixRegisteringInterpreter,
