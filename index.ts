@@ -58,6 +58,7 @@ export {
     CiPhases,
     ContainerPhase,
     DeployPhase,
+    ReleasePhase,
     StartupPhase,
 } from "./lib/analysis/phases";
 export {

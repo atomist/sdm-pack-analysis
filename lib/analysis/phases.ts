@@ -58,7 +58,15 @@ export interface DeployPhase {
     /**
      * If this is set stagedDeploy should not be set
      */
-    deployGoals?: Goals & GoalsBuilder;
+    deployGoals?: Goals;
+}
+
+/**
+ * Phase to publish and release artifacts or create tags
+ */
+export interface ReleasePhase {
+
+    releaseGoals?: Goals;
 }
 
 /**
@@ -66,4 +74,4 @@ export interface DeployPhase {
  * All goals should be constructed ahead of time and selected,
  * rather than created on the fly.
  */
-export type CiPhases = StartupPhase & CheckPhase & BuildPhase & ContainerPhase & DeployPhase;
+export type CiPhases = StartupPhase & CheckPhase & BuildPhase & ContainerPhase & ReleasePhase & DeployPhase;
