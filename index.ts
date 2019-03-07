@@ -46,6 +46,7 @@ export {
     CodeInspectionRegisteringInterpreter,
     containerGoals,
     controlGoals,
+    deliveryNotificationGoals,
     deployGoals,
     releaseGoals,
     Interpretation,

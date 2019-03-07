@@ -29,7 +29,18 @@ export interface StartupPhase {
 }
 
 /**
- * Well known Phases.
+ * Goals that react to delivery starting, which nothing else waits on.
+ * Useful to update cached data, alert observers etc. Can also be used
+ * to initiate slow reporting processes that do not require the ability
+ * to block delivery.
+ */
+export interface DeliveryStartGoals {
+
+    deliveryStartedGoals?: Goals;
+}
+
+/**
+ * Project check goals
  */
 export interface CheckPhase {
 
@@ -74,4 +85,5 @@ export interface ReleasePhase {
  * All goals should be constructed ahead of time and selected as appropriate for the given push,
  * rather than created on the fly.
  */
-export type DeliveryPhases = StartupPhase & CheckPhase & BuildPhase & ContainerPhase & ReleasePhase & DeployPhase;
+export type DeliveryPhases = StartupPhase & DeliveryStartGoals &
+    CheckPhase & BuildPhase & ContainerPhase & ReleasePhase & DeployPhase;
