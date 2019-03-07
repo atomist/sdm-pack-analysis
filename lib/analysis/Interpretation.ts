@@ -27,7 +27,7 @@ import {
     SdmContext,
 } from "@atomist/sdm";
 import { PreferencesElement } from "../element/preferences/preferencesScanner";
-import { CiPhases } from "./phases";
+import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
@@ -36,7 +36,7 @@ import { Scores } from "./Score";
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
  * intended to be persisted, but is only held in memory.
  */
-export interface Interpretation extends CiPhases {
+export interface Interpretation extends DeliveryPhases {
 
     /**
      * The data on which we arrived at this interpretation

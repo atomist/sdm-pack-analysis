@@ -70,8 +70,8 @@ export interface ReleasePhase {
 }
 
 /**
- * Standard CI phases.
- * All goals should be constructed ahead of time and selected,
+ * Standard delivery phases.
+ * All goals should be constructed ahead of time and selected as appropriate for the given push,
  * rather than created on the fly.
  */
-export type CiPhases = StartupPhase & CheckPhase & BuildPhase & ContainerPhase & ReleasePhase & DeployPhase;
+export type DeliveryPhases = StartupPhase & CheckPhase & BuildPhase & ContainerPhase & ReleasePhase & DeployPhase;

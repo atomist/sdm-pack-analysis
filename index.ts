@@ -56,7 +56,7 @@ export {
 export {
     BuildPhase,
     CheckPhase,
-    CiPhases,
+    DeliveryPhases,
     ContainerPhase,
     DeployPhase,
     ReleasePhase,
