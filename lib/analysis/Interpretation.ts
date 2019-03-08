@@ -149,6 +149,15 @@ export function controlGoals(interpretation: Interpretation): Goals {
     return startup;
 }
 
+export function deliveryNotificationGoals(interpretation: Interpretation): Goals {
+    const notification = goals("notification");
+    const startup = controlGoals(interpretation);
+    if (!!interpretation.deliveryStartedGoals) {
+        notification.plan(interpretation.deliveryStartedGoals).after(startup);
+    }
+    return notification;
+}
+
 export function checkGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
     const checks = goals("checks");
     const startup = controlGoals(interpretation);
