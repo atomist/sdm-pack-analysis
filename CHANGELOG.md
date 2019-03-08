@@ -10,3 +10,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 -   Empty SDM pack structure.
+-   Add delivery notification phase. [#3](https://github.com/atomist/sdm-pack-analysis/issues/3)
