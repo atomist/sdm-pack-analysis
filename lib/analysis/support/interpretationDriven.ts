@@ -39,7 +39,7 @@ function interpretationAutofixPushTest(thisTransform: AutofixRegistration, analy
 
 export function registerAutofixes(autofixGoal: Autofix, analyzer: ProjectAnalyzer): void {
     if (analyzer.possibleAutofixes) {
-        analyzer.possibleAutofixes.forEach(autofixRegistration => {
+        analyzer.possibleAutofixes.filter(i => !!i).forEach(autofixRegistration => {
             autofixGoal.with({
                 ...autofixRegistration,
                 pushTest: allSatisfied(
@@ -59,7 +59,7 @@ function interpretationCodeInspectionPushTest(thisTransform: AutoInspectRegistra
 
 export function registerCodeInspections(codeInspectionGoal: AutoCodeInspection, analyzer: ProjectAnalyzer): void {
     if (analyzer.possibleCodeInspections) {
-        analyzer.possibleCodeInspections.forEach(codeInspectionRegistration => {
+        analyzer.possibleCodeInspections.filter(i => !!i).forEach(codeInspectionRegistration => {
             codeInspectionGoal.with({
                 ...codeInspectionRegistration,
                 pushTest: allSatisfied(
