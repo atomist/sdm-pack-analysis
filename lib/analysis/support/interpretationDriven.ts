@@ -38,12 +38,14 @@ function interpretationAutofixPushTest(thisTransform: AutofixRegistration, analy
 }
 
 export function registerAutofixes(autofixGoal: Autofix, analyzer: ProjectAnalyzer): void {
-    for (const autofixRegistration of analyzer.possibleAutofixes) {
-        autofixGoal.with({
-            ...autofixRegistration,
-            pushTest: allSatisfied(
-                interpretationAutofixPushTest(autofixRegistration, analyzer),
-                autofixRegistration.pushTest || AnyPush),
+    if (analyzer.possibleAutofixes) {
+        analyzer.possibleAutofixes.filter(i => !!i).forEach(autofixRegistration => {
+            autofixGoal.with({
+                ...autofixRegistration,
+                pushTest: allSatisfied(
+                    interpretationAutofixPushTest(autofixRegistration, analyzer),
+                    autofixRegistration.pushTest || AnyPush),
+            });
         });
     }
 }
@@ -56,12 +58,14 @@ function interpretationCodeInspectionPushTest(thisTransform: AutoInspectRegistra
 }
 
 export function registerCodeInspections(codeInspectionGoal: AutoCodeInspection, analyzer: ProjectAnalyzer): void {
-    for (const codeInspectionRegistration of analyzer.possibleCodeInspections) {
-        codeInspectionGoal.with({
-            ...codeInspectionRegistration,
-            pushTest: allSatisfied(
-                interpretationCodeInspectionPushTest(codeInspectionRegistration, analyzer),
-                codeInspectionRegistration.pushTest || AnyPush),
+    if (analyzer.possibleCodeInspections) {
+        analyzer.possibleCodeInspections.filter(i => !!i).forEach(codeInspectionRegistration => {
+            codeInspectionGoal.with({
+                ...codeInspectionRegistration,
+                pushTest: allSatisfied(
+                    interpretationCodeInspectionPushTest(codeInspectionRegistration, analyzer),
+                    codeInspectionRegistration.pushTest || AnyPush),
+            });
         });
     }
 }
