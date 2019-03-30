@@ -17,7 +17,6 @@
 import {
     Cancel,
     Goals,
-    GoalsBuilder,
     Queue,
 } from "@atomist/sdm";
 
