@@ -45,6 +45,11 @@ export interface TransformRecipeContributionRegistration {
     originator: string;
 
     /**
+     * Description of this registration
+     */
+    description?: string;
+
+    /**
      * Whether this recipe is optional, meaning that the user should
      * be asked whether it should apply, rather than it being automatically
      * applied to the repo.
