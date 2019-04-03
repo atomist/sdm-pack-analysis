@@ -269,11 +269,10 @@ async function performSeedAnalysis(
         const rawRecipe = await contributor.contributor.analyze(project, analysis, sdmContext);
         if (rawRecipe) {
             const recipe: TransformRecipe = {
-                // Remove duplicates
+                // Remove duplicate parameters
                 parameters: rawRecipe.parameters.filter(p =>
                     !_.flatten(transformRecipes.map(t => t.recipe.parameters)).some(existing => existing.name === p.name)),
-                transforms: rawRecipe.transforms.filter(p =>
-                    !_.flatten(transformRecipes.map(t => t.recipe.transforms)).some(existing => existing.name === p.name)),
+                transforms: rawRecipe.transforms,
             };
             transformRecipes.push({
                 originator: contributor.originator,

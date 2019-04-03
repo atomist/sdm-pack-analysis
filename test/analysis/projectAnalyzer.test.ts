@@ -29,6 +29,7 @@ import {
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../../lib/analysis/TransformRecipeContributor";
+import { SnipTransformRecipeContributor } from "../../lib/analysis/support/transform-recipe/SnipTransformRecipeContributor";
 
 describe("projectAnalyzer", () => {
 
@@ -80,6 +81,20 @@ describe("projectAnalyzer", () => {
                 .analyze(p, pli, { full: true });
             assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 1);
             assert.strictEqual(analyzer.seedAnalysis.transformRecipes[0].recipe.transforms.length, 1);
+        });
+
+        it("should find transforms in recipe in seed analysis", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analyzer = await analyzerBuilder({} as any)
+                .withTransformRecipeContributor({
+                    originator: "snip",
+                    optional: true,
+                    contributor: new SnipTransformRecipeContributor()})
+                .withTransformRecipeContributor(AlwaysTRC).build()
+                .analyze(p, pli, { full: true });
+            assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 2);
+            assert.strictEqual(analyzer.seedAnalysis.transformRecipes[1].recipe.transforms.length, 1);
 
         });
 
