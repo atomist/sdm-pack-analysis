@@ -26,10 +26,10 @@ import {
     Scorer,
     StackSupport,
 } from "../../lib/analysis/ProjectAnalyzer";
+import { SnipTransformRecipeContributor } from "../../lib/analysis/support/transform-recipe/SnipTransformRecipeContributor";
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../../lib/analysis/TransformRecipeContributor";
-import { SnipTransformRecipeContributor } from "../../lib/analysis/support/transform-recipe/SnipTransformRecipeContributor";
 
 describe("projectAnalyzer", () => {
 
