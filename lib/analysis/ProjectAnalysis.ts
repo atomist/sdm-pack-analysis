@@ -161,6 +161,8 @@ export interface TransformRecipeRequest {
      */
     originator: string;
 
+    description: string;
+
     optional: boolean;
 
     recipe: TransformRecipe;

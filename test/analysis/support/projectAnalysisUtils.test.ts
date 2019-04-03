@@ -34,6 +34,7 @@ describe("projectAnalysisUtils", () => {
                     {
                         optional: false,
                         originator: "foo",
+                        description: "foo",
                         recipe: {
                             parameters: [],
                             transforms: [],
@@ -51,6 +52,7 @@ describe("projectAnalysisUtils", () => {
                     {
                         optional: false,
                         originator: "foo",
+                        description: "foo",
                         recipe: {
                             parameters: [ {
                                 name: "thing",

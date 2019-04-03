@@ -277,6 +277,7 @@ async function performSeedAnalysis(
             transformRecipes.push({
                 originator: contributor.originator,
                 optional: contributor.optional,
+                description: contributor.description || contributor.originator,
                 recipe,
             });
         }
