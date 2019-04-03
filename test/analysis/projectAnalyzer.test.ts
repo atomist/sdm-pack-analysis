@@ -28,6 +28,7 @@ import {
 } from "../../lib/analysis/ProjectAnalyzer";
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
+import { TransformRecipeContributionRegistration } from "../../lib/analysis/TransformRecipeContributor";
 
 describe("projectAnalyzer", () => {
 
@@ -54,6 +55,32 @@ describe("projectAnalyzer", () => {
             const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).withScanner(toy2Scanner).build()
                 .analyze(p, undefined);
             assert.deepStrictEqual(analysis.referencedEnvironmentVariables, ["frogs", "dogs"]);
+        });
+
+        it("should not perform seed analysis unless asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analyzer = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: false });
+            assert(!analyzer.seedAnalysis);
+        });
+
+        it("should perform seed analysis when asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analyzer = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: true });
+            assert(!!analyzer.seedAnalysis);
+        });
+
+        it("should find transform in recipe in seed analysis", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analyzer = await analyzerBuilder({} as any).withTransformRecipeContributor(AlwaysTRC).build()
+                .analyze(p, pli, { full: true });
+            assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 1);
+            assert.strictEqual(analyzer.seedAnalysis.transformRecipes[0].recipe.transforms.length, 1);
+
         });
 
     });
@@ -169,3 +196,20 @@ const toy2Scanner: TechnologyScanner<TechnologyStack> = async () => {
         referencedEnvironmentVariables: ["dogs"],
     };
 };
+
+const AlwaysTRC: TransformRecipeContributionRegistration = {
+    originator: "always",
+    contributor: {
+        analyze: async () => {
+            return {
+                parameters: [
+                    { name: "foo" },
+                ],
+                transforms: [
+                    async p => p.addFile("foo.txt", "Foo is foo")
+                ],
+            };
+        },
+    },
+    optional: true,
+}
