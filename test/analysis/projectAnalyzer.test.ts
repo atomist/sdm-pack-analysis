@@ -206,10 +206,10 @@ const AlwaysTRC: TransformRecipeContributionRegistration = {
                     { name: "foo" },
                 ],
                 transforms: [
-                    async p => p.addFile("foo.txt", "Foo is foo")
+                    async p => p.addFile("foo.txt", "Foo is foo"),
                 ],
             };
         },
     },
     optional: true,
-}
+};
