@@ -19,12 +19,14 @@ import {
     metadata,
 } from "@atomist/sdm";
 import { ElementsEnrichGoal } from "./analysis/support/enrichGoal";
+import { DismissMessageCommand } from "./analysis/support/messageGoal";
 
 export function analysis(): ExtensionPack {
     return {
         ...metadata(),
         configure: sdm => {
             sdm.configuration.sdm.enrichGoal = ElementsEnrichGoal;
+            sdm.addCommand(DismissMessageCommand);
         },
     };
 }
