@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-import { MessageOptions, SlackFileMessage } from "@atomist/automation-client";
+import {
+    MessageOptions,
+    SlackFileMessage,
+} from "@atomist/automation-client";
 import {
     AutoCodeInspection,
     Autofix,
     AutofixRegistration,
-    AutoInspectRegistration, goal,
+    AutoInspectRegistration,
+    goal,
     goals,
     Goals,
     GoalWithPrecondition,
