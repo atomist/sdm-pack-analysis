@@ -18,7 +18,7 @@ import {
     AutoCodeInspection,
     Autofix,
     AutofixRegistration,
-    AutoInspectRegistration,
+    AutoInspectRegistration, goal,
     goals,
     Goals,
     GoalWithPrecondition,
@@ -31,10 +31,13 @@ import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
+import { MessageOptions, SlackFileMessage } from "@atomist/automation-client";
+import { SlackMessage } from "@atomist/slack-messages";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
  * intended to be persisted, but is only held in memory.
+ * Interpreters add to an Interpretation's goals, considering what goals may already have been set.
  */
 export interface Interpretation extends DeliveryPhases {
 
@@ -78,6 +81,21 @@ export interface Interpretation extends DeliveryPhases {
 
     readonly scores: Scores;
 
+    /**
+     * Any messages regarding this project or push that should be displayed
+     * to users when handling the project.
+     */
+    readonly messages: PushMessage[];
+
+}
+
+/**
+ * Message relating to this project
+ */
+export interface PushMessage {
+
+    readonly message: string | SlackMessage | SlackFileMessage;
+    readonly opts?: MessageOptions;
 }
 
 /**
@@ -185,6 +203,24 @@ export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnal
             g => (g as GoalWithPrecondition).dependsOn.push(...startup.goals, ...preCondition.goals));
     }
     return interpretation.buildGoals;
+}
+
+/**
+ * Messaging goals. Only set if there are messages in this interpretation.
+ * @param {Interpretation} interpretation
+ * @return {Goals}
+ */
+export function messagingGoals(interpretation: Interpretation): Goals {
+    const startup = controlGoals(interpretation);
+    if (interpretation.messages.length > 0) {
+        const messagingGoal = goal({ displayName: "messaging" }, async gi => {
+            for (const message of interpretation.messages) {
+                await gi.addressChannels(message.message, message.opts);
+            }
+        });
+        return goals("messaging").plan(messagingGoal).after(startup);
+    }
+    return undefined;
 }
 
 export function testGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {

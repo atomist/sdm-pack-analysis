@@ -231,6 +231,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             codeInspectionGoal: this.codeInspectionGoal,
             queueGoal: this.queueGoal,
             scores: {},
+            messages: [],
         };
 
         for (const interpreter of this.interpreters) {

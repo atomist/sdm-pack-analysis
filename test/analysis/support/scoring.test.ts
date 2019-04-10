@@ -67,5 +67,6 @@ function newInterpretation(analysis?: ProjectAnalysis): Interpretation {
         codeInspectionGoal: undefined,
         queueGoal: undefined,
         scores: {},
+        messages: [],
     };
 }
