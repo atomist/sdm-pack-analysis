@@ -23,7 +23,6 @@ import {
     Autofix,
     AutofixRegistration,
     AutoInspectRegistration,
-    goal,
     goals,
     Goals,
     GoalWithPrecondition,
@@ -37,6 +36,7 @@ import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
+import { messageGoal } from "./support/messageGoal";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
@@ -98,7 +98,7 @@ export interface Interpretation extends DeliveryPhases {
  */
 export interface PushMessage {
 
-    readonly message: string | SlackMessage | SlackFileMessage;
+    readonly message: string | SlackMessage | SlackFileMessage & { title: string }; // require the title on file messages so that we can dismiss
     readonly opts?: MessageOptions;
 }
 
@@ -211,18 +211,10 @@ export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnal
 
 /**
  * Messaging goals. Only set if there are messages in this interpretation.
- * @param {Interpretation} interpretation
- * @return {Goals}
  */
-export function messagingGoals(interpretation: Interpretation): Goals {
-    const startup = controlGoals(interpretation);
+export function messagingGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
     if (interpretation.messages.length > 0) {
-        const messagingGoal = goal({ displayName: "messaging" }, async gi => {
-            for (const message of interpretation.messages) {
-                await gi.addressChannels(message.message, message.opts);
-            }
-        });
-        return goals("messaging").plan(messagingGoal).after(startup);
+        return goals("messaging").plan(analyzer.messageGoal);
     }
     return undefined;
 }

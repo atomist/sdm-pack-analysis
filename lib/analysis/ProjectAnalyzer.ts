@@ -20,6 +20,7 @@ import {
     Autofix,
     AutofixRegistration,
     AutoInspectRegistration,
+    Goal,
     SdmContext,
 } from "@atomist/sdm";
 import {
@@ -100,6 +101,8 @@ export interface ProjectAnalyzer {
     readonly autofixGoal: Autofix;
 
     readonly codeInspectionGoal: AutoCodeInspection;
+
+    readonly messageGoal: Goal;
 }
 
 /**

@@ -25,6 +25,7 @@ import {
     Autofix,
     AutofixRegistration,
     AutoInspectRegistration,
+    Goal,
     PushListenerInvocation,
     Queue,
     SdmContext,
@@ -64,6 +65,7 @@ import {
     registerAutofixes,
     registerCodeInspections,
 } from "./interpretationDriven";
+import { messageGoal } from "./messageGoal";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
@@ -85,6 +87,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
 
+    public readonly messageGoal: Goal;
+
     public readonly scorers: Array<ConditionalRegistration<Scorer>> = [];
 
     private readonly queueGoal: Queue;
@@ -98,6 +102,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     fetch: queueConfig.fetch || 20,
                 });
         }
+        this.messageGoal = messageGoal(this as ProjectAnalyzer);
     }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {
