@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { MessageOptions, SlackFileMessage } from "@atomist/automation-client";
 import {
     AutoCodeInspection,
     Autofix,
@@ -26,13 +27,12 @@ import {
     PushTest,
     SdmContext,
 } from "@atomist/sdm";
+import { SlackMessage } from "@atomist/slack-messages";
 import { PreferencesElement } from "../element/preferences/preferencesScanner";
 import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
-import { MessageOptions, SlackFileMessage } from "@atomist/automation-client";
-import { SlackMessage } from "@atomist/slack-messages";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
