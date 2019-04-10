@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/atomist/sdm-pack-seed/compare/1.0.0...HEAD)
 
+### Added
+
+-   Add support for sending messages from a Project Analysis. [#9](https://github.com/atomist/sdm-pack-analysis/issues/9)
+
 ## [1.0.0](https://github.com/atomist/sdm-pack-seed/compare/0.1.0...1.0.0) - 2019-03-30
 
 ## [0.1.0](https://github.com/atomist/sdm-pack-seed/tree/0.1.0) - 2019-03-20
