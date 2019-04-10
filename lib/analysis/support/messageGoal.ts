@@ -23,9 +23,9 @@ import {
 import {
     actionableButton,
     CommandHandlerRegistration,
-    doWithProject,
     goal,
     Goal,
+    GoalInvocation,
     PreferenceScope,
     SdmContext,
     slackInfoMessage,
@@ -34,10 +34,23 @@ import {
 import {
     Action,
     italic,
+    SlackMessage,
 } from "@atomist/slack-messages";
 import * as crypto from "crypto";
-import { PushMessage } from "../Interpretation";
-import { ProjectAnalyzer } from "../ProjectAnalyzer";
+
+/**
+ * Message relating to this project
+ */
+export interface PushMessage {
+
+    readonly message: string | SlackMessage | SlackFileMessage & { title: string }; // require the title on file messages so that we can dismiss
+    readonly opts?: MessageOptions;
+}
+
+/**
+ * Factory that is able to produce PushMessages
+ */
+export type PushMessageFactory = (gi: GoalInvocation) => Promise<PushMessage[]>;
 
 /**
  * Command to dismiss a certain PushMessage
@@ -63,14 +76,13 @@ export const DismissMessageCommand: CommandHandlerRegistration<{ hash: string, m
 /**
  * Create a Goal that sends PushMessages.
  * It adds a dismiss button to the messages it sends.
- * @param analyzer
  */
-export function messageGoal(analyzer: ProjectAnalyzer): Goal {
-    return goal({ displayName: "Messages" }, doWithProject(async gi => {
-        const { project } = gi;
-        const interpretation = await analyzer.interpret(project, gi, { full: false });
+export function messageGoal(messageFactory: PushMessageFactory): Goal {
+    return goal({ displayName: "Messages" }, async gi => {
 
-        for (const pm of interpretation.messages) {
+        const pushMessages = await messageFactory(gi) || [];
+
+        for (const pm of pushMessages) {
             if (!(await isDismissed(pm, gi))) {
                 const options: MessageOptions = {
                     id: guid(),
@@ -106,7 +118,7 @@ export function messageGoal(analyzer: ProjectAnalyzer): Goal {
             }
         }
 
-    }, { readOnly: true }));
+    });
 }
 
 function createDismissAction(pm: PushMessage, msgId: string): Action {

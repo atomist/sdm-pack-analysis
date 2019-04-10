@@ -102,7 +102,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     fetch: queueConfig.fetch || 20,
                 });
         }
-        this.messageGoal = messageGoal(this as ProjectAnalyzer);
+        this.messageGoal = messageGoal(async gi => {
+            const { configuration } = gi;
+            return configuration.sdm.projectLoader.doWithProject({ ...gi, readOnly: true }, async p => {
+                const interpretation = await this.interpret(p, gi);
+                return interpretation.messages;
+            });
+        });
     }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {

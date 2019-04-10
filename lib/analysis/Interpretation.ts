@@ -36,7 +36,10 @@ import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
-import { messageGoal } from "./support/messageGoal";
+import {
+    messageGoal,
+    PushMessage,
+} from "./support/messageGoal";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
@@ -91,15 +94,6 @@ export interface Interpretation extends DeliveryPhases {
      */
     readonly messages: PushMessage[];
 
-}
-
-/**
- * Message relating to this project
- */
-export interface PushMessage {
-
-    readonly message: string | SlackMessage | SlackFileMessage & { title: string }; // require the title on file messages so that we can dismiss
-    readonly opts?: MessageOptions;
 }
 
 /**
