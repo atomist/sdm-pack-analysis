@@ -51,6 +51,7 @@ export {
     releaseGoals,
     Interpretation,
     Interpreter,
+    messagingGoals,
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "./lib/analysis/Interpretation";
@@ -98,3 +99,4 @@ export {
 } from "./lib/element/preferences/preferencesScanner";
 export * from "./lib/analysis/support/transform-recipe/PlaceholderTransformRecipeContributor";
 export * from "./lib/analysis/support/transform-recipe/SnipTransformRecipeContributor";
+export { DismissMessageCommand } from "./lib/analysis/support/messageGoal";

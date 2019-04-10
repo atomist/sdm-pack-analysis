@@ -15,7 +15,9 @@
  */
 
 import {
+    guid,
     isSlackMessage,
+    MessageOptions,
     SlackFileMessage,
 } from "@atomist/automation-client";
 import {
@@ -27,11 +29,11 @@ import {
     PreferenceScope,
     SdmContext,
     slackInfoMessage,
+    slackSuccessMessage,
 } from "@atomist/sdm";
 import {
     Action,
     italic,
-    SlackMessage,
 } from "@atomist/slack-messages";
 import * as crypto from "crypto";
 import { PushMessage } from "../Interpretation";
@@ -40,16 +42,21 @@ import { ProjectAnalyzer } from "../ProjectAnalyzer";
 /**
  * Command to dismiss a certain PushMessage
  */
-export const DismissMessageCommand: CommandHandlerRegistration<{ hash: string }> = {
+export const DismissMessageCommand: CommandHandlerRegistration<{ hash: string, msgId: string }> = {
     name: "DismissMessage",
     description: "Dismiss a Project Analysis message",
     autoSubmit: true,
-    parameters: { hash: { required: true } },
+    parameters: { hash: { displayable: false }, msgId: { displayable: false } },
     listener: async ci => {
         await ci.preferences.put(
             `project-analysis.message.dismissed.${ci.parameters.hash}`,
             true,
             { scope: PreferenceScope.Sdm });
+        await ci.addressChannels(
+            slackSuccessMessage(
+                "Project Analysis",
+                "Successfully dismissed message"),
+            { id: ci.parameters.msgId });
     },
 };
 
@@ -65,12 +72,17 @@ export function messageGoal(analyzer: ProjectAnalyzer): Goal {
 
         for (const pm of interpretation.messages) {
             if (!(await isDismissed(pm, gi))) {
+                const options: MessageOptions = {
+                    id: guid(),
+                    ...(pm.opts || {}),
+                };
+
                 if (typeof pm.message === "string") {
                     const msg = slackInfoMessage(
                         "Project Analysis",
                         pm.message,
-                        { actions: [createDismissAction(pm)] });
-                    await gi.addressChannels(msg, pm.opts);
+                        { actions: [createDismissAction(pm, options.id)] });
+                    await gi.addressChannels(msg, options);
                 } else if (isSlackMessage(pm.message)) {
                     const msg = pm.message;
                     if (!msg.attachments || msg.attachments.length === 0) {
@@ -80,16 +92,16 @@ export function messageGoal(analyzer: ProjectAnalyzer): Goal {
                         }];
                     }
                     const attachment = msg.attachments.slice(-1)[0];
-                    attachment.actions = [...(attachment.actions || []), createDismissAction(pm)];
-                    await gi.addressChannels(msg, pm.opts);
+                    attachment.actions = [...(attachment.actions || []), createDismissAction(pm, options.id)];
+                    await gi.addressChannels(msg, options);
                 } else {
                     const fileMsg = pm.message as SlackFileMessage & { title: string };
                     const msg = slackInfoMessage(
                         "Project Analysis",
                         `Dismiss ${italic(fileMsg.title)}`,
-                        { actions: [createDismissAction(pm)] });
-                    await gi.addressChannels(msg);
-                    await gi.addressChannels(pm.message, pm.opts);
+                        { actions: [createDismissAction(pm, options.id)] });
+                    await gi.addressChannels(msg, options);
+                    await gi.addressChannels(pm.message);
                 }
             }
         }
@@ -97,11 +109,11 @@ export function messageGoal(analyzer: ProjectAnalyzer): Goal {
     }, { readOnly: true }));
 }
 
-function createDismissAction(pm: PushMessage): Action {
-    return actionableButton<{ hash: string }>(
+function createDismissAction(pm: PushMessage, msgId: string): Action {
+    return actionableButton<{ hash: string, msgId: string }>(
         { text: "Dismiss" },
         DismissMessageCommand,
-        { hash: createHash(pm) });
+        { hash: createHash(pm), msgId });
 }
 
 async function isDismissed(pm: PushMessage, context: SdmContext): Promise<boolean> {
