@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { analysis } from "./lib/pack";
+export { analysisSupport } from "./lib/pack";
 export {
     assessInspection,
     ResultDisplayer,

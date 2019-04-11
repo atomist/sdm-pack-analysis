@@ -15,6 +15,7 @@
  */
 
 import {
+    addressWeb,
     guid,
     isSlackMessage,
     MessageOptions,
@@ -103,7 +104,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                             "Project Analysis",
                             pm.message,
                             { actions: [createDismissAction(pm, options.id)] });
-                        await gi.addressChannels(msg, options);
+                        await addressMessage(msg, gi, options);
                     } else if (isSlackMessage(pm.message)) {
                         const msg = pm.message;
                         if (!msg.attachments || msg.attachments.length === 0) {
@@ -114,15 +115,15 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                         }
                         const attachment = msg.attachments.slice(-1)[0];
                         attachment.actions = [...(attachment.actions || []), createDismissAction(pm, options.id)];
-                        await gi.addressChannels(msg, options);
+                        await addressMessage(msg, gi, options);
                     } else {
                         const fileMsg = pm.message as SlackFileMessage & { title: string };
                         const msg = slackInfoMessage(
                             "Project Analysis",
                             `Dismiss ${italic(fileMsg.title)}`,
                             { actions: [createDismissAction(pm, options.id)] });
-                        await gi.addressChannels(msg, options);
-                        await gi.addressChannels(pm.message);
+                        await addressMessage(msg, gi, options);
+                        await addressMessage(pm.message, gi);
                     }
                 }
             }
@@ -146,4 +147,12 @@ async function isDismissed(pm: PushMessage, context: SdmContext): Promise<boolea
 function createHash(pm: PushMessage): string {
     const content = JSON.stringify(pm);
     return crypto.createHash("md5").update(content).digest("base64").toString();
+}
+
+async function addressMessage(msg: any, gi: GoalInvocation, options?: MessageOptions): Promise<void> {
+    if (!gi.goalEvent.push.repo.channels || gi.goalEvent.push.repo.channels.length === 0) {
+        await gi.context.messageClient.send(msg, addressWeb(), options);
+    } else {
+        await gi.addressChannels(msg, options);
+    }
 }

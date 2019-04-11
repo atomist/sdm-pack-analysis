@@ -21,7 +21,7 @@ import {
 import { ElementsEnrichGoal } from "./analysis/support/enrichGoal";
 import { DismissMessageCommand } from "./analysis/support/messageGoal";
 
-export function analysis(): ExtensionPack {
+export function analysisSupport(): ExtensionPack {
     return {
         ...metadata(),
         configure: sdm => {

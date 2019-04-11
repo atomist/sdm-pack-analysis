@@ -200,7 +200,7 @@ export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnal
  */
 export function messagingGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
     if (interpretation.messages.length > 0) {
-        return goals("messaging").plan(analyzer.messageGoal);
+        return goals("messages").plan(analyzer.messageGoal);
     }
     return undefined;
 }
