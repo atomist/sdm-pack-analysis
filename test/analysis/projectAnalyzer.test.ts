@@ -136,7 +136,7 @@ describe("projectAnalyzer", () => {
                 .withTransformRecipeContributor({
                     originator: "snip",
                     optional: true,
-                    contributor: new SnipTransformRecipeContributor()
+                    contributor: new SnipTransformRecipeContributor(),
                 })
                 .withTransformRecipeContributor(AlwaysTRC).build()
                 .analyze(p, pli, { full: true });
