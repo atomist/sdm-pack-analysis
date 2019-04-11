@@ -33,7 +33,12 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 import { Score } from "./Score";
-import { TechnologyScanner } from "./TechnologyScanner";
+import {
+    FastProject,
+    ScannerAction,
+    TechnologyClassification,
+    TechnologyScanner,
+} from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
 /**
@@ -71,11 +76,25 @@ export function isConditionalRegistration(a: any): a is ConditionalRegistration<
 export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
 
 /**
+ * Result of classifying the project quickly to determine its nature.
+ */
+export interface Classification {
+
+    elements: Record<string, TechnologyClassification>;
+}
+
+/**
  * Type with ability to analyze individual projects and determine their delivery.
  * We use a fixed set of goals created ahead of time with function implementations
  * that are parameterized based on analyzing and interpreting the project on push.
  */
 export interface ProjectAnalyzer {
+
+    /**
+     * Classify this project. The implementations should be faster than delivery steps of interpretation and analysis.
+     * Allows a project to be classified quickly to determine the relevance of this SDM to handling it.
+     */
+    classify(p: FastProject, sdmContext: SdmContext): Promise<Classification>;
 
     /**
      * Analyze the given project. Analysis will always be in sufficient detail to back delivery.
@@ -90,7 +109,7 @@ export interface ProjectAnalyzer {
 
     readonly interpreters: Array<ConditionalRegistration<Interpreter>>;
 
-    readonly scanners: Array<ConditionalRegistration<TechnologyScanner<any>>>;
+    readonly scanners: Array<ConditionalRegistration<ScannerAction<any>>>;
 
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
@@ -144,7 +163,7 @@ export interface ProjectAnalyzerBuilder {
      * of previous analyzers. This ensure that expensive parsing
      * can be done only once.
      */
-    withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): ProjectAnalyzerBuilder;
+    withScanner<T extends TechnologyElement>(scanner: ScannerAction<T> | ConditionalRegistration<ScannerAction<T>>): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

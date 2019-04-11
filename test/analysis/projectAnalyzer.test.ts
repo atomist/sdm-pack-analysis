@@ -33,6 +33,56 @@ import { TransformRecipeContributionRegistration } from "../../lib/analysis/Tran
 
 describe("projectAnalyzer", () => {
 
+    describe("relevance", () => {
+
+        it("should not be classified by default", async () => {
+            const p = InMemoryProject.of();
+            const classification = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .classify(p, undefined);
+            assert(!!classification);
+            assert.deepStrictEqual(classification, { elements: {}});
+        });
+
+        it("should be classified with classification", async () => {
+            const p = InMemoryProject.of();
+            const classification = await analyzerBuilder({} as any).withScanner({
+                classify: async () => ({name: "foo", tags: [], messages: []}),
+                scan: toyScanner,
+            }).build()
+                .classify(p, undefined);
+            assert(!!classification);
+            assert(!!classification.elements.foo);
+        });
+
+        it("should not be classified with no classification", async () => {
+            const p = InMemoryProject.of();
+            const classification = await analyzerBuilder({} as any).withScanner({
+                classify: async () => undefined,
+                scan: toyScanner,
+            }).build()
+                .classify(p, undefined);
+            assert(!!classification);
+            assert.deepStrictEqual(classification, { elements: {}});
+        });
+
+        it("should be classified with one true and one false classification", async () => {
+            const p = InMemoryProject.of();
+            const classified = await analyzerBuilder({} as any)
+                .withScanner({
+                    classify: async () => ({ name: "foo", tags: [], messages: []}),
+                    scan: toyScanner,
+                })
+                .withScanner({
+                    classify: async () => undefined,
+                    scan: toyScanner,
+                }).build()
+                .classify(p, undefined);
+            assert(!!classified);
+            assert(!!classified.elements.foo);
+        });
+
+    });
+
     describe("analysis", () => {
 
         it("should pull up services", async () => {
@@ -90,7 +140,8 @@ describe("projectAnalyzer", () => {
                 .withTransformRecipeContributor({
                     originator: "snip",
                     optional: true,
-                    contributor: new SnipTransformRecipeContributor()})
+                    contributor: new SnipTransformRecipeContributor(),
+                })
                 .withTransformRecipeContributor(AlwaysTRC).build()
                 .analyze(p, pli, { full: true });
             assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 2);

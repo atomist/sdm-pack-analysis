@@ -20,10 +20,23 @@ import {
 } from "../ProjectAnalysis";
 
 import * as _ from "lodash";
+import { Classification } from "../ProjectAnalyzer";
+import { TechnologyClassification } from "../TechnologyScanner";
+import { PushMessage } from "./messageGoal";
 
 export function allTechnologyElements(projectAnalysis: ProjectAnalysis): TechnologyElement[] {
     return Object.getOwnPropertyNames(projectAnalysis.elements)
         .map(name => projectAnalysis.elements[name]);
+}
+
+export function allTechnologyClassifications(classification: Classification): TechnologyClassification[] {
+    return Object.getOwnPropertyNames(classification.elements)
+        .map(name => classification.elements[name]);
+}
+
+export function allMessages(classification: Classification): PushMessage[] {
+    return _.flatten(allTechnologyClassifications(classification)
+        .map(cl => cl.messages));
 }
 
 /**

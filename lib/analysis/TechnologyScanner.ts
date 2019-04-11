@@ -17,10 +17,17 @@
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
 import {
+    Classified,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     TechnologyElement,
 } from "./ProjectAnalysis";
+import { HasMessages } from "./support/messageGoal";
+
+/**
+ * Subset of Project that is efficient and can be used during a precheck
+ */
+export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile" | "provenance">;
 
 /**
  * Scan the given project for a particular element.
@@ -33,3 +40,31 @@ import {
  */
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
+
+/**
+ * Result of quickly classifying a project.
+ */
+export type TechnologyClassification = Classified & HasMessages;
+
+/**
+ * More elaborate scanner that can work in phases
+ */
+export interface PhasedTechnologyScanner<T extends TechnologyElement> {
+
+    /**
+     * Quick classification of this project. Should be efficient.
+     */
+    classify: (p: FastProject, ctx: SdmContext) => Promise<TechnologyClassification | undefined>;
+
+    /**
+     * Perform a scan of the project.
+     */
+    scan: TechnologyScanner<T>;
+}
+
+export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<any> {
+    const maybe = a as PhasedTechnologyScanner<any>;
+    return !!maybe.scan;
+}
+
+export type ScannerAction<T extends TechnologyElement> = TechnologyScanner<T> | PhasedTechnologyScanner<T>;

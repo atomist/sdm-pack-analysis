@@ -31,14 +31,14 @@ import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
-import { PushMessage } from "./support/messageGoal";
+import { HasMessages } from "./support/messageGoal";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
  * intended to be persisted, but is only held in memory.
  * Interpreters add to an Interpretation's goals, considering what goals may already have been set.
  */
-export interface Interpretation extends DeliveryPhases {
+export interface Interpretation extends DeliveryPhases, HasMessages {
 
     /**
      * The data on which we arrived at this interpretation
@@ -79,12 +79,6 @@ export interface Interpretation extends DeliveryPhases {
     readonly codeInspectionGoal: AutoCodeInspection;
 
     readonly scores: Scores;
-
-    /**
-     * Any messages regarding this project or push that should be displayed
-     * to users when handling the project.
-     */
-    readonly messages: PushMessage[];
 
 }
 
@@ -208,8 +202,8 @@ export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnal
 /**
  * Messaging goals. Only set if there are messages in this interpretation.
  */
-export function messagingGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
-    if (interpretation.messages.length > 0) {
+export function messagingGoals(hasMessages: HasMessages, analyzer: ProjectAnalyzer): Goals {
+    if (hasMessages.messages.length > 0) {
         return goals("messages").plan(analyzer.messageGoal);
     }
     return undefined;

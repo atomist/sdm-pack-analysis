@@ -83,6 +83,8 @@ export {
     StackSupport,
 } from "./lib/analysis/ProjectAnalyzer";
 export {
+    FastProject,
+    ScannerAction,
     TechnologyScanner,
 } from "./lib/analysis/TechnologyScanner";
 export {
