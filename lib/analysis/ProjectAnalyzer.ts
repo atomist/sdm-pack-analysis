@@ -35,7 +35,8 @@ import {
 import { Score } from "./Score";
 import {
     FastProject,
-    ScannerAction, TechnologyClassification,
+    ScannerAction,
+    TechnologyClassification,
     TechnologyScanner,
 } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
