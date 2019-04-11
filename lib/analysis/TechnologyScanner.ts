@@ -17,10 +17,12 @@
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
 import {
+    Classified,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     TechnologyElement,
 } from "./ProjectAnalysis";
+import { HasMessages } from "./support/messageGoal";
 
 /**
  * Subset of Project that is efficient and can be used during a precheck
@@ -39,12 +41,7 @@ export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
 
-/**
- * Test as to whether a Project is relevant. Such tests should run fast
- * as they cannot scan the entire project and thus the infrastructure
- * can avoid cloning.
- */
-export type RelevanceTest = (p: FastProject, ctx: SdmContext) => Promise<boolean>;
+export type TechnologyClassification = Classified & HasMessages;
 
 /**
  * More elaborate scanner that can work in phases
@@ -52,9 +49,9 @@ export type RelevanceTest = (p: FastProject, ctx: SdmContext) => Promise<boolean
 export interface PhasedTechnologyScanner<T extends TechnologyElement> {
 
     /**
-     * Check whether this project might be relevant. Should be efficient.
+     * Quck classification of this project. Should be efficient.
      */
-    isRelevant: RelevanceTest;
+    classify: (p: FastProject, ctx: SdmContext) => Promise<TechnologyClassification | undefined>;
 
     /**
      * Perform a scan

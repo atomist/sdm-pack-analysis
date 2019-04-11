@@ -41,6 +41,7 @@ import {
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
 import {
+    Classified,
     Dependency,
     Elements,
     ProjectAnalysis,
@@ -52,6 +53,7 @@ import {
     TransformRecipeRequest,
 } from "../ProjectAnalysis";
 import {
+    Classification,
     ConditionalRegistration,
     isConditionalRegistration,
     ProjectAnalyzer,
@@ -195,12 +197,18 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public async isRelevant(p: FastProject,
-                            sdmContext: SdmContext): Promise<boolean> {
-        const results = await Promise.all(this.scanners
+    public async classify(p: FastProject,
+                          sdmContext: SdmContext): Promise<Classification> {
+        const classifiers = await Promise.all(this.scanners
             .filter(s => s.runWhen({ full: false }, sdmContext))
-            .map(s => s.action.isRelevant(p, sdmContext)));
-        return results.includes(true);
+            .map(s => s.action.classify(p, sdmContext)));
+        const classification: Classification = { elements: {} };
+        classifiers
+            .filter(c => !!c)
+            .forEach(c => {
+                classification.elements[c.name] = c;
+            });
+        return classification;
     }
 
     public async interpret(p: Project | ProjectAnalysis,
@@ -346,8 +354,8 @@ function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerActio
     return isPhasedScanner(sa) ?
         sa :
         {
-            // If it wants to be relevant, it has to tell us
-            isRelevant: async () => false,
+            // If it wants to be classified, it has to do work
+            classify: async () => undefined,
             scan: sa,
         };
 }

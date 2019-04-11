@@ -98,11 +98,7 @@ export interface ProjectAnalysis {
 
 }
 
-/**
- * Instance of a known element type, such as NodeTechnologyElement,
- * in a specific project.
- */
-export interface TechnologyElement {
+export interface Classified {
 
     /**
      * Name of the element, such as "node".
@@ -114,6 +110,13 @@ export interface TechnologyElement {
      * Tags associated with this element's use.
      */
     readonly tags: string[];
+}
+
+/**
+ * Instance of a known element type, such as NodeTechnologyElement,
+ * in a specific project.
+ */
+export interface TechnologyElement extends Classified {
 
     /**
      * Names of environment variables referenced by this stack.

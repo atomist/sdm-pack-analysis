@@ -28,6 +28,7 @@ import {
     Interpreter,
 } from "./Interpretation";
 import {
+    Classified,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     TechnologyElement,
@@ -35,7 +36,6 @@ import {
 import { Score } from "./Score";
 import {
     FastProject,
-    RelevanceTest,
     ScannerAction,
     TechnologyScanner,
 } from "./TechnologyScanner";
@@ -76,6 +76,14 @@ export function isConditionalRegistration(a: any): a is ConditionalRegistration<
 export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
 
 /**
+ * Project pre-check
+ */
+export interface Classification {
+
+    elements: Record<string, Classified>;
+}
+
+/**
  * Type with ability to analyze individual projects and determine their delivery.
  * We use a fixed set of goals created ahead of time with function implementations
  * that are parameterized based on analyzing and interpreting the project on push.
@@ -83,9 +91,9 @@ export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
 export interface ProjectAnalyzer {
 
     /**
-     * Is this project relevant?
+     * Classify this project
      */
-    isRelevant: RelevanceTest;
+    classify(p: FastProject, sdmContext: SdmContext): Promise<Classification>;
 
     /**
      * Analyze the given project. Analysis will always be in sufficient detail to back delivery.
