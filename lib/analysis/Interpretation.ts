@@ -121,6 +121,11 @@ export interface AutofixRegisteringInterpreter extends Interpreter {
      * This must be a stable value for possible autofixes, returned on all calls
      */
     readonly autofixes: AutofixRegistration[];
+
+    /**
+     * Configure the autofix goal to add more listeners etc
+     */
+    configureAutofixGoal?: (goal: Autofix) => void;
 }
 
 /**
@@ -133,7 +138,12 @@ export interface CodeInspectionRegisteringInterpreter extends Interpreter {
     /**
      * This must be a stable value for possible code inspections, returned on all calls
      */
-    codeInspections: Array<AutoInspectRegistration<any, any>>;
+    readonly codeInspections: Array<AutoInspectRegistration<any, any>>;
+
+    /**
+     * Configure the code inspection goal to add more listeners etc
+     */
+    configureCodeInspectionGoal?: (goal: AutoCodeInspection) => void;
 }
 
 export function isAutofixRegisteringInterpreter(a: Interpreter): a is AutofixRegisteringInterpreter {

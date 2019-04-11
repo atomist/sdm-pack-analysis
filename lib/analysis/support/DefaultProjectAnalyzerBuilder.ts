@@ -34,7 +34,6 @@ import {
 import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 
 import * as _ from "lodash";
-import { AnalyzerOptions } from "../analyzerBuilder";
 import {
     Interpretation,
     Interpreter,
@@ -95,8 +94,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     private readonly queueGoal: Queue;
 
-    constructor(private readonly sdm: SoftwareDeliveryMachine,
-                private readonly options: AnalyzerOptions) {
+    constructor(private readonly sdm: SoftwareDeliveryMachine) {
         const queueConfig = _.get(sdm, "configuration.sdm.goal.queue");
         if (!!queueConfig && queueConfig.enabled === true) {
             this.queueGoal = new Queue(
@@ -115,18 +113,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         });
 
         this.autofixGoal = new Autofix({ isolate: true });
-        if (!!options && !!options.autofix) {
-            toArray(options.autofix.projectListener || [])
-                .forEach(pl => this.autofixGoal.withProjectListener(pl));
-        }
-
         this.codeInspectionGoal = new AutoCodeInspection({ isolate: true });
-        if (!!options && !!options.codeInspection) {
-            toArray(options.codeInspection.reviewListener || [])
-                .forEach(rl => this.codeInspectionGoal.withListener(rl));
-            toArray(options.codeInspection.projectListener || [])
-                .forEach(pl => this.codeInspectionGoal.withProjectListener(pl));
-        }
     }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {
@@ -140,9 +127,15 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         this.interpreters.push(reg);
         if (isAutofixRegisteringInterpreter(interpreter)) {
             this.possibleAutofixes.push(...interpreter.autofixes);
+            if (!!interpreter.configureAutofixGoal) {
+                interpreter.configureAutofixGoal(this.autofixGoal);
+            }
         }
         if (isCodeInspectionRegisteringInterpreter(interpreter)) {
             this.possibleCodeInspections.push(...interpreter.codeInspections);
+            if (!!interpreter.configureCodeInspectionGoal) {
+                interpreter.configureCodeInspectionGoal(this.codeInspectionGoal);
+            }
         }
         return this;
     }
