@@ -33,7 +33,12 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 import { Score } from "./Score";
-import { FastProject, RelevanceTest, ScannerAction, TechnologyScanner } from "./TechnologyScanner";
+import {
+    FastProject,
+    RelevanceTest,
+    ScannerAction,
+    TechnologyScanner,
+} from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
 /**
