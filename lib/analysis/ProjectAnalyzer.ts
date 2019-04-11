@@ -33,7 +33,7 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 import { Score } from "./Score";
-import { TechnologyScanner } from "./TechnologyScanner";
+import { FastProject, RelevanceTest, ScannerAction, TechnologyScanner } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
 
 /**
@@ -78,6 +78,11 @@ export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
 export interface ProjectAnalyzer {
 
     /**
+     * Is this project relevant?
+     */
+    isRelevant: RelevanceTest;
+
+    /**
      * Analyze the given project. Analysis will always be in sufficient detail to back delivery.
      * If options are provided and specify a full analysis, go deeper.
      */
@@ -90,7 +95,7 @@ export interface ProjectAnalyzer {
 
     readonly interpreters: Array<ConditionalRegistration<Interpreter>>;
 
-    readonly scanners: Array<ConditionalRegistration<TechnologyScanner<any>>>;
+    readonly scanners: Array<ConditionalRegistration<ScannerAction<any>>>;
 
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
@@ -144,7 +149,7 @@ export interface ProjectAnalyzerBuilder {
      * of previous analyzers. This ensure that expensive parsing
      * can be done only once.
      */
-    withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): ProjectAnalyzerBuilder;
+    withScanner<T extends TechnologyElement>(scanner: ScannerAction<T> | ConditionalRegistration<ScannerAction<T>>): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

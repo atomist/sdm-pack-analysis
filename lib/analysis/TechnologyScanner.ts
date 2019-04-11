@@ -23,6 +23,11 @@ import {
 } from "./ProjectAnalysis";
 
 /**
+ * Subset of Project that is efficient and can be used during a precheck
+ */
+export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile" | "provenance">;
+
+/**
  * Scan the given project for a particular element.
  * Ordering is significant, as we can see the analysis to date.
  * It is important that scanners are efficient, because many may be
@@ -33,3 +38,33 @@ import {
  */
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
+
+/**
+ * Test as to whether a Project is relevant. Such tests should run fast
+ * as they cannot scan the entire project and thus the infrastructure
+ * can avoid cloning.
+ */
+export type RelevanceTest = (p: FastProject, ctx: SdmContext) => Promise<boolean>;
+
+/**
+ * More elaborate scanner that can work in phases
+ */
+export interface PhasedTechnologyScanner<T extends TechnologyElement> {
+
+    /**
+     * Check whether this project might be relevant. Should be efficient.
+     */
+    isRelevant: RelevanceTest;
+
+    /**
+     * Perform a scan
+     */
+    scan: TechnologyScanner<T>;
+}
+
+export function isPhasedScanner(a: any): a is PhasedTechnologyScanner<any> {
+    const maybe = a as PhasedTechnologyScanner<any>;
+    return !!maybe.scan;
+}
+
+export type ScannerAction<T extends TechnologyElement> = TechnologyScanner<T> | PhasedTechnologyScanner<T>;

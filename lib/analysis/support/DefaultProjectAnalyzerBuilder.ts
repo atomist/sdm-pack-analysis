@@ -60,7 +60,7 @@ import {
     Scorer,
     StackSupport,
 } from "../ProjectAnalyzer";
-import { TechnologyScanner } from "../TechnologyScanner";
+import { FastProject, isPhasedScanner, PhasedTechnologyScanner, ScannerAction } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
 import {
     registerAutofixes,
@@ -74,7 +74,7 @@ import { messageGoal } from "./messageGoal";
  */
 export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAnalyzerBuilder {
 
-    public readonly scanners: Array<ConditionalRegistration<TechnologyScanner<any>>> = [];
+    public readonly scanners: Array<ConditionalRegistration<PhasedTechnologyScanner<any>>> = [];
 
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
@@ -116,8 +116,17 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         this.codeInspectionGoal = new AutoCodeInspection({ isolate: true });
     }
 
-    public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {
-        this.scanners.push(isConditionalRegistration(scanner) ? scanner : runOnCondition(scanner));
+    public withScanner<T extends TechnologyElement>(scanner: ScannerAction<T> | ConditionalRegistration<ScannerAction<T>>): this {
+        let toAdd: ConditionalRegistration<PhasedTechnologyScanner<T>>;
+        if (isConditionalRegistration(scanner)) {
+            toAdd = {
+                action: toPhasedTechnologyScanner(scanner.action),
+                runWhen: scanner.runWhen,
+            };
+        } else {
+            toAdd = runOnCondition(toPhasedTechnologyScanner(scanner));
+        }
+        this.scanners.push(toAdd);
         return this;
     }
 
@@ -147,7 +156,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public withStack(stackSupport: StackSupport): this {
         // Conditionalize if necessary
-        const scanners: Array<ConditionalRegistration<TechnologyScanner<any>>> =
+        const scanners: Array<ConditionalRegistration<ScannerAction<any>>> =
             stackSupport.scanners.map(s => isConditionalRegistration(s) ? s : runOnCondition(s, stackSupport.condition));
         const interpreters: Array<ConditionalRegistration<Interpreter>> =
             stackSupport.interpreters.map(i => isConditionalRegistration(i) ? i : runOnCondition(i, stackSupport.condition));
@@ -181,6 +190,14 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
+    public async isRelevant(p: FastProject,
+                            sdmContext: SdmContext): Promise<boolean> {
+        const results = await Promise.all(this.scanners
+            .filter(s => s.runWhen({ full: false }, sdmContext))
+            .map(s => s.action.isRelevant(p, sdmContext)));
+        return results.includes(true);
+    }
+
     public async interpret(p: Project | ProjectAnalysis,
                            sdmContext: SdmContext,
                            options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
@@ -210,7 +227,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         const scanned = (await Promise.all(this.scanners
             .filter(s => s.runWhen(options, sdmContext))
-            .map(s => s.action(p, sdmContext, analysis, options))))
+            .map(s => s.action.scan(p, sdmContext, analysis, options))))
             .filter(r => !!r);
 
         for (const s of scanned) {
@@ -318,4 +335,14 @@ function runOnCondition<W>(action: W, runWhen: RunCondition = () => true): Condi
         action,
         runWhen,
     };
+}
+
+function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerAction<T>): PhasedTechnologyScanner<T> {
+    return isPhasedScanner(sa) ?
+        sa :
+        {
+            // If it wants to be relevant, it has to tell us
+            isRelevant: async () => false,
+            scan: sa,
+        };
 }
