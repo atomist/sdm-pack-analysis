@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    ReviewListenerRegistration,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { ProjectAnalyzerBuilder } from "./ProjectAnalyzer";
 import { DefaultProjectAnalyzerBuilder } from "./support/DefaultProjectAnalyzerBuilder";
+
+/**
+ * Options to configure the ProjectAnalyzer instance
+ */
+export interface AnalyzerOptions {
+
+    /** Configure the code inspection goal */
+    codeInspection?: {
+        /** ReviewListener for be added to code inspection goal */
+        reviewListener?: ReviewListenerRegistration | ReviewListenerRegistration[];
+    };
+
+}
 
 /**
  * Return the default ProjectAnalyzerBuilder so we don't need to know about the implementing class.
  * @param {SoftwareDeliveryMachine} sdm
  * @return {ProjectAnalyzerBuilder}
  */
-export function analyzerBuilder(sdm: SoftwareDeliveryMachine): ProjectAnalyzerBuilder {
-    return new DefaultProjectAnalyzerBuilder(sdm);
+export function analyzerBuilder(sdm: SoftwareDeliveryMachine,
+                                options: AnalyzerOptions = {}): ProjectAnalyzerBuilder {
+    return new DefaultProjectAnalyzerBuilder(sdm, options);
 }

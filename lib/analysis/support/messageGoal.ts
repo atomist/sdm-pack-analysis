@@ -131,17 +131,17 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
         });
 }
 
+export async function isDismissed(pm: PushMessage, context: SdmContext): Promise<boolean> {
+    return context.preferences.get<boolean>(
+        `project-analysis.message.dismissed.${createHash(pm)}`,
+        { defaultValue: false, scope: PreferenceScope.Sdm });
+}
+
 function createDismissAction(pm: PushMessage, msgId: string): Action {
     return actionableButton<{ hash: string, msgId: string }>(
         { text: "Dismiss" },
         DismissMessageCommand,
         { hash: createHash(pm), msgId });
-}
-
-async function isDismissed(pm: PushMessage, context: SdmContext): Promise<boolean> {
-    return context.preferences.get<boolean>(
-        `project-analysis.message.dismissed.${createHash(pm)}`,
-        { defaultValue: false, scope: PreferenceScope.Sdm });
 }
 
 function createHash(pm: PushMessage): string {

@@ -31,8 +31,10 @@ import {
     SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
+import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 
 import * as _ from "lodash";
+import { AnalyzerOptions } from "../analyzerBuilder";
 import {
     Interpretation,
     Interpreter,
@@ -85,7 +87,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly autofixGoal: Autofix = new Autofix({ isolate: true });
 
-    public readonly codeInspectionGoal: AutoCodeInspection = new AutoCodeInspection({ isolate: true });
+    public readonly codeInspectionGoal: AutoCodeInspection;
 
     public readonly messageGoal: Goal;
 
@@ -93,7 +95,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     private readonly queueGoal: Queue;
 
-    constructor(private readonly sdm: SoftwareDeliveryMachine) {
+    constructor(private readonly sdm: SoftwareDeliveryMachine,
+                private readonly options: AnalyzerOptions) {
         const queueConfig = _.get(sdm, "configuration.sdm.goal.queue");
         if (!!queueConfig && queueConfig.enabled === true) {
             this.queueGoal = new Queue(
@@ -109,6 +112,10 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 return interpretation.messages;
             });
         });
+        this.codeInspectionGoal = new AutoCodeInspection({ isolate: true });
+        if (!!options && !!options.codeInspection && !!options.codeInspection.reviewListener) {
+            toArray(options.codeInspection.reviewListener).forEach(rl => this.codeInspectionGoal.withListener(rl));
+        }
     }
 
     public withScanner<T extends TechnologyElement>(scanner: TechnologyScanner<T> | ConditionalRegistration<TechnologyScanner<T>>): this {

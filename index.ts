@@ -37,6 +37,7 @@ export {
 } from "./lib/analysis/support/projectAnalysisUtils";
 export {
     analyzerBuilder,
+    AnalyzerOptions,
 } from "./lib/analysis/analyzerBuilder";
 export {
     testGoals,
