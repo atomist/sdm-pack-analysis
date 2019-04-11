@@ -33,6 +33,52 @@ import { TransformRecipeContributionRegistration } from "../../lib/analysis/Tran
 
 describe("projectAnalyzer", () => {
 
+    describe("relevance", () => {
+
+        it("should not be relevant by default", async () => {
+            const p = InMemoryProject.of();
+            const relevant = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .isRelevant(p, undefined);
+            assert(!relevant);
+        });
+
+        it("should be relevant with true precheck", async () => {
+            const p = InMemoryProject.of();
+            const relevant = await analyzerBuilder({} as any).withScanner({
+                isRelevant: async () => true,
+                scan: toyScanner,
+            }).build()
+                .isRelevant(p, undefined);
+            assert(relevant);
+        });
+
+        it("should not be relevant with false precheck", async () => {
+            const p = InMemoryProject.of();
+            const relevant = await analyzerBuilder({} as any).withScanner({
+                isRelevant: async () => false,
+                scan: toyScanner,
+            }).build()
+                .isRelevant(p, undefined);
+            assert(!relevant);
+        });
+
+        it("should be relevant with one true and one false precheck", async () => {
+            const p = InMemoryProject.of();
+            const relevant = await analyzerBuilder({} as any)
+                .withScanner({
+                    isRelevant: async () => true,
+                    scan: toyScanner,
+                })
+                .withScanner({
+                    isRelevant: async () => false,
+                    scan: toyScanner,
+                }).build()
+                .isRelevant(p, undefined);
+            assert(relevant);
+        });
+
+    });
+
     describe("analysis", () => {
 
         it("should pull up services", async () => {
@@ -90,7 +136,8 @@ describe("projectAnalyzer", () => {
                 .withTransformRecipeContributor({
                     originator: "snip",
                     optional: true,
-                    contributor: new SnipTransformRecipeContributor()})
+                    contributor: new SnipTransformRecipeContributor()
+                })
                 .withTransformRecipeContributor(AlwaysTRC).build()
                 .analyze(p, pli, { full: true });
             assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 2);
