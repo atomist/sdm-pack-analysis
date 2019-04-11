@@ -192,8 +192,8 @@ export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnal
 /**
  * Messaging goals. Only set if there are messages in this interpretation.
  */
-export function messagingGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
-    if (interpretation.messages.length > 0) {
+export function messagingGoals(hasMessages: HasMessages, analyzer: ProjectAnalyzer): Goals {
+    if (hasMessages.messages.length > 0) {
         return goals("messaging").plan(analyzer.messageGoal);
     }
     return undefined;
