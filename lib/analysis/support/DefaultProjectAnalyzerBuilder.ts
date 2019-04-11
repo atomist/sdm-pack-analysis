@@ -59,7 +59,12 @@ import {
     Scorer,
     StackSupport,
 } from "../ProjectAnalyzer";
-import { FastProject, isPhasedScanner, PhasedTechnologyScanner, ScannerAction } from "../TechnologyScanner";
+import {
+    FastProject,
+    isPhasedScanner,
+    PhasedTechnologyScanner,
+    ScannerAction,
+} from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
 import {
     registerAutofixes,
