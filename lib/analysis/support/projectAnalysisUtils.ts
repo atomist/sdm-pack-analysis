@@ -21,8 +21,8 @@ import {
 
 import * as _ from "lodash";
 import { Classification } from "../ProjectAnalyzer";
-import { PushMessage } from "./messageGoal";
 import { TechnologyClassification } from "../TechnologyScanner";
+import { PushMessage } from "./messageGoal";
 
 export function allTechnologyElements(projectAnalysis: ProjectAnalysis): TechnologyElement[] {
     return Object.getOwnPropertyNames(projectAnalysis.elements)
