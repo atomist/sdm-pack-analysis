@@ -85,7 +85,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly possibleCodeInspections: Array<AutoInspectRegistration<any, any>> = [];
 
-    public readonly autofixGoal: Autofix = new Autofix({ isolate: true });
+    public readonly autofixGoal: Autofix;
 
     public readonly codeInspectionGoal: AutoCodeInspection;
 
@@ -105,6 +105,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     fetch: queueConfig.fetch || 20,
                 });
         }
+        
         this.messageGoal = messageGoal(async gi => {
             const { configuration } = gi;
             return configuration.sdm.projectLoader.doWithProject({ ...gi, readOnly: true }, async p => {
@@ -112,9 +113,19 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 return interpretation.messages;
             });
         });
+
+        this.autofixGoal = new Autofix({ isolate: true });
+        if (!!options && !!options.autofix) {
+            toArray(options.autofix.projectListener || [])
+                .forEach(pl => this.autofixGoal.withProjectListener(pl));
+        }
+
         this.codeInspectionGoal = new AutoCodeInspection({ isolate: true });
-        if (!!options && !!options.codeInspection && !!options.codeInspection.reviewListener) {
-            toArray(options.codeInspection.reviewListener).forEach(rl => this.codeInspectionGoal.withListener(rl));
+        if (!!options && !!options.codeInspection) {
+            toArray(options.codeInspection.reviewListener || [])
+                .forEach(rl => this.codeInspectionGoal.withListener(rl));
+            toArray(options.codeInspection.projectListener || [])
+                .forEach(pl => this.codeInspectionGoal.withProjectListener(pl));
         }
     }
 

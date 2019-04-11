@@ -15,6 +15,7 @@
  */
 
 import {
+    GoalProjectListenerRegistration,
     ReviewListenerRegistration,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
@@ -26,10 +27,15 @@ import { DefaultProjectAnalyzerBuilder } from "./support/DefaultProjectAnalyzerB
  */
 export interface AnalyzerOptions {
 
+    autofix?: {
+        projectListener?: GoalProjectListenerRegistration | GoalProjectListenerRegistration[];
+    };
+
     /** Configure the code inspection goal */
     codeInspection?: {
         /** ReviewListener for be added to code inspection goal */
         reviewListener?: ReviewListenerRegistration | ReviewListenerRegistration[];
+        projectListener?: GoalProjectListenerRegistration | GoalProjectListenerRegistration[];
     };
 
 }
