@@ -35,46 +35,50 @@ describe("projectAnalyzer", () => {
 
     describe("relevance", () => {
 
-        it("should not be relevant by default", async () => {
+        it("should not be classified by default", async () => {
             const p = InMemoryProject.of();
-            const relevant = await analyzerBuilder({} as any).withScanner(toyScanner).build()
-                .isRelevant(p, undefined);
-            assert(!relevant);
+            const classification = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .classify(p, undefined);
+            assert(!!classification);
+            assert.deepStrictEqual(classification, { elements: {}});
         });
 
-        it("should be relevant with true precheck", async () => {
+        it("should be classified with classification", async () => {
             const p = InMemoryProject.of();
-            const relevant = await analyzerBuilder({} as any).withScanner({
-                isRelevant: async () => true,
+            const classification = await analyzerBuilder({} as any).withScanner({
+                classify: async () => ({name: "foo", tags: [], messages: []}),
                 scan: toyScanner,
             }).build()
-                .isRelevant(p, undefined);
-            assert(relevant);
+                .classify(p, undefined);
+            assert(!!classification);
+            assert(!!classification.elements.foo);
         });
 
-        it("should not be relevant with false precheck", async () => {
+        it("should not be classified with no classification", async () => {
             const p = InMemoryProject.of();
-            const relevant = await analyzerBuilder({} as any).withScanner({
-                isRelevant: async () => false,
+            const classification = await analyzerBuilder({} as any).withScanner({
+                classify: async () => undefined,
                 scan: toyScanner,
             }).build()
-                .isRelevant(p, undefined);
-            assert(!relevant);
+                .classify(p, undefined);
+            assert(!!classification);
+            assert.deepStrictEqual(classification, { elements: {}});
         });
 
-        it("should be relevant with one true and one false precheck", async () => {
+        it("should be classified with one true and one false classification", async () => {
             const p = InMemoryProject.of();
-            const relevant = await analyzerBuilder({} as any)
+            const classified = await analyzerBuilder({} as any)
                 .withScanner({
-                    isRelevant: async () => true,
+                    classify: async () => ({ name: "foo", tags: [], messages: []}),
                     scan: toyScanner,
                 })
                 .withScanner({
-                    isRelevant: async () => false,
+                    classify: async () => undefined,
                     scan: toyScanner,
                 }).build()
-                .isRelevant(p, undefined);
-            assert(relevant);
+                .classify(p, undefined);
+            assert(!!classified);
+            assert(!!classified.elements.foo);
         });
 
     });

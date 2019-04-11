@@ -48,6 +48,18 @@ export interface PushMessage {
 }
 
 /**
+ * Extended by any type that can have messages associated with it.
+ */
+export interface HasMessages {
+
+    /**
+     * Any messages regarding this project or push that should be displayed
+     * to users when handling the project.
+     */
+    readonly messages: PushMessage[];
+}
+
+/**
  * Factory that is able to produce PushMessages
  */
 export type PushMessageFactory = (gi: GoalInvocation) => Promise<PushMessage[]>;

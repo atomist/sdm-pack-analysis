@@ -31,14 +31,14 @@ import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
-import { PushMessage } from "./support/messageGoal";
+import { HasMessages } from "./support/messageGoal";
 
 /**
  * Consolidated interpretation. Unlike a ProjectAnalysis, an interpretation is not
  * intended to be persisted, but is only held in memory.
  * Interpreters add to an Interpretation's goals, considering what goals may already have been set.
  */
-export interface Interpretation extends DeliveryPhases {
+export interface Interpretation extends DeliveryPhases, HasMessages {
 
     /**
      * The data on which we arrived at this interpretation
@@ -79,12 +79,6 @@ export interface Interpretation extends DeliveryPhases {
     readonly codeInspectionGoal: AutoCodeInspection;
 
     readonly scores: Scores;
-
-    /**
-     * Any messages regarding this project or push that should be displayed
-     * to users when handling the project.
-     */
-    readonly messages: PushMessage[];
 
 }
 
