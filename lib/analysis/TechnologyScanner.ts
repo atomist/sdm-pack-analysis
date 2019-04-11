@@ -41,6 +41,9 @@ export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
 
+/**
+ * Result of quickly classifying a project.
+ */
 export type TechnologyClassification = Classified & HasMessages;
 
 /**
@@ -49,17 +52,17 @@ export type TechnologyClassification = Classified & HasMessages;
 export interface PhasedTechnologyScanner<T extends TechnologyElement> {
 
     /**
-     * Quck classification of this project. Should be efficient.
+     * Quick classification of this project. Should be efficient.
      */
     classify: (p: FastProject, ctx: SdmContext) => Promise<TechnologyClassification | undefined>;
 
     /**
-     * Perform a scan
+     * Perform a scan of the project.
      */
     scan: TechnologyScanner<T>;
 }
 
-export function isPhasedScanner(a: any): a is PhasedTechnologyScanner<any> {
+export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<any> {
     const maybe = a as PhasedTechnologyScanner<any>;
     return !!maybe.scan;
 }

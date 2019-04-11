@@ -63,7 +63,7 @@ import {
 } from "../ProjectAnalyzer";
 import {
     FastProject,
-    isPhasedScanner,
+    isPhasedTechnologyScanner,
     PhasedTechnologyScanner,
     ScannerAction,
 } from "../TechnologyScanner";
@@ -340,7 +340,7 @@ function runOnCondition<W>(action: W, runWhen: RunCondition = () => true): Condi
 }
 
 function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerAction<T>): PhasedTechnologyScanner<T> {
-    return isPhasedScanner(sa) ?
+    return isPhasedTechnologyScanner(sa) ?
         sa :
         {
             // If it wants to be classified, it has to do work

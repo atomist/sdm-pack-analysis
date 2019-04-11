@@ -76,7 +76,7 @@ export function isConditionalRegistration(a: any): a is ConditionalRegistration<
 export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
 
 /**
- * Project pre-check
+ * Result of classifying the project quickly to determine its nature.
  */
 export interface Classification {
 
@@ -91,7 +91,8 @@ export interface Classification {
 export interface ProjectAnalyzer {
 
     /**
-     * Classify this project
+     * Classify this project. The implementations should be faster than delivery steps of interpretation and analysis.
+     * Allows a project to be classified quickly to determine the relevance of this SDM to handling it.
      */
     classify(p: FastProject, sdmContext: SdmContext): Promise<Classification>;
 
