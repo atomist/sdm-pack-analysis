@@ -78,47 +78,56 @@ export const DismissMessageCommand: CommandHandlerRegistration<{ hash: string, m
  * It adds a dismiss button to the messages it sends.
  */
 export function messageGoal(messageFactory: PushMessageFactory): Goal {
-    return goal({ displayName: "Messages" }, async gi => {
+    return goal({
+            displayName: "message",
+            descriptions: {
+                planned: "Send project analysis messages",
+                requested: "Sending project analysis messages",
+                inProcess: "Sending project analysis messages",
+                completed: "Sent project analysis messages",
+            },
+        },
+        async gi => {
 
-        const pushMessages = await messageFactory(gi) || [];
+            const pushMessages = await messageFactory(gi) || [];
 
-        for (const pm of pushMessages) {
-            if (!(await isDismissed(pm, gi))) {
-                const options: MessageOptions = {
-                    id: guid(),
-                    ...(pm.opts || {}),
-                };
+            for (const pm of pushMessages) {
+                if (!(await isDismissed(pm, gi))) {
+                    const options: MessageOptions = {
+                        id: guid(),
+                        ...(pm.opts || {}),
+                    };
 
-                if (typeof pm.message === "string") {
-                    const msg = slackInfoMessage(
-                        "Project Analysis",
-                        pm.message,
-                        { actions: [createDismissAction(pm, options.id)] });
-                    await gi.addressChannels(msg, options);
-                } else if (isSlackMessage(pm.message)) {
-                    const msg = pm.message;
-                    if (!msg.attachments || msg.attachments.length === 0) {
-                        msg.attachments = [{
-                            fallback: "Dismiss",
-                            actions: [],
-                        }];
+                    if (typeof pm.message === "string") {
+                        const msg = slackInfoMessage(
+                            "Project Analysis",
+                            pm.message,
+                            { actions: [createDismissAction(pm, options.id)] });
+                        await gi.addressChannels(msg, options);
+                    } else if (isSlackMessage(pm.message)) {
+                        const msg = pm.message;
+                        if (!msg.attachments || msg.attachments.length === 0) {
+                            msg.attachments = [{
+                                fallback: "Dismiss",
+                                actions: [],
+                            }];
+                        }
+                        const attachment = msg.attachments.slice(-1)[0];
+                        attachment.actions = [...(attachment.actions || []), createDismissAction(pm, options.id)];
+                        await gi.addressChannels(msg, options);
+                    } else {
+                        const fileMsg = pm.message as SlackFileMessage & { title: string };
+                        const msg = slackInfoMessage(
+                            "Project Analysis",
+                            `Dismiss ${italic(fileMsg.title)}`,
+                            { actions: [createDismissAction(pm, options.id)] });
+                        await gi.addressChannels(msg, options);
+                        await gi.addressChannels(pm.message);
                     }
-                    const attachment = msg.attachments.slice(-1)[0];
-                    attachment.actions = [...(attachment.actions || []), createDismissAction(pm, options.id)];
-                    await gi.addressChannels(msg, options);
-                } else {
-                    const fileMsg = pm.message as SlackFileMessage & { title: string };
-                    const msg = slackInfoMessage(
-                        "Project Analysis",
-                        `Dismiss ${italic(fileMsg.title)}`,
-                        { actions: [createDismissAction(pm, options.id)] });
-                    await gi.addressChannels(msg, options);
-                    await gi.addressChannels(pm.message);
                 }
             }
-        }
 
-    });
+        });
 }
 
 function createDismissAction(pm: PushMessage, msgId: string): Action {
