@@ -28,7 +28,6 @@ import {
     Interpreter,
 } from "./Interpretation";
 import {
-    Classified,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     TechnologyElement,
@@ -36,7 +35,7 @@ import {
 import { Score } from "./Score";
 import {
     FastProject,
-    ScannerAction,
+    ScannerAction, TechnologyClassification,
     TechnologyScanner,
 } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
@@ -80,7 +79,7 @@ export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
  */
 export interface Classification {
 
-    elements: Record<string, Classified>;
+    elements: Record<string, TechnologyClassification>;
 }
 
 /**
