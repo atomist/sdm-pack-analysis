@@ -105,7 +105,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     fetch: queueConfig.fetch || 20,
                 });
         }
-        
+
         this.messageGoal = messageGoal(async gi => {
             const { configuration } = gi;
             return configuration.sdm.projectLoader.doWithProject({ ...gi, readOnly: true }, async p => {
