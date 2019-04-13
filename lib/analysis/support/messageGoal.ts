@@ -17,9 +17,7 @@
 import {
     addressWeb,
     guid,
-    isSlackMessage,
     MessageOptions,
-    SlackFileMessage,
 } from "@atomist/automation-client";
 import {
     actionableButton,
@@ -30,13 +28,16 @@ import {
     GoalInvocation,
     PreferenceScope,
     SdmContext,
+    slackFooter,
     slackInfoMessage,
     slackSuccessMessage,
+    slackTs,
 } from "@atomist/sdm";
 import {
     Action,
-    italic,
-    SlackMessage,
+    Attachment,
+    bold,
+    codeLine,
 } from "@atomist/slack-messages";
 import * as crypto from "crypto";
 
@@ -45,8 +46,7 @@ import * as crypto from "crypto";
  */
 export interface PushMessage {
 
-    readonly message: string | SlackMessage | SlackFileMessage & { title: string }; // require the title on file messages so that we can dismiss
-    readonly opts?: MessageOptions;
+    readonly message: string | Attachment; // require the title on file messages so that we can dismiss
 }
 
 /**
@@ -75,14 +75,19 @@ export const DismissMessageCommand: CommandHandlerRegistration<{ hash: string, m
     autoSubmit: true,
     parameters: { hash: { displayable: false }, msgId: { displayable: false } },
     listener: async ci => {
-        await ci.preferences.put(
-            `project-analysis.message.dismissed.${ci.parameters.hash}`,
-            true,
-            { scope: PreferenceScope.Sdm });
+        const hashes = JSON.parse(ci.parameters.hash) as string[];
+
+        for (const hash of hashes) {
+            await ci.preferences.put(
+                `project-analysis.message.dismissed.${hash}`,
+                true,
+                { scope: PreferenceScope.Sdm });
+        }
+
         await ci.addressChannels(
             slackSuccessMessage(
                 "Project Analysis",
-                "Successfully dismissed message"),
+                `Successfully dismissed ${hashes.length === 1 ? "analysis message" : "all analysis messages"}`),
             { id: ci.parameters.msgId });
     },
 };
@@ -103,45 +108,49 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
             },
         },
         async gi => {
+            const { goalEvent } = gi;
 
             const pushMessages = await messageFactory(gi) || [];
 
-            for (const pm of pushMessages) {
-                if (!(await isDismissed(pm, gi))) {
-                    const options: MessageOptions = {
-                        id: guid(),
-                        ...(pm.opts || {}),
-                    };
+            if (pushMessages.length > 0) {
 
-                    if (typeof pm.message === "string") {
-                        const msg = slackInfoMessage(
-                            "Project Analysis",
-                            pm.message,
-                            { actions: [createDismissAction(pm, options.id)] });
-                        await addressMessage(msg, gi, options);
-                    } else if (isSlackMessage(pm.message)) {
-                        const msg = pm.message;
-                        if (!msg.attachments || msg.attachments.length === 0) {
-                            msg.attachments = [{
-                                fallback: "Dismiss",
-                                actions: [],
-                            }];
+                const options: MessageOptions = {
+                    id: guid(),
+                };
+
+                const attachments: Attachment[] = [];
+                for (const pm of pushMessages) {
+                    if (!(await isDismissed(pm, gi))) {
+                        let attachment: Attachment;
+                        if (typeof pm.message === "string") {
+                            attachment = {
+                                text: pm.message,
+                                fallback: pm.message,
+                            };
+                        } else {
+                            attachment = pm.message as Attachment;
                         }
-                        const attachment = msg.attachments.slice(-1)[0];
                         attachment.actions = [...(attachment.actions || []), createDismissAction(pm, options.id)];
-                        await addressMessage(msg, gi, options);
-                    } else {
-                        const fileMsg = pm.message as SlackFileMessage & { title: string };
-                        const msg = slackInfoMessage(
-                            "Project Analysis",
-                            `Dismiss ${italic(fileMsg.title)}`,
-                            { actions: [createDismissAction(pm, options.id)] });
-                        await addressMessage(msg, gi, options);
-                        await addressMessage(pm.message, gi);
+                        attachments.push(attachment);
                     }
                 }
-            }
 
+                const slug = `${goalEvent.repo.owner}/${goalEvent.repo.name}/${goalEvent.branch}`;
+                const msg = slackInfoMessage(
+                    "Project Analysis",
+                    `Finished analyzing commit ${codeLine(goalEvent.sha.slice(0, 7))} of ${bold(slug)} with following messages:`,
+                    { actions: [createDismissAllAction(pushMessages, options.id)] });
+
+                msg.attachments[0].footer = undefined;
+                msg.attachments[0].ts = undefined;
+                msg.attachments.push(...attachments);
+
+                const lastAttachment = attachments.slice(-1)[0];
+                lastAttachment.footer = slackFooter();
+                lastAttachment.ts = slackTs();
+
+                await addressMessage(msg, gi, {});
+            }
         });
 }
 
@@ -155,7 +164,14 @@ function createDismissAction(pm: PushMessage, msgId: string): Action {
     return actionableButton<{ hash: string, msgId: string }>(
         { text: "Dismiss" },
         DismissMessageCommand,
-        { hash: createHash(pm), msgId });
+        { hash: JSON.stringify([createHash(pm)]), msgId });
+}
+
+function createDismissAllAction(pm: PushMessage[], msgId: string): Action {
+    return actionableButton<{ hash: string, msgId: string }>(
+        { text: "Dismiss all" },
+        DismissMessageCommand,
+        { hash: JSON.stringify(pm.map(p => createHash(p))), msgId });
 }
 
 function createHash(pm: PushMessage): string {
