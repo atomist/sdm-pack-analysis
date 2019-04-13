@@ -24,6 +24,7 @@ import {
 import {
     actionableButton,
     CommandHandlerRegistration,
+    DefaultGoalNameGenerator,
     goal,
     Goal,
     GoalInvocation,
@@ -92,6 +93,7 @@ export const DismissMessageCommand: CommandHandlerRegistration<{ hash: string, m
  */
 export function messageGoal(messageFactory: PushMessageFactory): Goal {
     return goal({
+            uniqueName: DefaultGoalNameGenerator.generateName(),
             displayName: "message",
             descriptions: {
                 planned: "Send project analysis messages",
