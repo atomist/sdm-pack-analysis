@@ -128,7 +128,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                                 fallback: pm.message,
                             };
                         } else {
-                            attachment = pm.message as Attachment;
+                            attachment = pm.message;
                         }
                         attachment.actions = [...(attachment.actions || []), createDismissAction(pm, options.id)];
                         attachments.push(attachment);
@@ -171,7 +171,7 @@ function createDismissAllAction(pm: PushMessage[], msgId: string): Action {
     return actionableButton<{ hash: string, msgId: string }>(
         { text: "Dismiss all" },
         DismissMessageCommand,
-        { hash: JSON.stringify(pm.map(p => createHash(p))), msgId });
+        { hash: JSON.stringify(pm.map(createHash)), msgId });
 }
 
 function createHash(pm: PushMessage): string {
