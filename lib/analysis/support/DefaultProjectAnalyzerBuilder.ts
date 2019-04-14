@@ -74,6 +74,7 @@ import {
     registerCodeInspections,
 } from "./interpretationDriven";
 import { messageGoal } from "./messageGoal";
+import { allMessages } from "./projectAnalysisUtils";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
@@ -114,8 +115,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         this.messageGoal = messageGoal(async gi => {
             const { configuration } = gi;
             return configuration.sdm.projectLoader.doWithProject({ ...gi, readOnly: true }, async p => {
+                const classification = await this.classify(p, gi);
                 const interpretation = await this.interpret(p, gi);
-                return interpretation.messages;
+                return [...interpretation.messages, ...allMessages(classification)];
             });
         });
 
