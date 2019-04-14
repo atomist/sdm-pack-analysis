@@ -37,15 +37,15 @@
     "yamljs": "^0.3.0"
   },
   "peerDependencies": {
-    "@atomist/automation-client": ">=1.3.0",
-    "@atomist/sdm": ">=1.3.0",
-    "@atomist/sdm-core": ">=1.3.0",
+    "@atomist/automation-client": ">=1.4.0",
+    "@atomist/sdm": ">=1.5.0",
+    "@atomist/sdm-core": ">=1.5.0",
     "@atomist/slack-messages": ">=1.1.0"
   },
   "devDependencies": {
-    "@atomist/automation-client": "1.3.1-master.20190411075431",
-    "@atomist/sdm": "^1.3.0",
-    "@atomist/sdm-core": "^1.3.0",
+    "@atomist/automation-client": "1.4.0-master.20190411165304",
+    "@atomist/sdm": "1.5.0-master.20190414160706",
+    "@atomist/sdm-core": "1.5.0-master.20190414161457",
     "@atomist/slack-messages": "1.1.0",
     "@types/mocha": "^5.2.5",
     "@types/power-assert": "^1.5.0",
