@@ -139,7 +139,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 const msg = slackInfoMessage(
                     "Project Analysis",
                     `Finished analyzing commit ${codeLine(goalEvent.sha.slice(0, 7))} of ${bold(slug)} with following messages:`,
-                    { actions: [createDismissAllAction(pushMessages, options.id)] });
+                    { actions: pushMessages.length > 1 ? [createDismissAllAction(pushMessages, options.id)] : [] });
 
                 msg.attachments[0].footer = undefined;
                 msg.attachments[0].ts = undefined;
