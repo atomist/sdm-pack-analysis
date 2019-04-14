@@ -35,6 +35,7 @@ import {
 import { Score } from "./Score";
 import {
     FastProject,
+    PhasedTechnologyScanner,
     ScannerAction,
     TechnologyClassification,
     TechnologyScanner,
@@ -137,7 +138,8 @@ export interface StackSupport {
      * Scanner or scanners that identify the new stack. Necessary to drive
      * any Interpreters, TransformRecipeContributors or Scorers.
      */
-    scanners: Array<TechnologyScanner<any> | ConditionalRegistration<TechnologyScanner<any>>>;
+    scanners: Array<TechnologyScanner<any> | ConditionalRegistration<TechnologyScanner<any>>
+        | PhasedTechnologyScanner<any> | ConditionalRegistration<PhasedTechnologyScanner<any>>>;
 
     interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
 
