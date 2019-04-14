@@ -139,7 +139,8 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 const slug = url(goalEvent.push.repo.url, `${goalEvent.repo.owner}/${goalEvent.repo.name}/${goalEvent.branch}`);
                 const msg = slackInfoMessage(
                     "Project Analysis",
-                    `Finished analyzing commit ${codeLine(url(goalEvent.push.after.url, goalEvent.sha.slice(0, 7)))} of ${bold(slug)} with following messages:`,
+                    `Finished analyzing commit ${codeLine(url(goalEvent.push.after.url, goalEvent.sha.slice(0, 7)))} of ${
+                        bold(slug)} with following messages:`,
                     { actions: pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent, options.id)] : [] });
 
                 msg.attachments[0].footer = undefined;
