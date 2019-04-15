@@ -84,6 +84,10 @@ export {
     ProjectAnalyzer,
     ProjectAnalyzerBuilder,
     StackSupport,
+    Classification,
+    ConditionalRegistration,
+    RunCondition,
+    Scorer,
 } from "./lib/analysis/ProjectAnalyzer";
 export {
     FastProject,
