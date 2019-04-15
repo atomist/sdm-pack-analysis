@@ -150,7 +150,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 lastAttachment.footer = slackFooter();
                 lastAttachment.ts = slackTs();
                 lastAttachment.actions =
-                    [...lastAttachment.actions, ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent, options.id)] : [])]
+                    [...lastAttachment.actions, ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent, options.id)] : [])];
 
                 await addressMessage(msg, gi, {});
             }
