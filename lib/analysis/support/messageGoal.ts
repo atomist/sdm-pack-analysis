@@ -36,9 +36,6 @@ import {
 import {
     Action,
     Attachment,
-    bold,
-    codeLine,
-    url,
 } from "@atomist/slack-messages";
 import * as crypto from "crypto";
 
@@ -186,7 +183,16 @@ export function createDismissAllAction(pm: PushMessage[], goalEvent: Pick<SdmGoa
 }
 
 function createHash(pm: PushMessage): string {
-    const content = JSON.stringify(pm);
+    let text;
+    if (typeof pm.message === "string") {
+        text = pm.message;
+    } else {
+        text = {
+            title: pm.message.title,
+            text: pm.message.text,
+        };
+    }
+    const content = JSON.stringify(text);
     return crypto.createHash("md5").update(content).digest("base64").toString();
 }
 
