@@ -131,17 +131,16 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                         } else {
                             attachment = pm.message;
                         }
-                        attachment.actions = [...(attachment.actions || []), createDismissAction(pm, goalEvent, options.id)];
+                        if (!!attachment.actions && attachment.actions.length === 0) {
+                            attachment.actions = [createDismissAction(pm, goalEvent, options.id)];
+                        }
                         attachments.push(attachment);
                     }
                 }
 
-                const slug = url(goalEvent.push.repo.url, `${goalEvent.repo.owner}/${goalEvent.repo.name}/${goalEvent.branch}`);
                 const msg = slackInfoMessage(
                     "Project Analysis",
-                    `Finished analyzing commit ${codeLine(url(goalEvent.push.after.url, goalEvent.sha.slice(0, 7)))} of ${
-                        bold(slug)} with following messages:`,
-                    { actions: pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent, options.id)] : [] });
+                    "");
 
                 msg.attachments[0].footer = undefined;
                 msg.attachments[0].ts = undefined;
@@ -150,6 +149,8 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 const lastAttachment = attachments.slice(-1)[0];
                 lastAttachment.footer = slackFooter();
                 lastAttachment.ts = slackTs();
+                lastAttachment.actions =
+                    [...lastAttachment.actions, ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent, options.id)] : [])]
 
                 await addressMessage(msg, gi, {});
             }
