@@ -118,7 +118,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
 
                 const attachments: Attachment[] = [];
                 for (const pm of pushMessages) {
-                    if (!(await isDismissed(pm, goalEvent, gi))) {
+                    if (!(await isDismissed(pm, goalEvent.repo, gi))) {
                         let attachment: Attachment;
                         if (typeof pm.message === "string") {
                             attachment = {
@@ -129,7 +129,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                             attachment = pm.message;
                         }
                         if (!!attachment.actions && attachment.actions.length === 0) {
-                            attachment.actions = [createDismissAction(pm, goalEvent, options.id)];
+                            attachment.actions = [createDismissAction(pm, goalEvent.repo, options.id)];
                         }
                         attachments.push(attachment);
                     }
@@ -147,36 +147,36 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 lastAttachment.footer = slackFooter();
                 lastAttachment.ts = slackTs();
                 lastAttachment.actions =
-                    [...lastAttachment.actions, ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent, options.id)] : [])];
+                    [...lastAttachment.actions, ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent.repo, options.id)] : [])];
 
                 await addressMessage(msg, gi, {});
             }
         });
 }
 
-export async function isDismissed(pm: PushMessage, goalEvent: Pick<SdmGoalEvent, "repo">, context: SdmContext): Promise<boolean> {
+export async function isDismissed(pm: PushMessage, repo: { owner: string, name: string }, context: SdmContext): Promise<boolean> {
     return context.preferences.get<boolean>(
         `project-analysis.message.dismissed.${createHash(pm)}`,
-        { defaultValue: false, scope: `${goalEvent.repo.owner}/${goalEvent.repo.name}` });
+        { defaultValue: false, scope: `${repo.owner}/${repo.name}` });
 }
 
-export function createDismissAction(pm: PushMessage, goalEvent: Pick<SdmGoalEvent, "repo">, msgId: string): Action {
+export function createDismissAction(pm: PushMessage, repo: { owner: string, name: string }, msgId: string): Action {
     return actionableButton<{ scope: string, hash: string, msgId: string }>(
         { text: "Dismiss" },
         DismissMessageCommand,
         {
-            scope: `${goalEvent.repo.owner}/${goalEvent.repo.name}`,
+            scope: `${repo.owner}/${repo.name}`,
             hash: JSON.stringify([createHash(pm)]),
             msgId,
         });
 }
 
-export function createDismissAllAction(pm: PushMessage[], goalEvent: Pick<SdmGoalEvent, "repo">, msgId: string): Action {
+export function createDismissAllAction(pm: PushMessage[], repo: { owner: string, name: string }, msgId: string): Action {
     return actionableButton<{ scope: string, hash: string, msgId: string }>(
         { text: "Dismiss all" },
         DismissMessageCommand,
         {
-            scope: `${goalEvent.repo.owner}/${goalEvent.repo.name}`,
+            scope: `${repo.owner}/${repo.name}`,
             hash: JSON.stringify(pm.map(createHash)),
             msgId,
         });
