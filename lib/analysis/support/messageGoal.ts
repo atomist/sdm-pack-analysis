@@ -157,13 +157,13 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
         });
 }
 
-export async function isDismissed(pm: PushMessage, goalEvent: SdmGoalEvent, context: SdmContext): Promise<boolean> {
+export async function isDismissed(pm: PushMessage, goalEvent: Pick<SdmGoalEvent, "repo">, context: SdmContext): Promise<boolean> {
     return context.preferences.get<boolean>(
         `project-analysis.message.dismissed.${createHash(pm)}`,
         { defaultValue: false, scope: `${goalEvent.repo.owner}/${goalEvent.repo.name}` });
 }
 
-function createDismissAction(pm: PushMessage, goalEvent: SdmGoalEvent, msgId: string): Action {
+export function createDismissAction(pm: PushMessage, goalEvent: Pick<SdmGoalEvent, "repo">, msgId: string): Action {
     return actionableButton<{ scope: string, hash: string, msgId: string }>(
         { text: "Dismiss" },
         DismissMessageCommand,
@@ -174,7 +174,7 @@ function createDismissAction(pm: PushMessage, goalEvent: SdmGoalEvent, msgId: st
         });
 }
 
-function createDismissAllAction(pm: PushMessage[], goalEvent: SdmGoalEvent, msgId: string): Action {
+export function createDismissAllAction(pm: PushMessage[], goalEvent: Pick<SdmGoalEvent, "repo">, msgId: string): Action {
     return actionableButton<{ scope: string, hash: string, msgId: string }>(
         { text: "Dismiss all" },
         DismissMessageCommand,
