@@ -22,6 +22,7 @@ export {
 export {
     ElementsGoalsKey,
     ElementsEnrichGoal,
+    ServicesGoalsKey,
 } from "./lib/analysis/support/enrichGoal";
 export {
     registerAutofixes,
@@ -34,6 +35,8 @@ export {
 export {
     allTechnologyElements,
     isUsableAsSeed,
+    allMessages,
+    allTechnologyClassifications,
 } from "./lib/analysis/support/projectAnalysisUtils";
 export {
     analyzerBuilder,
@@ -86,6 +89,8 @@ export {
     FastProject,
     ScannerAction,
     TechnologyScanner,
+    PhasedTechnologyScanner,
+    TechnologyClassification,
 } from "./lib/analysis/TechnologyScanner";
 export {
     isTechnologyStack,
@@ -105,4 +110,5 @@ export {
     DismissMessageCommand,
     createDismissAllAction,
     createDismissAction,
+    messageGoal,
 } from "./lib/analysis/support/messageGoal";
