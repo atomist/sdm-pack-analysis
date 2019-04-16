@@ -22,7 +22,10 @@ import {
 } from "@atomist/sdm";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
-import { CodeInspectionRegisteringInterpreter, Interpreter } from "../../lib/analysis/Interpretation";
+import {
+    CodeInspectionRegisteringInterpreter,
+    Interpreter,
+} from "../../lib/analysis/Interpretation";
 import {
     Scorer,
     StackSupport,

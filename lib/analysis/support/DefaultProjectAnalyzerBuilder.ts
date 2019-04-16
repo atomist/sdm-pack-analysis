@@ -41,7 +41,8 @@ import {
 } from "../Interpretation";
 import {
     Dependency,
-    Elements, InspectionResults,
+    Elements,
+    InspectionResults,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     SeedAnalysis,
