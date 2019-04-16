@@ -73,6 +73,10 @@ export interface Interpretation extends DeliveryPhases, HasMessages {
     readonly materialChangePushTests: PushTest[];
 
     readonly autofixes: AutofixRegistration[];
+
+    /**
+     * Inspections relevant to this Interpretation.
+     */
     readonly inspections: Array<AutoInspectRegistration<any, any>>;
 
     readonly autofixGoal: Autofix;

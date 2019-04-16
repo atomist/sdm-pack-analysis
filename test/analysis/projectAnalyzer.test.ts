@@ -16,12 +16,13 @@
 
 import { InMemoryProject } from "@atomist/automation-client";
 import {
+    CodeInspectionRegistration,
     goals,
     PushListenerInvocation,
 } from "@atomist/sdm";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
-import { Interpreter } from "../../lib/analysis/Interpretation";
+import { CodeInspectionRegisteringInterpreter, Interpreter } from "../../lib/analysis/Interpretation";
 import {
     Scorer,
     StackSupport,
@@ -40,13 +41,13 @@ describe("projectAnalyzer", () => {
             const classification = await analyzerBuilder({} as any).withScanner(toyScanner).build()
                 .classify(p, undefined);
             assert(!!classification);
-            assert.deepStrictEqual(classification, { elements: {}});
+            assert.deepStrictEqual(classification, { elements: {} });
         });
 
         it("should be classified with classification", async () => {
             const p = InMemoryProject.of();
             const classification = await analyzerBuilder({} as any).withScanner({
-                classify: async () => ({name: "foo", tags: [], messages: []}),
+                classify: async () => ({ name: "foo", tags: [], messages: [] }),
                 scan: toyScanner,
             }).build()
                 .classify(p, undefined);
@@ -62,14 +63,14 @@ describe("projectAnalyzer", () => {
             }).build()
                 .classify(p, undefined);
             assert(!!classification);
-            assert.deepStrictEqual(classification, { elements: {}});
+            assert.deepStrictEqual(classification, { elements: {} });
         });
 
         it("should be classified with one true and one false classification", async () => {
             const p = InMemoryProject.of();
             const classified = await analyzerBuilder({} as any)
                 .withScanner({
-                    classify: async () => ({ name: "foo", tags: [], messages: []}),
+                    classify: async () => ({ name: "foo", tags: [], messages: [] }),
                     scan: toyScanner,
                 })
                 .withScanner({
@@ -111,32 +112,32 @@ describe("projectAnalyzer", () => {
         it("should not perform seed analysis unless asked", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
-            const analyzer = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
                 .analyze(p, pli, { full: false });
-            assert(!analyzer.seedAnalysis);
+            assert(!analysis.seedAnalysis);
         });
 
         it("should perform seed analysis when asked", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
-            const analyzer = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
                 .analyze(p, pli, { full: true });
-            assert(!!analyzer.seedAnalysis);
+            assert(!!analysis.seedAnalysis);
         });
 
         it("should find transform in recipe in seed analysis", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
-            const analyzer = await analyzerBuilder({} as any).withTransformRecipeContributor(AlwaysTRC).build()
+            const analysis = await analyzerBuilder({} as any).withTransformRecipeContributor(AlwaysTRC).build()
                 .analyze(p, pli, { full: true });
-            assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 1);
-            assert.strictEqual(analyzer.seedAnalysis.transformRecipes[0].recipe.transforms.length, 1);
+            assert.strictEqual(analysis.seedAnalysis.transformRecipes.length, 1);
+            assert.strictEqual(analysis.seedAnalysis.transformRecipes[0].recipe.transforms.length, 1);
         });
 
         it("should find transforms in recipe in seed analysis", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
-            const analyzer = await analyzerBuilder({} as any)
+            const analysis = await analyzerBuilder({} as any)
                 .withTransformRecipeContributor({
                     originator: "snip",
                     optional: true,
@@ -144,9 +145,64 @@ describe("projectAnalyzer", () => {
                 })
                 .withTransformRecipeContributor(AlwaysTRC).build()
                 .analyze(p, pli, { full: true });
-            assert.strictEqual(analyzer.seedAnalysis.transformRecipes.length, 2);
-            assert.strictEqual(analyzer.seedAnalysis.transformRecipes[1].recipe.transforms.length, 1);
+            assert.strictEqual(analysis.seedAnalysis.transformRecipes.length, 2);
+            assert.strictEqual(analysis.seedAnalysis.transformRecipes[1].recipe.transforms.length, 1);
+        });
 
+        it("should not perform scoring unless asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: false });
+            assert(!analysis.scores);
+        });
+
+        it("should perform scoring when asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.scores, {});
+        });
+
+        it("should not perform inspection unless asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: false });
+            assert(!analysis.inspections);
+        });
+
+        it("should perform inspections when asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.inspections, {});
+        });
+
+        it("should perform concrete inspection when asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const barCr: CodeInspectionRegistration<any, any> = {
+                name: "foo",
+                inspection: async () => {
+                    return { bar: true };
+                },
+            };
+            const i: CodeInspectionRegisteringInterpreter = {
+                enrich: async interpretation => {
+                    interpretation.inspections.push(barCr);
+                    return true;
+                },
+                codeInspections: [barCr],
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(toyScanner)
+                .withInterpreter(i)
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.inspections, { foo: { bar: true } });
         });
 
     });

@@ -23,6 +23,7 @@ import {
     HasDefaultValue,
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
+import { Scores } from "./Score";
 
 /**
  * Definition of a service such as riak or mongodb
@@ -36,6 +37,11 @@ export interface Service {
 export type Services = Record<string, Service>;
 
 export type Elements = Record<string, TechnologyElement>;
+
+/**
+ * Results of running code inspections on the current project
+ */
+export type InspectionResults = Record<string, object>;
 
 /**
  * Cross-platform representation of a dependency
@@ -95,6 +101,16 @@ export interface ProjectAnalysis {
      * Only available on a full analysis
      */
     seedAnalysis?: SeedAnalysis;
+
+    /**
+     * Inspections. Only performed on a full analysis
+     */
+    inspections?: InspectionResults;
+
+    /**
+     * Scores. Only performed on a full analysis
+     */
+    scores?: Scores;
 
 }
 
