@@ -236,6 +236,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             services,
             dependencies,
             referencedEnvironmentVariables,
+            messages: [],
         };
 
         const scanned = (await Promise.all(this.scanners
@@ -262,6 +263,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             // We'll need to get more from the interpretation
             const interpretation = await this.runInterpretation(analysis, sdmContext, options);
             analysis.scores = interpretation.scores;
+            analysis.messages.push(...interpretation.messages);
             analysis.inspections = await runInspections(p, interpretation.inspections);
         }
         return analysis;

@@ -205,6 +205,31 @@ describe("projectAnalyzer", () => {
             assert.deepStrictEqual(analysis.inspections, { foo: { bar: true } });
         });
 
+        it("should not return messages unless asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).build()
+                .analyze(p, pli, { full: false });
+            assert.strictEqual(analysis.messages.length, 0);
+        });
+
+        it("should find concrete message when asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const i: Interpreter = {
+                enrich: async interpretation => {
+                    interpretation.messages.push({ message: "foobar" });
+                    return true;
+                },
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(toyScanner)
+                .withInterpreter(i)
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.messages, [{ message: "foobar" }]);
+        });
+
     });
 
     describe("interpretation", () => {

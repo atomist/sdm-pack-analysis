@@ -24,6 +24,7 @@ import {
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
 import { Scores } from "./Score";
+import { HasMessages } from "./support/messageGoal";
 
 /**
  * Definition of a service such as riak or mongodb
@@ -66,7 +67,7 @@ export interface ProjectAnalysisOptions {
  * so that Interpreters don't need to refer to the project.
  * Analyses can be persisted.
  */
-export interface ProjectAnalysis {
+export interface ProjectAnalysis extends HasMessages {
 
     /**
      * Options used to perform this analysis.
