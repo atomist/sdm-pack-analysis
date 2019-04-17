@@ -28,6 +28,7 @@ import {
     Interpreter,
 } from "./Interpretation";
 import {
+    HasAnalysis,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     TechnologyElement,
@@ -45,7 +46,7 @@ import { TransformRecipeContributionRegistration } from "./TransformRecipeContri
 /**
  * When an action should be run
  */
-export type RunCondition = (options: ProjectAnalysisOptions, sdmContext: SdmContext) => boolean;
+export type RunCondition = (options: ProjectAnalysisOptions | ProjectAnalysisOptions & HasAnalysis, sdmContext: SdmContext) => boolean;
 
 /**
  * Registration of a TechnologyScanner, Interpreter etc that should run conditionally
@@ -67,6 +68,11 @@ export interface ConditionalRegistration<W> {
      * @return {boolean}
      */
     runWhen: RunCondition;
+}
+
+export function hasAnalysis(a: any): a is HasAnalysis {
+    const maybe = a as HasAnalysis;
+    return !!maybe.analysis;
 }
 
 export function isConditionalRegistration(a: any): a is ConditionalRegistration<any> {

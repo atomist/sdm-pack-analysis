@@ -31,8 +31,6 @@ import {
     SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
-
 import * as _ from "lodash";
 import {
     Interpretation,
@@ -41,9 +39,9 @@ import {
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
 import {
-    Classified,
     Dependency,
     Elements,
+    HasAnalysis,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     SeedAnalysis,
@@ -288,8 +286,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             messages: [],
         };
 
+        const fullOptions: ProjectAnalysisOptions & HasAnalysis = {
+            ...options,
+            analysis,
+        };
+
         for (const interpreter of this.interpreters) {
-            if (interpreter.runWhen(options, sdmContext)) {
+            if (interpreter.runWhen(fullOptions, sdmContext)) {
                 const enriched = await interpreter.action.enrich(interpretation, sdmContext);
                 if (enriched) {
                     interpretation.reason.chosenInterpreters.push(interpreter.action);
@@ -298,7 +301,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
 
         for (const scorer of this.scorers) {
-            if (scorer.runWhen(options, sdmContext)) {
+            if (scorer.runWhen(fullOptions, sdmContext)) {
                 const score = await scorer.action(interpretation, sdmContext);
                 interpretation.scores[score.name] = score;
             }
