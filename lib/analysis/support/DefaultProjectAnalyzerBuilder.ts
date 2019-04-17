@@ -176,6 +176,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         const elements: Elements = {};
         const services: Services = {};
         const dependencies: Dependency[] = [];
+        const tags: string[] = [];
         const referencedEnvironmentVariables: string[] = [];
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
@@ -183,6 +184,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             elements,
             services,
             dependencies,
+            tags,
             referencedEnvironmentVariables,
         };
 
@@ -198,6 +200,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
             if (!!s.dependencies) {
                 dependencies.push(...s.dependencies);
+            }
+            if (!!s.tags) {
+                tags.push(...s.tags);
             }
             if (!!s.referencedEnvironmentVariables) {
                 referencedEnvironmentVariables.push(

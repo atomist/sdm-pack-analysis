@@ -86,6 +86,11 @@ export interface ProjectAnalysis {
     readonly dependencies: Dependency[];
 
     /**
+     * Tags of this project.
+     */
+    readonly tags: string[];
+
+    /**
      * Environment variables referenced in all elements
      */
     readonly referencedEnvironmentVariables: string[];

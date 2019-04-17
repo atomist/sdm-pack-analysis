@@ -73,6 +73,7 @@ function newAnalysis(): ProjectAnalysis {
         id: undefined,
         options: { full: true },
         dependencies: [],
+        tags: [],
         referencedEnvironmentVariables: [],
         services: {},
     };
