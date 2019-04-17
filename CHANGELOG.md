@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 -   Add support for sending messages from a Project Analysis. [#9](https://github.com/atomist/sdm-pack-analysis/issues/9)
 -   Introduce project classification . [#11](https://github.com/atomist/sdm-pack-analysis/issues/11)
+-   Analysis is now also available on RunCondition. [#19](https://github.com/atomist/sdm-pack-analysis/issues/19)
 
 ## [1.0.0](https://github.com/atomist/sdm-pack-seed/compare/0.1.0...1.0.0) - 2019-03-30
 
