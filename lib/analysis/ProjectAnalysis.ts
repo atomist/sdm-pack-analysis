@@ -53,6 +53,10 @@ export interface ProjectAnalysisOptions {
     full: boolean;
 }
 
+export interface HasAnalysis {
+    analysis?: ProjectAnalysis;
+}
+
 /**
  * An analysis of the various facets of a project.
  * An analysis doesn't involve decisions about how to process the project:
