@@ -42,8 +42,8 @@ import {
 import {
     Dependency,
     Elements,
-    InspectionResults,
     HasAnalysis,
+    InspectionResults,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     SeedAnalysis,
