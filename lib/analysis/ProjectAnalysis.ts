@@ -25,6 +25,7 @@ import {
 } from "@atomist/sdm";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
+import { DeliveryPhases } from "./phases";
 
 /**
  * Definition of a service such as riak or mongodb
@@ -108,7 +109,7 @@ export interface ProjectAnalysis extends HasMessages {
     seedAnalysis?: SeedAnalysis;
 
     /**
-     * Inspections. Only performed on a full analysis
+     * Results of code inspections. Only performed on a full analysis.
      */
     inspections?: InspectionResults;
 
@@ -116,6 +117,13 @@ export interface ProjectAnalysis extends HasMessages {
      * Scores. Only performed on a full analysis
      */
     scores?: Scores;
+
+    /**
+     * Lets us know whether the current Uhura SDM (if we are in one) could deliver this project,
+     * allowing querying and assessment of how far the organization is from Uhura-ready.
+     * Only performed on a full analysis, because it requires running an interpretation.
+     */
+    phaseStatus?: Record<keyof DeliveryPhases, boolean>;
 
 }
 

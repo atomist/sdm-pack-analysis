@@ -61,7 +61,7 @@
     },
     "max-line-length": {
       "severity": "warning",
-      "options": [150]
+      "options": [300]
     },
     "member-access": true,
     "member-ordering": false,
