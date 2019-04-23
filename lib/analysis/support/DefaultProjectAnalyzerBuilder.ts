@@ -267,6 +267,19 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             analysis.scores = interpretation.scores;
             analysis.messages.push(...interpretation.messages);
             analysis.inspections = await runInspections(p, interpretation.inspections);
+            // Unfortunately there's no way to see this at runtime, so we need to hardcode.
+            // At least it's checked by the compiler, so will stay in sync
+            analysis.phaseStatus = {
+                containerBuildGoals: !!interpretation.containerBuildGoals,
+                checkGoals: !!interpretation.checkGoals,
+                deployGoals: !!interpretation.deployGoals,
+                releaseGoals: !!interpretation.releaseGoals,
+                cancelGoal: !!interpretation.cancelGoal,
+                deliveryStartedGoals: !!interpretation.deliveryStartedGoals,
+                queueGoal: !!interpretation.queueGoal,
+                buildGoals: !!interpretation.buildGoals,
+                testGoals: !!interpretation.testGoals,
+            };
         }
         return analysis;
     }

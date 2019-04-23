@@ -233,6 +233,44 @@ describe("projectAnalyzer", () => {
             assert.deepStrictEqual(analysis.messages, [{ message: "foobar" }]);
         });
 
+        it("should not find phases status when not asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const buildGoals = goals("thing");
+            const i: Interpreter = {
+                enrich: async interpretation => {
+                    interpretation.buildGoals = buildGoals;
+                    return true;
+                },
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(toyScanner)
+                .withInterpreter(i)
+                .build()
+                .analyze(p, pli, { full: false });
+            assert(!analysis.phaseStatus);
+        });
+
+        it("should find phases status when asked", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const buildGoals = goals("thing");
+            const i: Interpreter = {
+                enrich: async interpretation => {
+                    interpretation.buildGoals = buildGoals;
+                    return true;
+                },
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(toyScanner)
+                .withInterpreter(i)
+                .build()
+                .analyze(p, pli, { full: true });
+            assert(!!analysis.phaseStatus);
+            assert.strictEqual(analysis.phaseStatus.buildGoals, true);
+            assert.strictEqual(analysis.phaseStatus.deployGoals, false);
+        });
+
     });
 
     describe("interpretation", () => {
