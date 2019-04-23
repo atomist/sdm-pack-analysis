@@ -125,6 +125,11 @@ export interface ProjectAnalysis extends HasMessages {
      */
     phaseStatus?: Record<keyof DeliveryPhases, boolean>;
 
+    /**
+     * GitStatus if available and if we are performing a full analysis that we want to persist.
+     */
+    gitStatus?: { branch: string, sha: string };
+
 }
 
 export interface Classified {

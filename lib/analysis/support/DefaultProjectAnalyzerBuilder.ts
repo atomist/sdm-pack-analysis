@@ -15,6 +15,7 @@
  */
 
 import {
+    GitProject,
     logger,
     Project,
     RemoteRepoRef,
@@ -261,6 +262,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
 
         if (options && options.full) {
+            if (isGitProject(p)) {
+                try {
+                    analysis.gitStatus = await p.gitStatus();
+                } catch (err) {
+                    // Don't fail on this
+                }
+            }
             analysis.seedAnalysis = await performSeedAnalysis(p, analysis, this.transformRecipeContributorRegistrations, sdmContext);
             // We'll need to get more from the interpretation
             const interpretation = await this.runInterpretation(analysis, sdmContext, options);
@@ -397,4 +405,9 @@ async function runInspections(p: Project,
     const results = await Promise.all(asArray);
     results.forEach(r => inspections[r.name] = r.result);
     return inspections;
+}
+
+function isGitProject(p: Project): p is GitProject {
+    const maybe = p as GitProject;
+    return !!maybe.gitStatus;
 }
