@@ -23,9 +23,9 @@ import {
     HasDefaultValue,
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
+import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
-import { DeliveryPhases } from "./phases";
 
 /**
  * Definition of a service such as riak or mongodb
