@@ -23,6 +23,8 @@ import {
     HasDefaultValue,
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
+import { Scores } from "./Score";
+import { HasMessages } from "./support/messageGoal";
 
 /**
  * Definition of a service such as riak or mongodb
@@ -36,6 +38,11 @@ export interface Service {
 export type Services = Record<string, Service>;
 
 export type Elements = Record<string, TechnologyElement>;
+
+/**
+ * Results of running code inspections on the current project
+ */
+export type InspectionResults = Record<string, object>;
 
 /**
  * Cross-platform representation of a dependency
@@ -64,7 +71,7 @@ export interface HasAnalysis {
  * so that Interpreters don't need to refer to the project.
  * Analyses can be persisted.
  */
-export interface ProjectAnalysis {
+export interface ProjectAnalysis extends HasMessages {
 
     /**
      * Options used to perform this analysis.
@@ -99,6 +106,16 @@ export interface ProjectAnalysis {
      * Only available on a full analysis
      */
     seedAnalysis?: SeedAnalysis;
+
+    /**
+     * Inspections. Only performed on a full analysis
+     */
+    inspections?: InspectionResults;
+
+    /**
+     * Scores. Only performed on a full analysis
+     */
+    scores?: Scores;
 
 }
 

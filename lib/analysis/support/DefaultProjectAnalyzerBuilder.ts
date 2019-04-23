@@ -31,6 +31,7 @@ import {
     SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
+
 import * as _ from "lodash";
 import {
     Interpretation,
@@ -42,6 +43,7 @@ import {
     Dependency,
     Elements,
     HasAnalysis,
+    InspectionResults,
     ProjectAnalysis,
     ProjectAnalysisOptions,
     SeedAnalysis,
@@ -236,6 +238,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             services,
             dependencies,
             referencedEnvironmentVariables,
+            messages: [],
         };
 
         const scanned = (await Promise.all(this.scanners
@@ -259,6 +262,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         if (options && options.full) {
             analysis.seedAnalysis = await performSeedAnalysis(p, analysis, this.transformRecipeContributorRegistrations, sdmContext);
+            // We'll need to get more from the interpretation
+            const interpretation = await this.runInterpretation(analysis, sdmContext, options);
+            analysis.scores = interpretation.scores;
+            analysis.messages.push(...interpretation.messages);
+            analysis.inspections = await runInspections(p, interpretation.inspections);
         }
         return analysis;
     }
@@ -363,4 +371,17 @@ function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerActio
             classify: async () => undefined,
             scan: sa,
         };
+}
+
+async function runInspections(p: Project,
+                              registrations: Array<AutoInspectRegistration<any, any>>): Promise<InspectionResults> {
+    const inspections: InspectionResults = {};
+    const asArray: Array<Promise<{ name: string, result: any }>> = registrations.map(async ir => ({
+        name: ir.name,
+        // TODO not clean
+        result: await ir.inspection(p, undefined),
+    }));
+    const results = await Promise.all(asArray);
+    results.forEach(r => inspections[r.name] = r.result);
+    return inspections;
 }

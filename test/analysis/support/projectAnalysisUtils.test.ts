@@ -54,7 +54,7 @@ describe("projectAnalysisUtils", () => {
                         originator: "foo",
                         description: "foo",
                         recipe: {
-                            parameters: [ {
+                            parameters: [{
                                 name: "thing",
                             }],
                             transforms: [],
@@ -77,5 +77,6 @@ function newAnalysis(): ProjectAnalysis {
         dependencies: [],
         referencedEnvironmentVariables: [],
         services: {},
+        messages: [],
     };
 }
