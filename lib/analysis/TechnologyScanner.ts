@@ -67,4 +67,14 @@ export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<
     return !!maybe.scan;
 }
 
+export function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerAction<T>): PhasedTechnologyScanner<T> {
+    return isPhasedTechnologyScanner(sa) ?
+        sa :
+        {
+            // If it wants to be classified, it has to do work
+            classify: async () => undefined,
+            scan: sa,
+        };
+}
+
 export type ScannerAction<T extends TechnologyElement> = TechnologyScanner<T> | PhasedTechnologyScanner<T>;

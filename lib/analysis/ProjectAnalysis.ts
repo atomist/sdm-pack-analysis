@@ -18,6 +18,7 @@ import {
     BaseParameter,
     RemoteRepoRef,
 } from "@atomist/automation-client";
+import { Fingerprint } from "@atomist/automation-client/lib/project/fingerprint/Fingerprint";
 import {
     CodeTransform,
     HasDefaultValue,
@@ -64,6 +65,11 @@ export interface ProjectAnalysisOptions {
 export interface HasAnalysis {
     analysis?: ProjectAnalysis;
 }
+
+/**
+ * All fingerprints from individual scanners, in a record type.
+ */
+export type ConsolidatedFingerprints = Record<string, Fingerprint>;
 
 /**
  * An analysis of the various facets of a project.
@@ -130,6 +136,13 @@ export interface ProjectAnalysis extends HasMessages {
      */
     gitStatus?: { branch: string, sha: string };
 
+    /**
+     * Fingerprints found in this structure. Unpacked from individual scanner contributions.
+     * Empty object if no fingerprints returned by any scanner.
+     * Fingerprinting is performed on all pushes.
+     */
+    readonly fingerprints: ConsolidatedFingerprints;
+
 }
 
 export interface Classified {
@@ -161,6 +174,12 @@ export interface TechnologyElement extends Classified {
      * Any services required by this element
      */
     readonly services?: Services;
+
+    /**
+     * Individual fingerprints if any, within this structure.
+     * The names of fingerprints must be globally unique.
+     */
+    readonly fingerprints?: Fingerprint[];
 
 }
 

@@ -78,5 +78,6 @@ function newAnalysis(): ProjectAnalysis {
         referencedEnvironmentVariables: [],
         services: {},
         messages: [],
+        fingerprints: {},
     };
 }

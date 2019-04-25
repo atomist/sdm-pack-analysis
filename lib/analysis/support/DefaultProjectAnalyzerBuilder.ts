@@ -41,6 +41,7 @@ import {
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
 import {
+    ConsolidatedFingerprints,
     Dependency,
     Elements,
     HasAnalysis,
@@ -65,9 +66,9 @@ import {
 } from "../ProjectAnalyzer";
 import {
     FastProject,
-    isPhasedTechnologyScanner,
     PhasedTechnologyScanner,
     ScannerAction,
+    toPhasedTechnologyScanner,
 } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
 import {
@@ -232,6 +233,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         const services: Services = {};
         const dependencies: Dependency[] = [];
         const referencedEnvironmentVariables: string[] = [];
+        const fingerprints: ConsolidatedFingerprints = {};
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
             options,
@@ -240,6 +242,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             dependencies,
             referencedEnvironmentVariables,
             messages: [],
+            fingerprints,
         };
 
         const scanned = (await Promise.all(this.scanners
@@ -259,35 +262,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 referencedEnvironmentVariables.push(
                     ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
             }
+            if (!!s.fingerprints) {
+                s.fingerprints.forEach((fp: any) => fingerprints[fp.name] = fp);
+            }
         }
 
         if (options && options.full) {
-            if (isGitProject(p)) {
-                try {
-                    analysis.gitStatus = await p.gitStatus();
-                } catch (err) {
-                    // Don't fail on this
-                }
-            }
-            analysis.seedAnalysis = await performSeedAnalysis(p, analysis, this.transformRecipeContributorRegistrations, sdmContext);
-            // We'll need to get more from the interpretation
-            const interpretation = await this.runInterpretation(analysis, sdmContext, options);
-            analysis.scores = interpretation.scores;
-            analysis.messages.push(...interpretation.messages);
-            analysis.inspections = await runInspections(p, interpretation.inspections);
-            // Unfortunately there's no way to see this at runtime, so we need to hardcode.
-            // At least it's checked by the compiler, so will stay in sync
-            analysis.phaseStatus = {
-                containerBuildGoals: !!interpretation.containerBuildGoals,
-                checkGoals: !!interpretation.checkGoals,
-                deployGoals: !!interpretation.deployGoals,
-                releaseGoals: !!interpretation.releaseGoals,
-                cancelGoal: !!interpretation.cancelGoal,
-                deliveryStartedGoals: !!interpretation.deliveryStartedGoals,
-                queueGoal: !!interpretation.queueGoal,
-                buildGoals: !!interpretation.buildGoals,
-                testGoals: !!interpretation.testGoals,
-            };
+            await this.enrichToFullAnalysis(p, sdmContext, options, analysis);
         }
         return analysis;
     }
@@ -339,6 +320,38 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return interpretation;
     }
 
+    private async enrichToFullAnalysis(p: Project,
+                                       sdmContext: SdmContext,
+                                       options: ProjectAnalysisOptions,
+                                       analysis: ProjectAnalysis): Promise<void> {
+        if (isGitProject(p)) {
+            try {
+                analysis.gitStatus = await p.gitStatus();
+            } catch (err) {
+                // Don't fail on this
+            }
+        }
+        analysis.seedAnalysis = await performSeedAnalysis(p, analysis, this.transformRecipeContributorRegistrations, sdmContext);
+        // We'll need to get more from the interpretation
+        const interpretation = await this.runInterpretation(analysis, sdmContext, options);
+        analysis.scores = interpretation.scores;
+        analysis.messages.push(...interpretation.messages);
+        analysis.inspections = await runInspections(p, interpretation.inspections);
+        // Unfortunately there's no way to see this at runtime, so we need to hardcode.
+        // At least it's checked by the compiler, so will stay in sync
+        analysis.phaseStatus = {
+            containerBuildGoals: !!interpretation.containerBuildGoals,
+            checkGoals: !!interpretation.checkGoals,
+            deployGoals: !!interpretation.deployGoals,
+            releaseGoals: !!interpretation.releaseGoals,
+            cancelGoal: !!interpretation.cancelGoal,
+            deliveryStartedGoals: !!interpretation.deliveryStartedGoals,
+            queueGoal: !!interpretation.queueGoal,
+            buildGoals: !!interpretation.buildGoals,
+            testGoals: !!interpretation.testGoals,
+        };
+    }
+
 }
 
 /**
@@ -382,16 +395,6 @@ function runOnCondition<W>(action: W, runWhen: RunCondition = () => true): Condi
         action,
         runWhen,
     };
-}
-
-function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerAction<T>): PhasedTechnologyScanner<T> {
-    return isPhasedTechnologyScanner(sa) ?
-        sa :
-        {
-            // If it wants to be classified, it has to do work
-            classify: async () => undefined,
-            scan: sa,
-        };
 }
 
 async function runInspections(p: Project,
