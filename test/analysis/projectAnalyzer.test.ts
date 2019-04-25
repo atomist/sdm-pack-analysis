@@ -271,6 +271,37 @@ describe("projectAnalyzer", () => {
             assert.strictEqual(analysis.phaseStatus.deployGoals, false);
         });
 
+        it("should return empty fingerprints", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(toyScanner)
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.fingerprints, {});
+        });
+
+        it("should consolidate one fingerprint", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const fp1 = {
+                name: "one",
+                version: "0.1.0",
+                abbreviation: "abc",
+                sha: "abcd",
+                data: "x",
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(async () => ({
+                    name: "foo",
+                    tags: [],
+                    fingerprints: [fp1],
+                }))
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.fingerprints, { one: fp1});
+        });
+
     });
 
     describe("interpretation", () => {

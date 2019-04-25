@@ -26,6 +26,7 @@ import {
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
+import { Fingerprint } from "@atomist/automation-client/lib/project/fingerprint/Fingerprint";
 
 /**
  * Definition of a service such as riak or mongodb
@@ -64,6 +65,8 @@ export interface ProjectAnalysisOptions {
 export interface HasAnalysis {
     analysis?: ProjectAnalysis;
 }
+
+export type ConsolidatedFingerprints = Record<string, Fingerprint>;
 
 /**
  * An analysis of the various facets of a project.
@@ -130,6 +133,13 @@ export interface ProjectAnalysis extends HasMessages {
      */
     gitStatus?: { branch: string, sha: string };
 
+    /**
+     * Fingerprints found in this structure. Unpacked from individual scanner contributions.
+     * Empty object if no fingerprints returned by any scanner.
+     * Fingerprinting is performed on all pushes.
+     */
+    readonly fingerprints: ConsolidatedFingerprints;
+
 }
 
 export interface Classified {
@@ -161,6 +171,11 @@ export interface TechnologyElement extends Classified {
      * Any services required by this element
      */
     readonly services?: Services;
+
+    /**
+     * Individual fingerprints if any, within this structure
+     */
+    readonly fingerprints?: Fingerprint[];
 
 }
 

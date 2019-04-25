@@ -41,6 +41,7 @@ import {
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
 import {
+    ConsolidatedFingerprints,
     Dependency,
     Elements,
     HasAnalysis,
@@ -232,6 +233,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         const services: Services = {};
         const dependencies: Dependency[] = [];
         const referencedEnvironmentVariables: string[] = [];
+        const fingerprints: ConsolidatedFingerprints = {};
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
             options,
@@ -240,6 +242,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             dependencies,
             referencedEnvironmentVariables,
             messages: [],
+            fingerprints,
         };
 
         const scanned = (await Promise.all(this.scanners
@@ -258,6 +261,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             if (!!s.referencedEnvironmentVariables) {
                 referencedEnvironmentVariables.push(
                     ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
+            }
+            if (!!s.fingerprints) {
+                s.fingerprints.forEach((fp: any) => fingerprints[fp.name] = fp);
             }
         }
 
