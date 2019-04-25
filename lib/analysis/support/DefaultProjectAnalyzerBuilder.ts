@@ -67,7 +67,8 @@ import {
 import {
     FastProject,
     PhasedTechnologyScanner,
-    ScannerAction, toPhasedTechnologyScanner,
+    ScannerAction,
+    toPhasedTechnologyScanner,
 } from "../TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
 import {
