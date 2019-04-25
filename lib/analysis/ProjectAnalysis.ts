@@ -66,6 +66,9 @@ export interface HasAnalysis {
     analysis?: ProjectAnalysis;
 }
 
+/**
+ * All fingerprints from individual scanners, in a record type.
+ */
 export type ConsolidatedFingerprints = Record<string, Fingerprint>;
 
 /**
@@ -173,7 +176,8 @@ export interface TechnologyElement extends Classified {
     readonly services?: Services;
 
     /**
-     * Individual fingerprints if any, within this structure
+     * Individual fingerprints if any, within this structure.
+     * The names of fingerprints must be globally unique.
      */
     readonly fingerprints?: Fingerprint[];
 
