@@ -18,6 +18,7 @@ import {
     BaseParameter,
     RemoteRepoRef,
 } from "@atomist/automation-client";
+import { Fingerprint } from "@atomist/automation-client/lib/project/fingerprint/Fingerprint";
 import {
     CodeTransform,
     HasDefaultValue,
@@ -26,7 +27,6 @@ import {
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
-import { Fingerprint } from "@atomist/automation-client/lib/project/fingerprint/Fingerprint";
 
 /**
  * Definition of a service such as riak or mongodb
