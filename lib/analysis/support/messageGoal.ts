@@ -16,7 +16,6 @@
 
 import {
     addressWeb,
-    guid,
     MessageOptions,
 } from "@atomist/automation-client";
 import {
@@ -109,11 +108,12 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
 
             const pushMessages = await messageFactory(gi) || [];
 
-            if (pushMessages.length > 0) {
+            const options: MessageOptions = {
+                id: `project-analysis/message/${goalEvent.repo.owner}/${goalEvent.repo.name}`,
+                ttl: 1000 * 60 * 60 * 24, // 1 day
+            };
 
-                const options: MessageOptions = {
-                    id: guid(),
-                };
+            if (pushMessages.length > 0) {
 
                 const attachments: Attachment[] = [];
                 for (const pm of pushMessages) {
@@ -150,7 +150,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                     ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent.repo, options.id)] : []),
                 ];
 
-                await addressMessage(msg, gi, {});
+                await addressMessage(msg, gi, options);
             }
         });
 }
