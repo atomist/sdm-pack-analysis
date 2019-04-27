@@ -26,6 +26,7 @@ import {
     Goal,
     GoalInvocation,
     SdmContext,
+    SdmGoalState,
     slackFooter,
     slackInfoMessage,
     slackSuccessMessage,
@@ -97,10 +98,10 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
             uniqueName: DefaultGoalNameGenerator.generateName(),
             displayName: "message",
             descriptions: {
-                planned: "Send project analysis messages",
-                requested: "Sending project analysis messages",
-                inProcess: "Sending project analysis messages",
-                completed: "Sent project analysis messages",
+                planned: "Analyze project",
+                requested: "Analyzing project",
+                inProcess: "Analyzing project",
+                completed: "Analyzed project",
             },
         },
         async gi => {
@@ -113,6 +114,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 ttl: 1000 * 60 * 60 * 24, // 1 day
             };
 
+            let count = 0;
             if (pushMessages.length > 0) {
 
                 const attachments: Attachment[] = [];
@@ -131,6 +133,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                             attachment.actions = [createDismissAction(pm, goalEvent.repo, options.id)];
                         }
                         attachments.push(attachment);
+                        count++;
                     }
                 }
 
@@ -151,6 +154,13 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 ];
 
                 await addressMessage(msg, gi, options);
+
+                if (count > 0) {
+                    return {
+                        state: SdmGoalState.success,
+                        phase: `${count} ${count > 1 ? "messages" : "message"}`,
+                    };
+                }
             }
         });
 }
