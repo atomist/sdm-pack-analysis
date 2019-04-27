@@ -156,7 +156,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                 await addressMessage(msg, gi, options);
 
             }
-            
+
             return {
                 state: SdmGoalState.success,
                 phase: count > 0 ? `${count} ${count > 1 ? "messages" : "message"}` : undefined,
