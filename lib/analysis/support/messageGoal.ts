@@ -127,7 +127,7 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
                         } else {
                             attachment = pm.message;
                         }
-                        if (!!attachment.actions && attachment.actions.length === 0) {
+                        if (!attachment.actions || attachment.actions.length === 0) {
                             attachment.actions = [createDismissAction(pm, goalEvent.repo, options.id)];
                         }
                         attachments.push(attachment);
