@@ -21,6 +21,7 @@ import {
 import {
     actionableButton,
     CommandHandlerRegistration,
+    CoreRepoFieldsAndChannels,
     DefaultGoalNameGenerator,
     goal,
     Goal,
@@ -106,56 +107,14 @@ export function messageGoal(messageFactory: PushMessageFactory): Goal {
         },
         async gi => {
             const { goalEvent } = gi;
+            const owner = goalEvent.repo.owner;
+            const name = goalEvent.repo.name;
+            const repo = { owner, name };
+            const channels = goalEvent.push.repo.channels;
 
             const pushMessages = await messageFactory(gi) || [];
 
-            const options: MessageOptions = {
-                id: `project-analysis/message/${goalEvent.repo.owner}/${goalEvent.repo.name}`,
-                ttl: 1000 * 60 * 60 * 24, // 1 day
-            };
-
-            let count = 0;
-            if (pushMessages.length > 0) {
-
-                const attachments: Attachment[] = [];
-                for (const pm of pushMessages) {
-                    if (!(await isDismissed(pm, goalEvent.repo, gi))) {
-                        let attachment: Attachment;
-                        if (typeof pm.message === "string") {
-                            attachment = {
-                                text: pm.message,
-                                fallback: pm.message,
-                            };
-                        } else {
-                            attachment = pm.message;
-                        }
-                        if (!attachment.actions || attachment.actions.length === 0) {
-                            attachment.actions = [createDismissAction(pm, goalEvent.repo, options.id)];
-                        }
-                        attachments.push(attachment);
-                        count++;
-                    }
-                }
-
-                const msg = slackInfoMessage(
-                    "Project Analysis",
-                    "");
-
-                msg.attachments[0].footer = undefined;
-                msg.attachments[0].ts = undefined;
-                msg.attachments.push(...attachments);
-
-                const lastAttachment = attachments.slice(-1)[0];
-                lastAttachment.footer = slackFooter();
-                lastAttachment.ts = slackTs();
-                lastAttachment.actions = [
-                    ...(lastAttachment.actions || []),
-                    ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, goalEvent.repo, options.id)] : []),
-                ];
-
-                await addressMessage(msg, gi, options);
-
-            }
+            const count = await sendMessages(pushMessages, repo, channels, gi);
 
             return {
                 state: SdmGoalState.success,
@@ -192,6 +151,60 @@ export function createDismissAllAction(pm: PushMessage[], repo: { owner: string,
         });
 }
 
+export async function sendMessages(pushMessages: PushMessage[],
+                                   repo: { owner: string, name: string },
+                                   channels: CoreRepoFieldsAndChannels.Channels[],
+                                   ctx: SdmContext): Promise<number> {
+    const options: MessageOptions = {
+        id: `project-analysis/message/${repo.owner}/${repo.name}`,
+        ttl: 1000 * 60 * 60 * 24, // 1 day
+    };
+
+    let count = 0;
+    if (pushMessages.length > 0) {
+
+        const attachments: Attachment[] = [];
+        for (const pm of pushMessages) {
+            if (!(await isDismissed(pm, repo, ctx))) {
+                let attachment: Attachment;
+                if (typeof pm.message === "string") {
+                    attachment = {
+                        text: pm.message,
+                        fallback: pm.message,
+                    };
+                } else {
+                    attachment = pm.message;
+                }
+                if (!attachment.actions || attachment.actions.length === 0) {
+                    attachment.actions = [createDismissAction(pm, repo, options.id)];
+                }
+                attachments.push(attachment);
+                count++;
+            }
+        }
+
+        const msg = slackInfoMessage(
+            "Project Analysis",
+            "");
+
+        msg.attachments[0].footer = undefined;
+        msg.attachments[0].ts = undefined;
+        msg.attachments.push(...attachments);
+
+        const lastAttachment = attachments.slice(-1)[0];
+        lastAttachment.footer = slackFooter();
+        lastAttachment.ts = slackTs();
+        lastAttachment.actions = [
+            ...(lastAttachment.actions || []),
+            ...(pushMessages.length > 1 ? [createDismissAllAction(pushMessages, repo, options.id)] : []),
+        ];
+
+        await addressMessage(msg, channels, ctx, options);
+
+    }
+    return count;
+}
+
 function createHash(pm: PushMessage): string {
     let text;
     if (typeof pm.message === "string") {
@@ -206,10 +219,13 @@ function createHash(pm: PushMessage): string {
     return crypto.createHash("md5").update(content).digest("base64").toString();
 }
 
-async function addressMessage(msg: any, gi: GoalInvocation, options?: MessageOptions): Promise<void> {
-    if (!gi.goalEvent.push.repo.channels || gi.goalEvent.push.repo.channels.length === 0) {
-        await gi.context.messageClient.send(msg, addressWeb(), options);
+async function addressMessage(msg: any,
+                              channels: CoreRepoFieldsAndChannels.Channels[],
+                              ctx: SdmContext,
+                              options?: MessageOptions): Promise<void> {
+    if (!channels || channels.length === 0) {
+        await ctx.context.messageClient.send(msg, addressWeb(), options);
     } else {
-        await gi.addressChannels(msg, options);
+        await ctx.addressChannels(msg, options);
     }
 }

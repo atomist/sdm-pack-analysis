@@ -115,4 +115,8 @@ export {
     createDismissAllAction,
     createDismissAction,
     messageGoal,
+    isDismissed,
+    sendMessages,
+    PushMessage,
+    PushMessageFactory,
 } from "./lib/analysis/support/messageGoal";
