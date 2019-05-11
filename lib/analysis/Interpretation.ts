@@ -162,6 +162,9 @@ export function controlGoals(interpretation: Interpretation): Goals {
     if (!!interpretation.queueGoal) {
         startup.plan(interpretation.queueGoal);
     }
+    if (!!interpretation.startupGoals) {
+        startup.plan(interpretation.startupGoals).after(interpretation.cancelGoal, interpretation.queueGoal);
+    }
     return startup;
 }
 

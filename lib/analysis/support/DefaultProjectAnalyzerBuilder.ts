@@ -340,6 +340,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         // Unfortunately there's no way to see this at runtime, so we need to hardcode.
         // At least it's checked by the compiler, so will stay in sync
         analysis.phaseStatus = {
+            startupGoals: !!interpretation.startupGoals,
             containerBuildGoals: !!interpretation.containerBuildGoals,
             checkGoals: !!interpretation.checkGoals,
             deployGoals: !!interpretation.deployGoals,

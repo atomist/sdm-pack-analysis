@@ -25,6 +25,9 @@ export interface StartupPhase {
     cancelGoal?: Cancel;
 
     queueGoal?: Queue;
+
+    startupGoals?: Goals;
+
 }
 
 /**
