@@ -16,7 +16,10 @@
 
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
-import { Feature, FP } from "@atomist/sdm-pack-fingerprints";
+import {
+    Feature,
+    FP,
+} from "@atomist/sdm-pack-fingerprints";
 import {
     Classified,
     ProjectAnalysis,
