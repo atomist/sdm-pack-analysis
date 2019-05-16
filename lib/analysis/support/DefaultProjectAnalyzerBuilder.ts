@@ -66,7 +66,9 @@ import {
     StackSupport,
 } from "../ProjectAnalyzer";
 import {
-    FastProject, isInferredTechnologyFeature, ManagedFeature,
+    FastProject,
+    isInferredTechnologyFeature,
+    ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
     toPhasedTechnologyScanner,
