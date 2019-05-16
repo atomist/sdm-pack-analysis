@@ -33,6 +33,7 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 
+import { FP } from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
 import {
     Interpretation,
@@ -77,7 +78,6 @@ import {
 } from "./interpretationDriven";
 import { messageGoal } from "./messageGoal";
 import { allMessages } from "./projectAnalysisUtils";
-import { FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
