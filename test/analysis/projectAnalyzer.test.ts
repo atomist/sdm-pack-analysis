@@ -302,6 +302,37 @@ describe("projectAnalyzer", () => {
             assert.deepStrictEqual(analysis.fingerprints, { one: fp1});
         });
 
+        it("should add feature fingerprints", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const fp1 = {
+                name: "one",
+                version: "0.1.0",
+                abbreviation: "abc",
+                sha: "abcd",
+                data: "x",
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner({
+                    classify: async () => undefined,
+                    scan: async () => ({
+                        name: "foo",
+                        tags: [],
+                    }),
+                    features: [
+                        {
+                            extract: async proj => {
+                                return fp1;
+                            },
+                            toDisplayableString: () => "foo",
+                        },
+                    ],
+                })
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.fingerprints, { one: fp1});
+        });
+
     });
 
     describe("interpretation", () => {

@@ -247,7 +247,16 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         const scanned = (await Promise.all(this.scanners
             .filter(s => s.runWhen(options, sdmContext))
-            .map(s => s.action.scan(p, sdmContext, analysis, options))))
+            .map(s => s.action.scan(p, sdmContext, analysis, options)
+                .then(te => {
+                    if (!!te && !!s.action.features) {
+                        te.fingerprints = te.fingerprints || [];
+                        return Promise.all(s.action.features.map(
+                            feature => feature.extract(p).then(fp => te.fingerprints.push(fp))))
+                            .then(() => te);
+                    }
+                    return te;
+                }))))
             .filter(r => !!r);
 
         for (const s of scanned) {

@@ -23,6 +23,7 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 import { HasMessages } from "./support/messageGoal";
+import { Feature, FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * Subset of Project that is efficient and can be used during a precheck
@@ -41,10 +42,26 @@ export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
 
+export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
+
 /**
  * Result of quickly classifying a project.
  */
 export type TechnologyClassification = Classified & HasMessages;
+
+/**
+ * Way of attaching fingerprints to scanners. This will automatically be exposed on analysis.
+ */
+export interface TechnologyFeature<FPI extends FP = FP> extends Feature<FPI> {
+
+    /**
+     * Is this registration relevant to this project? For example, if
+     * we are tracking TypeScript version, is this even a Node project?
+     * Is the target at all relevant
+     */
+    relevanceTest?: RelevanceTest;
+
+}
 
 /**
  * More elaborate scanner that can work in phases
@@ -60,6 +77,11 @@ export interface PhasedTechnologyScanner<T extends TechnologyElement> {
      * Perform a scan of the project.
      */
     scan: TechnologyScanner<T>;
+
+    /**
+     * Return the features that can be managed in this project
+     */
+    features?: Array<TechnologyFeature<any>>;
 }
 
 export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<any> {
