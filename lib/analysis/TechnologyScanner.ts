@@ -66,6 +66,28 @@ export interface TechnologyFeature<FPI extends FP = FP> extends Feature<FPI> {
 
 }
 
+export interface InferredTechnologyFeature<T extends TechnologyElement, FPI extends FP = FP>
+    extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString"> {
+
+    consequence(t: T): FPI;
+
+    /**
+     * Is this registration relevant to this project? For example, if
+     * we are tracking TypeScript version, is this even a Node project?
+     * Is the target at all relevant
+     */
+    relevanceTest?: RelevanceTest;
+
+}
+
+export type ManagedFeature<T extends TechnologyElement, FPI extends FP = FP> =
+    TechnologyFeature<FPI> | InferredTechnologyFeature<T, FPI>;
+
+export function isInferredTechnologyFeature(mf: ManagedFeature<any, any>): mf is InferredTechnologyFeature<any> {
+    const maybe = mf as InferredTechnologyFeature<any, any>;
+    return !!maybe.consequence;
+}
+
 /**
  * More elaborate scanner that can work in phases
  */
@@ -84,7 +106,7 @@ export interface PhasedTechnologyScanner<T extends TechnologyElement> {
     /**
      * Return the features that can be managed in this project
      */
-    features?: Array<TechnologyFeature<any>>;
+    features?: Array<ManagedFeature<T, any>>;
 }
 
 export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<any> {

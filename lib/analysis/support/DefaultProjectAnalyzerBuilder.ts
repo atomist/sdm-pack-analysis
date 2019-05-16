@@ -65,7 +65,7 @@ import {
     StackSupport,
 } from "../ProjectAnalyzer";
 import {
-    FastProject,
+    FastProject, isInferredTechnologyFeature, ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
     toPhasedTechnologyScanner,
@@ -77,6 +77,7 @@ import {
 } from "./interpretationDriven";
 import { messageGoal } from "./messageGoal";
 import { allMessages } from "./projectAnalysisUtils";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
@@ -245,6 +246,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             fingerprints,
         };
 
+        async function extractify(feature: ManagedFeature<any, any>, te: TechnologyElement): Promise<FP> {
+            return isInferredTechnologyFeature(feature) ?
+                feature.consequence(undefined) :
+                // tODO why is this needed
+                (feature as any).extract(p);
+        }
+
         const scanned = (await Promise.all(this.scanners
             .filter(s => s.runWhen(options, sdmContext))
             .map(s => s.action.scan(p, sdmContext, analysis, options)
@@ -252,7 +260,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     if (!!te && !!s.action.features) {
                         te.fingerprints = te.fingerprints || [];
                         return Promise.all(s.action.features.map(
-                            feature => feature.extract(p).then(fp => te.fingerprints.push(fp))))
+                            feature => extractify(feature, te)
+                                .then(fp => te.fingerprints.push(fp))))
                             .then(() => te);
                     }
                     return te;
