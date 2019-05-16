@@ -16,6 +16,7 @@
 
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
+import { Feature, FP } from "@atomist/sdm-pack-fingerprints";
 import {
     Classified,
     ProjectAnalysis,
@@ -23,7 +24,6 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 import { HasMessages } from "./support/messageGoal";
-import { Feature, FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * Subset of Project that is efficient and can be used during a precheck
