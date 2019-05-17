@@ -23,6 +23,7 @@ import {
     Goal,
     SdmContext,
 } from "@atomist/sdm";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 import {
     Interpretation,
     Interpreter,
@@ -42,7 +43,6 @@ import {
     TechnologyScanner,
 } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
-import { FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * When an action should be run
