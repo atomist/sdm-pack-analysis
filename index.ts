@@ -91,7 +91,9 @@ export {
 } from "./lib/analysis/ProjectAnalyzer";
 export {
     FastProject,
+    InferredTechnologyFeature,
     ScannerAction,
+    TechnologyFeature,
     TechnologyScanner,
     PhasedTechnologyScanner,
     TechnologyClassification,
