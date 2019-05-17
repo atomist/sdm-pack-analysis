@@ -88,11 +88,10 @@ export interface InferredFeature<T extends TechnologyElement, FPI extends FP = F
 
     /**
      * Can this feature be inferred from the given analysis, without going back to the project
-     * @param {T} t relevant technology element
      * @param {ProjectAnalysis} analysis complete analysis to date
      * @return {FPI} fingerprint if found
      */
-    consequence(t: T, analysis: ProjectAnalysis): FPI | undefined;
+    consequence(analysis: ProjectAnalysis): FPI | undefined;
 
 }
 
@@ -122,10 +121,6 @@ export interface PhasedTechnologyScanner<T extends TechnologyElement> {
      */
     scan: TechnologyScanner<T>;
 
-    /**
-     * Return the features that can be managed in this project
-     */
-    features?: Array<ManagedFeature<T, any>>;
 }
 
 export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<any> {

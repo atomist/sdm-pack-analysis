@@ -156,6 +156,11 @@ export interface StackSupport {
 
     interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
 
+    /**
+     * Return the features that can be managed in this project
+     */
+    features?: Array<ManagedFeature<TechnologyElement, FP>>;
+
     scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 
     transformRecipeContributors: TransformRecipeContributionRegistration[];
@@ -179,6 +184,11 @@ export interface ProjectAnalyzerBuilder {
      * can be done only once.
      */
     withScanner<T extends TechnologyElement>(scanner: ScannerAction<T> | ConditionalRegistration<ScannerAction<T>>): ProjectAnalyzerBuilder;
+
+    /**
+     * Add a feature
+     */
+    withFeature<T extends TechnologyElement>(f: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

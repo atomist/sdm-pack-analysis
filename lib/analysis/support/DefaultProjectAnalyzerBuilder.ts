@@ -144,9 +144,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             toAdd = runOnCondition(toPhasedTechnologyScanner(scanner));
         }
         this.scanners.push(toAdd);
-        if (toAdd.action.features) {
-            this.features.push(...toAdd.action.features);
-        }
+        return this;
+    }
+
+    public withFeature<T extends TechnologyElement>(f: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder {
+        this.features.push(f);
         return this;
     }
 
@@ -187,6 +189,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         interpreters.forEach(i => this.withInterpreter(i));
         stackSupport.transformRecipeContributors.forEach(trc => this.withTransformRecipeContributor(trc));
         scorers.forEach(scorer => this.withScorer(scorer));
+        (stackSupport.features || []).forEach(f => this.withFeature(f));
         return this;
     }
 
@@ -254,21 +257,19 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             fingerprints,
         };
 
-        async function extractify(feature: ManagedFeature<any, any>, te: TechnologyElement): Promise<FP> {
+        async function extractify(feature: ManagedFeature<any, any>): Promise<FP> {
             return isExtractedTechnologyFeature(feature) ?
                 feature.extract(p) :
-                feature.consequence(te, analysis);
+                feature.consequence(analysis);
         }
 
-        const scans: Array<{ scanner: PhasedTechnologyScanner<any>, result: TechnologyStack }> =
+        const scans =
             (await Promise.all(this.scanners
                 .filter(s => s.runWhen(options, sdmContext))
-                .map(s => s.action.scan(p, sdmContext, analysis, options)
-                    .then(result => !!result ? ({ scanner: s.action, result }) : undefined)),
+                .map(s => s.action.scan(p, sdmContext, analysis, options)),
             )).filter(r => !!r);
 
-        for (const scan of scans) {
-            const s = scan.result;
+        for (const s of scans) {
             elements[s.name] = s;
             if (!!s.services) {
                 _.merge(services, s.services);
@@ -280,15 +281,15 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 referencedEnvironmentVariables.push(
                     ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
             }
-            if (scan.scanner.features) {
-                s.fingerprints = s.fingerprints || [];
-                await Promise.all(scan.scanner.features.map(
-                    feature => extractify(feature, s)
-                        .then(fp => s.fingerprints.push(fp))));
-            }
             if (!!s.fingerprints) {
                 s.fingerprints.forEach((fp: any) => fingerprints[fp.name] = fp);
             }
+        }
+
+        if (this.features) {
+            await Promise.all(this.features.map(
+                feature => extractify(feature)
+                    .then(fp => analysis.fingerprints[fp.name] = fp)));
         }
 
         if (options && options.full) {
