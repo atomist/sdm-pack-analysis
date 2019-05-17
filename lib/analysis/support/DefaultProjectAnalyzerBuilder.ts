@@ -73,6 +73,7 @@ import {
     ScannerAction,
     toPhasedTechnologyScanner,
 } from "../TechnologyScanner";
+import { TechnologyStack } from "../TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
 import {
     registerAutofixes,
@@ -80,7 +81,6 @@ import {
 } from "./interpretationDriven";
 import { messageGoal } from "./messageGoal";
 import { allMessages } from "./projectAnalysisUtils";
-import { TechnologyStack } from "../TechnologyStack";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
