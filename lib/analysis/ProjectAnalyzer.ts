@@ -36,7 +36,8 @@ import {
 } from "./ProjectAnalysis";
 import { Score } from "./Score";
 import {
-    FastProject, ManagedFeature,
+    FastProject,
+    ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
     TechnologyClassification,
