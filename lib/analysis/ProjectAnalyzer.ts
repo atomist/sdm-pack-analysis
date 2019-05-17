@@ -35,13 +35,14 @@ import {
 } from "./ProjectAnalysis";
 import { Score } from "./Score";
 import {
-    FastProject,
+    FastProject, ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
     TechnologyClassification,
     TechnologyScanner,
 } from "./TechnologyScanner";
 import { TransformRecipeContributionRegistration } from "./TransformRecipeContributor";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * When an action should be run
@@ -117,6 +118,11 @@ export interface ProjectAnalyzer {
     readonly interpreters: Array<ConditionalRegistration<Interpreter>>;
 
     readonly scanners: Array<ConditionalRegistration<ScannerAction<any>>>;
+
+    /**
+     * All features registered anywhere
+     */
+    readonly features: Array<ManagedFeature<TechnologyElement, FP>>;
 
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 

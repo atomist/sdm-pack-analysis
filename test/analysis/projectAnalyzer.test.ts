@@ -27,6 +27,7 @@ import {
     Interpreter,
 } from "../../lib/analysis/Interpretation";
 import {
+    ProjectAnalyzer,
     Scorer,
     StackSupport,
 } from "../../lib/analysis/ProjectAnalyzer";
@@ -344,7 +345,7 @@ describe("projectAnalyzer", () => {
                 sha: "abcd",
                 data: "x",
             };
-            const analysis = await analyzerBuilder({} as any)
+            const pa: ProjectAnalyzer = analyzerBuilder({} as any)
                 .withScanner({
                     classify: async () => undefined,
                     scan: async () => ({
@@ -361,8 +362,9 @@ describe("projectAnalyzer", () => {
                         },
                     ],
                 })
-                .build()
-                .analyze(p, pli, { full: true });
+                .build();
+            assert.strictEqual(pa.features.length, 1);
+            const analysis = await pa.analyze(p, pli, { full: true });
             assert.deepStrictEqual(analysis.fingerprints, { one: fp1});
         });
 

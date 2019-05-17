@@ -90,6 +90,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly scanners: Array<ConditionalRegistration<PhasedTechnologyScanner<any>>> = [];
 
+    public readonly features: Array<ManagedFeature<TechnologyElement, FP>> = [];
+
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
     public readonly transformRecipeContributorRegistrations: TransformRecipeContributionRegistration[] = [];
@@ -142,6 +144,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             toAdd = runOnCondition(toPhasedTechnologyScanner(scanner));
         }
         this.scanners.push(toAdd);
+        if (toAdd.action.features) {
+            this.features.push(...toAdd.action.features);
+        }
         return this;
     }
 
