@@ -147,8 +147,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withFeature<T extends TechnologyElement>(f: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder {
-        this.features.push(f);
+    public withFeature<T extends TechnologyElement>(feature: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder {
+        this.features.push(feature);
+        return this;
+    }
+
+    public withFeatures<T extends TechnologyElement>(features: Array<ManagedFeature<TechnologyElement, FP>>): ProjectAnalyzerBuilder {
+        this.features.push(...features);
         return this;
     }
 

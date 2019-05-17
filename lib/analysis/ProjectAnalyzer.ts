@@ -188,7 +188,9 @@ export interface ProjectAnalyzerBuilder {
     /**
      * Add a feature
      */
-    withFeature<T extends TechnologyElement>(f: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder;
+    withFeature<T extends TechnologyElement>(feature: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder;
+
+    withFeatures<T extends TechnologyElement>(features: Array<ManagedFeature<TechnologyElement, FP>>): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.
