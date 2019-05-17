@@ -250,7 +250,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         async function extractify(feature: ManagedFeature<any, any>, te: TechnologyElement): Promise<FP> {
             return isInferredTechnologyFeature(feature) ?
-                feature.consequence(undefined) :
+                feature.consequence(te) :
                 // tODO why is this needed
                 (feature as any).extract(p);
         }
