@@ -60,11 +60,16 @@ export interface VisualFeature {
     readonly name: string;
 
     /**
-     * Is this registration relevant to this project? For example, if
+     * Is this feature relevant to this project? For example, if
      * we are tracking TypeScript version, is this even a Node project?
      * Is the target at all relevant
      */
     relevanceTest?: RelevanceTest;
+
+    /**
+     * Is this feature desired on this project, according to our standards?
+     */
+    necessityTest?: RelevanceTest;
 }
 
 /**
