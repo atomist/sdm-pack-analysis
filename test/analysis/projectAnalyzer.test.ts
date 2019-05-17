@@ -321,6 +321,7 @@ describe("projectAnalyzer", () => {
                     }),
                     features: [
                         {
+                            name: "foo",
                             extract: async proj => {
                                 return fp1;
                             },
@@ -352,6 +353,7 @@ describe("projectAnalyzer", () => {
                     }),
                     features: [
                         {
+                            name: "foo",
                             consequence: proj => {
                                 return fp1;
                             },

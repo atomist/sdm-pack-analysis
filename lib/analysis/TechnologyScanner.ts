@@ -52,10 +52,9 @@ export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
  */
 export type TechnologyClassification = Classified & HasMessages;
 
-/**
- * Way of attaching fingerprints to scanners. This will automatically be exposed on analysis.
- */
-export interface TechnologyFeature<FPI extends FP = FP> extends Feature<FPI> {
+export interface VisualFeature {
+
+    readonly name: string;
 
     /**
      * Is this registration relevant to this project? For example, if
@@ -63,20 +62,20 @@ export interface TechnologyFeature<FPI extends FP = FP> extends Feature<FPI> {
      * Is the target at all relevant
      */
     relevanceTest?: RelevanceTest;
+}
+
+/**
+ * Way of attaching fingerprints to scanners. This will automatically be exposed on analysis.
+ */
+export interface TechnologyFeature<FPI extends FP = FP> extends Feature<FPI>, VisualFeature {
 
 }
 
 export interface InferredTechnologyFeature<T extends TechnologyElement, FPI extends FP = FP>
-    extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString"> {
+    extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString">,
+        VisualFeature {
 
     consequence(t: T): FPI;
-
-    /**
-     * Is this registration relevant to this project? For example, if
-     * we are tracking TypeScript version, is this even a Node project?
-     * Is the target at all relevant
-     */
-    relevanceTest?: RelevanceTest;
 
 }
 
