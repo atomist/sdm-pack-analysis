@@ -45,7 +45,7 @@ export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
 
-export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
+export type RelevanceTest<T extends TechnologyElement> = (t: T, analysis: ProjectAnalysis) => boolean;
 
 /**
  * Result of quickly classifying a project.
@@ -55,22 +55,27 @@ export type TechnologyClassification = Classified & HasMessages;
 /**
  * Feature that can be managed visually. Extends Fingerprint support.
  */
-export interface VisualFeature {
+export interface VisualFeature<T extends TechnologyElement> {
 
     readonly name: string;
 
     /**
-     * Is this registration relevant to this project? For example, if
+     * Is this feature relevant to this project? For example, if
      * we are tracking TypeScript version, is this even a Node project?
      * Is the target at all relevant
      */
-    relevanceTest?: RelevanceTest;
+    relevanceTest?: RelevanceTest<T>;
+
+    /**
+     * Is this feature necessary to this project according to our standards?
+     */
+    necessityTest?: RelevanceTest<T>;
 }
 
 /**
  * Feature that can be extracted from a Project directly.
  */
-export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, VisualFeature {
+export interface ExtractedFeature<T extends TechnologyElement, FPI extends FP = FP> extends Feature<FPI>, VisualFeature<T> {
 
 }
 
@@ -79,7 +84,7 @@ export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, Vis
  */
 export interface InferredFeature<T extends TechnologyElement, FPI extends FP = FP>
     extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString">,
-        VisualFeature {
+        VisualFeature<T> {
 
     /**
      * Can this feature be inferred from the given analysis, without going back to the project
@@ -95,9 +100,9 @@ export interface InferredFeature<T extends TechnologyElement, FPI extends FP = F
  * Feature we can manage, including with visualization, however it is extracted.
  */
 export type ManagedFeature<T extends TechnologyElement, FPI extends FP = FP> =
-    ExtractedFeature<FPI> | InferredFeature<T, FPI>;
+    ExtractedFeature<T, FPI> | InferredFeature<T, FPI>;
 
-export function isExtractedTechnologyFeature(mf: ManagedFeature<any, any>): mf is ExtractedFeature<any> {
+export function isExtractedTechnologyFeature(mf: ManagedFeature<any, any>): mf is ExtractedFeature<any, any> {
     const maybe = mf as ExtractedFeature<any>;
     return !!maybe.extract;
 }
@@ -131,11 +136,12 @@ export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<
 export function toPhasedTechnologyScanner<T extends TechnologyElement>(sa: ScannerAction<T>): PhasedTechnologyScanner<T> {
     return isPhasedTechnologyScanner(sa) ?
         sa :
+        // tslint:disable-next-line:no-object-literal-type-assertion
         {
             // If it wants to be classified, it has to do work
             classify: async () => undefined,
             scan: sa,
-        };
+        } as PhasedTechnologyScanner<T>;
 }
 
 export type ScannerAction<T extends TechnologyElement> = TechnologyScanner<T> | PhasedTechnologyScanner<T>;
