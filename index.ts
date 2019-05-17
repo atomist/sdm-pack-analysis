@@ -90,10 +90,11 @@ export {
     Scorer,
 } from "./lib/analysis/ProjectAnalyzer";
 export {
+    ExtractedFeature,
     FastProject,
-    InferredTechnologyFeature,
+    InferredFeature,
+    ManagedFeature,
     ScannerAction,
-    TechnologyFeature,
     TechnologyScanner,
     PhasedTechnologyScanner,
     TechnologyClassification,

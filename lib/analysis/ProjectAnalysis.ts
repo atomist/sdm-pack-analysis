@@ -179,7 +179,7 @@ export interface TechnologyElement extends Classified {
      * Individual fingerprints if any, within this structure.
      * The names of fingerprints must be globally unique.
      */
-    readonly fingerprints?: Fingerprint[];
+    fingerprints?: Fingerprint[];
 
 }
 

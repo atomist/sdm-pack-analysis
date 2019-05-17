@@ -67,7 +67,7 @@ import {
 } from "../ProjectAnalyzer";
 import {
     FastProject,
-    isInferredTechnologyFeature,
+    isExtractedTechnologyFeature,
     ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
@@ -80,6 +80,7 @@ import {
 } from "./interpretationDriven";
 import { messageGoal } from "./messageGoal";
 import { allMessages } from "./projectAnalysisUtils";
+import { TechnologyStack } from "../TechnologyStack";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
@@ -249,28 +250,20 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         };
 
         async function extractify(feature: ManagedFeature<any, any>, te: TechnologyElement): Promise<FP> {
-            return isInferredTechnologyFeature(feature) ?
-                feature.consequence(te) :
-                // tODO why is this needed
-                (feature as any).extract(p);
+            return isExtractedTechnologyFeature(feature) ?
+                feature.extract(p) :
+                feature.consequence(te, analysis);
         }
 
-        const scanned = (await Promise.all(this.scanners
-            .filter(s => s.runWhen(options, sdmContext))
-            .map(s => s.action.scan(p, sdmContext, analysis, options)
-                .then(te => {
-                    if (!!te && !!s.action.features) {
-                        te.fingerprints = te.fingerprints || [];
-                        return Promise.all(s.action.features.map(
-                            feature => extractify(feature, te)
-                                .then(fp => te.fingerprints.push(fp))))
-                            .then(() => te);
-                    }
-                    return te;
-                }))))
-            .filter(r => !!r);
+        const scans: Array<{ scanner: PhasedTechnologyScanner<any>, result: TechnologyStack }> =
+            (await Promise.all(this.scanners
+                .filter(s => s.runWhen(options, sdmContext))
+                .map(s => s.action.scan(p, sdmContext, analysis, options)
+                    .then(result => !!result ? ({ scanner: s.action, result }) : undefined)),
+            )).filter(r => !!r);
 
-        for (const s of scanned) {
+        for (const scan of scans) {
+            const s = scan.result;
             elements[s.name] = s;
             if (!!s.services) {
                 _.merge(services, s.services);
@@ -281,6 +274,12 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             if (!!s.referencedEnvironmentVariables) {
                 referencedEnvironmentVariables.push(
                     ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
+            }
+            if (scan.scanner.features) {
+                s.fingerprints = s.fingerprints || [];
+                await Promise.all(scan.scanner.features.map(
+                    feature => extractify(feature, s)
+                        .then(fp => s.fingerprints.push(fp))));
             }
             if (!!s.fingerprints) {
                 s.fingerprints.forEach((fp: any) => fingerprints[fp.name] = fp);

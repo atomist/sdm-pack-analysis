@@ -52,6 +52,9 @@ export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
  */
 export type TechnologyClassification = Classified & HasMessages;
 
+/**
+ * Feature that can be managed visually. Extends Fingerprint support.
+ */
 export interface VisualFeature {
 
     readonly name: string;
@@ -65,26 +68,38 @@ export interface VisualFeature {
 }
 
 /**
- * Way of attaching fingerprints to scanners. This will automatically be exposed on analysis.
+ * Feature that can be extracted from a Project directly.
  */
-export interface TechnologyFeature<FPI extends FP = FP> extends Feature<FPI>, VisualFeature {
+export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, VisualFeature {
 
 }
 
-export interface InferredTechnologyFeature<T extends TechnologyElement, FPI extends FP = FP>
+/**
+ * Feature that can be inferred from an analysis of a project
+ */
+export interface InferredFeature<T extends TechnologyElement, FPI extends FP = FP>
     extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString">,
         VisualFeature {
 
-    consequence(t: T): FPI;
+    /**
+     * Can this feature be inferred from the given analysis, without going back to the project
+     * @param {T} t relevant technology element
+     * @param {ProjectAnalysis} analysis complete analysis to date
+     * @return {FPI} fingerprint if found
+     */
+    consequence(t: T, analysis: ProjectAnalysis): FPI | undefined;
 
 }
 
+/**
+ * Feature we can manage, including with visualization, however it is extracted.
+ */
 export type ManagedFeature<T extends TechnologyElement, FPI extends FP = FP> =
-    TechnologyFeature<FPI> | InferredTechnologyFeature<T, FPI>;
+    ExtractedFeature<FPI> | InferredFeature<T, FPI>;
 
-export function isInferredTechnologyFeature(mf: ManagedFeature<any, any>): mf is InferredTechnologyFeature<any> {
-    const maybe = mf as InferredTechnologyFeature<any, any>;
-    return !!maybe.consequence;
+export function isExtractedTechnologyFeature(mf: ManagedFeature<any, any>): mf is ExtractedFeature<any> {
+    const maybe = mf as ExtractedFeature<any>;
+    return !!maybe.extract;
 }
 
 /**
