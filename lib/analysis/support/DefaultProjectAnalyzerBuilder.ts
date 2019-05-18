@@ -290,7 +290,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             const extracted = isExtractedTechnologyFeature(feature) ?
                 await feature.extract(p) :
                 await feature.consequence(analysis);
-            return !!extracted ? toArray(extracted) : undefined;
+            return !!extracted ? toArray(extracted) : [];
         }
 
         // Fingerprint from all features after the rest of the analysis is complete
