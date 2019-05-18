@@ -91,7 +91,7 @@ export interface InferredFeature<T extends TechnologyElement, FPI extends FP = F
      * @param {ProjectAnalysis} analysis complete analysis to date
      * @return {FPI} fingerprint if found
      */
-    consequence(analysis: ProjectAnalysis): FPI | undefined;
+    consequence(analysis: ProjectAnalysis): FPI | undefined | Promise<FPI | undefined>;
 
 }
 
