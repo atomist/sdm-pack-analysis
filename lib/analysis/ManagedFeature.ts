@@ -57,7 +57,7 @@ export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, Vis
  * Feature that can be inferred from an analysis of a project
  */
 export interface InferredFeature<T extends TechnologyElement, FPI extends FP = FP>
-    extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString">,
+    extends Pick<Feature<FPI>, "displayName" | "selector" | "apply" | "comparators" | "toDisplayableString">,
         VisualFeature {
 
     /**
