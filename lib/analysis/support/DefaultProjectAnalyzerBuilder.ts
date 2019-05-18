@@ -294,7 +294,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         if (this.features) {
             await Promise.all(this.features.map(
                 feature => extractify(feature)
-                    .then(fp => analysis.fingerprints[fp.name] = fp)));
+                    .then(fp => {
+                        if (!!fp) {
+                            analysis.fingerprints[fp.name] = fp;
+                        }
+                    })));
         }
 
         if (options && options.full) {
