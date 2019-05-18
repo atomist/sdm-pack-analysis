@@ -316,7 +316,6 @@ describe("projectAnalyzer", () => {
             const analysis = await analyzerBuilder({} as any)
                 .withFeature(
                     {
-                        name: "foo",
                         extract: async () => {
                             return fp1;
                         },
@@ -340,7 +339,6 @@ describe("projectAnalyzer", () => {
             const pa: ProjectAnalyzer = analyzerBuilder({} as any)
                 .withFeature(
                     {
-                        name: "foo",
                         consequence: () => {
                             return fp1;
                         },

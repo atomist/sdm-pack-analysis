@@ -82,6 +82,7 @@ import {
 } from "./interpretationDriven";
 import { messageGoal } from "./messageGoal";
 import { allMessages } from "./projectAnalysisUtils";
+import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 
 /**
  * Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
@@ -264,9 +265,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         };
 
         const scans = (await Promise.all(this.scanners
-                .filter(s => s.runWhen(options, sdmContext))
-                .map(s => s.action.scan(p, sdmContext, analysis, options)),
-            )).filter(r => !!r);
+            .filter(s => s.runWhen(options, sdmContext))
+            .map(s => s.action.scan(p, sdmContext, analysis, options)),
+        )).filter(r => !!r);
 
         for (const s of scans) {
             elements[s.name] = s;
@@ -285,10 +286,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractify(feature: ManagedFeature<any, any>): Promise<FP> {
-            return isExtractedTechnologyFeature(feature) ?
-                feature.extract(p) :
-                feature.consequence(analysis);
+        async function extractify(feature: ManagedFeature<any, any>): Promise<FP[]> {
+            const extracted = isExtractedTechnologyFeature(feature) ?
+                await feature.extract(p) :
+                await feature.consequence(analysis);
+            return !!extracted ? toArray(extracted) : undefined;
         }
 
         // Fingerprint from all features after the rest of the analysis is complete
@@ -296,11 +298,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         if (this.features) {
             await Promise.all(this.features.map(
                 feature => extractify(feature)
-                    .then(fp => {
-                        if (!!fp) {
-                            analysis.fingerprints[fp.name] = fp;
-                        }
-                    })));
+                    .then(fps =>
+                        fps.forEach(fp => analysis.fingerprints[fp.name] = fp),
+                    )));
         }
 
         if (options && options.full) {

@@ -31,11 +31,6 @@ export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
 export interface VisualFeature {
 
     /**
-     * Name of the feature. Must correspond to fingerprint name.
-     */
-    readonly name: string;
-
-    /**
      * Is this feature relevant to this project? For example, if
      * we are tracking TypeScript version, is this even a Node project?
      * Is the target at all relevant
@@ -65,9 +60,8 @@ export interface InferredFeature<T extends TechnologyElement, FPI extends FP = F
     /**
      * Can this feature be inferred from the given analysis, without going back to the project
      * @param {ProjectAnalysis} analysis complete analysis to date
-     * @return {FPI} fingerprint if found
      */
-    consequence(analysis: ProjectAnalysis): FPI | undefined | Promise<FPI | undefined>;
+    consequence(analysis: ProjectAnalysis): FPI | FPI[] | undefined | Promise<FPI | undefined | FPI[]>;
 
 }
 
