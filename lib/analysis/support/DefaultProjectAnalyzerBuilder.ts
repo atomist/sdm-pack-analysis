@@ -41,7 +41,10 @@ import {
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
-import { isExtractedTechnologyFeature, ManagedFeature } from "../ManagedFeature";
+import {
+    isExtractedTechnologyFeature,
+    ManagedFeature,
+} from "../ManagedFeature";
 import {
     ConsolidatedFingerprints,
     Dependency,

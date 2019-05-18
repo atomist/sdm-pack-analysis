@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-import { Feature, FP } from "@atomist/sdm-pack-fingerprints";
-import { ProjectAnalysis, TechnologyElement } from "./ProjectAnalysis";
+import {
+    Feature,
+    FP,
+} from "@atomist/sdm-pack-fingerprints";
+import {
+    ProjectAnalysis,
+    TechnologyElement,
+} from "./ProjectAnalysis";
 
 export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
 
