@@ -41,6 +41,7 @@ import {
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
+import { isExtractedTechnologyFeature, ManagedFeature } from "../ManagedFeature";
 import {
     ConsolidatedFingerprints,
     Dependency,
@@ -67,13 +68,10 @@ import {
 } from "../ProjectAnalyzer";
 import {
     FastProject,
-    isExtractedTechnologyFeature,
-    ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
     toPhasedTechnologyScanner,
 } from "../TechnologyScanner";
-import { TechnologyStack } from "../TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../TransformRecipeContributor";
 import {
     registerAutofixes,
@@ -262,14 +260,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             fingerprints,
         };
 
-        async function extractify(feature: ManagedFeature<any, any>): Promise<FP> {
-            return isExtractedTechnologyFeature(feature) ?
-                feature.extract(p) :
-                feature.consequence(analysis);
-        }
-
-        const scans =
-            (await Promise.all(this.scanners
+        const scans = (await Promise.all(this.scanners
                 .filter(s => s.runWhen(options, sdmContext))
                 .map(s => s.action.scan(p, sdmContext, analysis, options)),
             )).filter(r => !!r);
@@ -291,6 +282,14 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
+        async function extractify(feature: ManagedFeature<any, any>): Promise<FP> {
+            return isExtractedTechnologyFeature(feature) ?
+                feature.extract(p) :
+                feature.consequence(analysis);
+        }
+
+        // Fingerprint from all features after the rest of the analysis is complete
+        // Fingerprinting is done on every analysis
         if (this.features) {
             await Promise.all(this.features.map(
                 feature => extractify(feature)

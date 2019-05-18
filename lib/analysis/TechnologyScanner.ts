@@ -17,10 +17,6 @@
 import { Project } from "@atomist/automation-client";
 import { SdmContext } from "@atomist/sdm";
 import {
-    Feature,
-    FP,
-} from "@atomist/sdm-pack-fingerprints";
-import {
     Classified,
     ProjectAnalysis,
     ProjectAnalysisOptions,
@@ -45,66 +41,10 @@ export type FastProject = Pick<Project, "id" | "findFile" | "hasFile" | "getFile
 export type TechnologyScanner<T extends TechnologyElement> =
     (p: Project, ctx: SdmContext, analysisSoFar: ProjectAnalysis, options: ProjectAnalysisOptions) => Promise<T | undefined>;
 
-export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
-
 /**
  * Result of quickly classifying a project.
  */
 export type TechnologyClassification = Classified & HasMessages;
-
-/**
- * Feature that can be managed visually. Extends Fingerprint support.
- */
-export interface VisualFeature {
-
-    readonly name: string;
-
-    /**
-     * Is this feature relevant to this project? For example, if
-     * we are tracking TypeScript version, is this even a Node project?
-     * Is the target at all relevant
-     */
-    relevanceTest?: RelevanceTest;
-
-    /**
-     * Is this feature desired on this project, according to our standards?
-     */
-    necessityTest?: RelevanceTest;
-}
-
-/**
- * Feature that can be extracted from a Project directly.
- */
-export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, VisualFeature {
-
-}
-
-/**
- * Feature that can be inferred from an analysis of a project
- */
-export interface InferredFeature<T extends TechnologyElement, FPI extends FP = FP>
-    extends Pick<Feature<FPI>, "selector" | "apply" | "comparators" | "toDisplayableString">,
-        VisualFeature {
-
-    /**
-     * Can this feature be inferred from the given analysis, without going back to the project
-     * @param {ProjectAnalysis} analysis complete analysis to date
-     * @return {FPI} fingerprint if found
-     */
-    consequence(analysis: ProjectAnalysis): FPI | undefined | Promise<FPI | undefined>;
-
-}
-
-/**
- * Feature we can manage, including with visualization, however it is extracted.
- */
-export type ManagedFeature<T extends TechnologyElement, FPI extends FP = FP> =
-    ExtractedFeature<FPI> | InferredFeature<T, FPI>;
-
-export function isExtractedTechnologyFeature(mf: ManagedFeature<any, any>): mf is ExtractedFeature<any> {
-    const maybe = mf as ExtractedFeature<any>;
-    return !!maybe.extract;
-}
 
 /**
  * More elaborate scanner that can work in phases

@@ -90,10 +90,7 @@ export {
     Scorer,
 } from "./lib/analysis/ProjectAnalyzer";
 export {
-    ExtractedFeature,
     FastProject,
-    InferredFeature,
-    ManagedFeature,
     ScannerAction,
     TechnologyScanner,
     PhasedTechnologyScanner,
@@ -123,3 +120,5 @@ export {
     PushMessage,
     PushMessageFactory,
 } from "./lib/analysis/support/messageGoal";
+
+export * from "./lib/analysis/ManagedFeature";

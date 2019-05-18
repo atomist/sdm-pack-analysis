@@ -28,6 +28,7 @@ import {
     Interpretation,
     Interpreter,
 } from "./Interpretation";
+import { ManagedFeature } from "./ManagedFeature";
 import {
     HasAnalysis,
     ProjectAnalysis,
@@ -37,7 +38,6 @@ import {
 import { Score } from "./Score";
 import {
     FastProject,
-    ManagedFeature,
     PhasedTechnologyScanner,
     ScannerAction,
     TechnologyClassification,

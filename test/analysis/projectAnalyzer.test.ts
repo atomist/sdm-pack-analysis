@@ -317,7 +317,7 @@ describe("projectAnalyzer", () => {
                 .withFeature(
                     {
                         name: "foo",
-                        extract: async proj => {
+                        extract: async () => {
                             return fp1;
                         },
                         toDisplayableString: () => "foo",
@@ -341,7 +341,7 @@ describe("projectAnalyzer", () => {
                 .withFeature(
                     {
                         name: "foo",
-                        consequence: proj => {
+                        consequence: () => {
                             return fp1;
                         },
                         toDisplayableString: () => "foo",
