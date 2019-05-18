@@ -23,7 +23,10 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 
-export type RelevanceTest = (analysis: ProjectAnalysis) => boolean;
+/**
+ * Do we consider that the particular fingerprint is relevant to this project?
+ */
+export type RelevanceTest = (fingerprintName: string, analysis: ProjectAnalysis) => boolean;
 
 /**
  * Feature that can be managed visually. Extends Fingerprint support.
