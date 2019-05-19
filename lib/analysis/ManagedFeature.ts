@@ -25,7 +25,6 @@ import {
 
 export interface PossibleIdeal<FPI extends FP> {
     ideal: FPI;
-    scope: keyof PossibleIdeals<FPI>;
     reason: string;
     url?: string;
 }
