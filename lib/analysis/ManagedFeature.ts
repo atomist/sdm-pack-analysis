@@ -23,6 +23,31 @@ import {
     TechnologyElement,
 } from "./ProjectAnalysis";
 
+export interface PossibleIdeal<FPI extends FP> {
+    ideal: FPI;
+    scope: keyof PossibleIdeals<FPI>;
+    reason: string;
+    url?: string;
+}
+
+export interface PossibleIdeals<FPI extends FP> {
+
+    /**
+     * Ideal found from wider world--e.g. a package repository
+     */
+    world?: PossibleIdeal<FPI>;
+
+    /**
+     * Ideal based on what we've found internally
+     */
+    fromProjects?: PossibleIdeal<FPI>;
+
+    /**
+     * Ideals managed internally in an organization
+     */
+    custom?: Array<PossibleIdeal<FPI>>;
+}
+
 /**
  * Do we consider that the particular fingerprint is relevant to this project?
  */
@@ -31,7 +56,7 @@ export type RelevanceTest = (fingerprintName: string, analysis: ProjectAnalysis)
 /**
  * Feature that can be managed visually. Extends Fingerprint support.
  */
-export interface VisualFeature {
+export interface VisualFeature<FPI extends FP> {
 
     /**
      * Is this feature relevant to this project? For example, if
@@ -44,12 +69,20 @@ export interface VisualFeature {
      * Is this feature desired on this project, according to our standards?
      */
     necessityTest?: RelevanceTest;
+
+    /**
+     * Based on the given fingerprints, suggest ideals
+     * @param {FPI[]} cohort
+     * @return {PossibleIdeals<FPI extends FP>}
+     */
+    suggestIdeal?(cohort: FPI[]): PossibleIdeals<FPI>;
 }
 
 /**
  * Feature that can be extracted from a Project directly.
  */
-export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, VisualFeature {
+export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>,
+    VisualFeature<FPI> {
 
 }
 
@@ -58,7 +91,7 @@ export interface ExtractedFeature<FPI extends FP = FP> extends Feature<FPI>, Vis
  */
 export interface InferredFeature<T extends TechnologyElement, FPI extends FP = FP>
     extends Pick<Feature<FPI>, "displayName" | "selector" | "apply" | "comparators" | "toDisplayableString">,
-        VisualFeature {
+        VisualFeature<FPI> {
 
     /**
      * Can this feature be inferred from the given analysis, without going back to the project
