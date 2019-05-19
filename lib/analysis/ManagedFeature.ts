@@ -71,11 +71,13 @@ export interface VisualFeature<FPI extends FP> {
     necessityTest?: RelevanceTest;
 
     /**
-     * Based on the given fingerprints, suggest ideals
-     * @param {FPI[]} cohort
+     * Based on the given fingerprint name and any fingerprints
+     * from our organization, suggest ideals
+     * @param fingerprintName name of the fingerprint we're interesting in
+     * @param {FPI[]} cohort existing repositories
      * @return {PossibleIdeals<FPI extends FP>}
      */
-    suggestIdeal?(cohort: FPI[]): PossibleIdeals<FPI>;
+    suggestIdeal?(fingerprintName: string, cohort: FPI[]): PossibleIdeals<FPI>;
 }
 
 /**
