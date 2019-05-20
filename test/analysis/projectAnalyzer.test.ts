@@ -346,7 +346,7 @@ describe("projectAnalyzer", () => {
                         consequence: () => {
                             return fp1;
                         },
-                        toDisplayableString: () => "foo",
+                        toDisplayableFingerprint: () => "foo",
                     })
                 .build();
             assert.strictEqual(pa.features.length, 1);
