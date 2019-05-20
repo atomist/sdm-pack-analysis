@@ -321,7 +321,7 @@ describe("projectAnalyzer", () => {
                         extract: async () => {
                             return fp1;
                         },
-                        toDisplayableString: () => "foo",
+                        toDisplayableFingerprint: () => "foo",
                     })
                 .build()
                 .analyze(p, pli, { full: true });
