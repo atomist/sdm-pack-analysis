@@ -27,7 +27,7 @@
   "types": "./index.d.ts",
   "dependencies": {
     "@atomist/microgrammar": "^1.2.0",
-    "@atomist/sdm-pack-fingerprints": "^3.0.3-converge.20190520205936",
+    "@atomist/sdm-pack-fingerprints": "^3.0.4-master.20190523230150",
     "@types/git-url-parse": "^9.0.0",
     "@types/package-json": "^4.0.1",
     "@types/yamljs": "^0.2.30",
