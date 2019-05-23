@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { DerivedFeature, Feature, FP } from "@atomist/sdm-pack-fingerprints";
+import {
+    DerivedFeature,
+    Feature,
+    FP,
+} from "@atomist/sdm-pack-fingerprints";
 import { ProjectAnalysis } from "./ProjectAnalysis";
 
 export type AnalysisDerivedFeature<FPI extends FP = FP> = DerivedFeature<ProjectAnalysis, FPI>;
