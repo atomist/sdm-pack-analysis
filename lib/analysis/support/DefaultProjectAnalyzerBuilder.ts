@@ -34,7 +34,7 @@ import {
 } from "@atomist/sdm";
 
 import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
-import { FP } from "@atomist/sdm-pack-fingerprints";
+import { FP, isDerivedFeature, Feature } from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
 import {
     Interpretation,
@@ -220,7 +220,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public async classify(p: FastProject,
-                          sdmContext: SdmContext): Promise<Classification> {
+        sdmContext: SdmContext): Promise<Classification> {
         const classifiers = await Promise.all(this.scanners
             .filter(s => s.runWhen({ full: false }, sdmContext))
             .map(s => s.action.classify(p, sdmContext)));
@@ -234,8 +234,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     public async interpret(p: Project | ProjectAnalysis,
-                           sdmContext: SdmContext,
-                           options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
+        sdmContext: SdmContext,
+        options: ProjectAnalysisOptions = { full: false }): Promise<Interpretation> {
         const analysis = isProject(p) ? await this.analyze(p, sdmContext, options) : p;
         return this.runInterpretation(analysis, sdmContext, options);
     }
@@ -245,8 +245,8 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
      * @return
      */
     public async analyze(p: Project,
-                         sdmContext: SdmContext,
-                         options: ProjectAnalysisOptions = { full: false }): Promise<ProjectAnalysis> {
+        sdmContext: SdmContext,
+        options: ProjectAnalysisOptions = { full: false }): Promise<ProjectAnalysis> {
         const elements: Elements = {};
         const services: Services = {};
         const dependencies: Dependency[] = [];
@@ -288,7 +288,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         async function extractify(feature: ManagedFeature): Promise<FP[]> {
             const extracted = isDerivedFeature(feature) ?
                 await feature.derive(analysis) :
-                await feature.extract(p);
+                await (feature as Feature).extract(p);
             return !!extracted ? toArray(extracted) : [];
         }
 
@@ -356,9 +356,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
     }
 
     private async enrichToFullAnalysis(p: Project,
-                                       sdmContext: SdmContext,
-                                       options: ProjectAnalysisOptions,
-                                       analysis: ProjectAnalysis): Promise<void> {
+        sdmContext: SdmContext,
+        options: ProjectAnalysisOptions,
+        analysis: ProjectAnalysis): Promise<void> {
         if (isGitProject(p)) {
             try {
                 analysis.gitStatus = await p.gitStatus();
@@ -434,7 +434,7 @@ function runOnCondition<W>(action: W, runWhen: RunCondition = () => true): Condi
 }
 
 async function runInspections(p: Project,
-                              registrations: Array<AutoInspectRegistration<any, any>>): Promise<InspectionResults> {
+    registrations: Array<AutoInspectRegistration<any, any>>): Promise<InspectionResults> {
     const inspections: InspectionResults = {};
     const asArray: Array<Promise<{ name: string, result: any }>> = registrations.map(async ir => ({
         name: ir.name,
