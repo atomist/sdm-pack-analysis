@@ -123,7 +123,7 @@ export interface ProjectAnalyzer {
     /**
      * All features registered anywhere
      */
-    readonly features: Array<ManagedFeature<TechnologyElement, FP>>;
+    readonly features: ManagedFeature[];
 
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
@@ -159,7 +159,7 @@ export interface StackSupport {
     /**
      * Return the features that can be managed in this project
      */
-    features?: Array<ManagedFeature<TechnologyElement, FP>>;
+    features?: ManagedFeature[];
 
     scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 
@@ -188,9 +188,9 @@ export interface ProjectAnalyzerBuilder {
     /**
      * Add a feature
      */
-    withFeature<T extends TechnologyElement>(feature: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder;
+    withFeature<T extends TechnologyElement>(feature: ManagedFeature): ProjectAnalyzerBuilder;
 
-    withFeatures<T extends TechnologyElement>(features: Array<ManagedFeature<TechnologyElement, FP>>): ProjectAnalyzerBuilder;
+    withFeatures<T extends TechnologyElement>(features: ManagedFeature[]): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

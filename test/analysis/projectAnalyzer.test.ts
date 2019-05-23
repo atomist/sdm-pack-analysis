@@ -343,7 +343,7 @@ describe("projectAnalyzer", () => {
                     {
                         displayName: "thing",
                         selector: () => true,
-                        consequence: () => {
+                        derive: async () => {
                             return fp1;
                         },
                         toDisplayableFingerprint: () => "foo",

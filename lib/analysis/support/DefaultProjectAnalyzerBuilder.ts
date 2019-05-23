@@ -43,7 +43,6 @@ import {
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
 import {
-    isExtractedTechnologyFeature,
     ManagedFeature,
 } from "../ManagedFeature";
 import {
@@ -92,7 +91,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly scanners: Array<ConditionalRegistration<PhasedTechnologyScanner<any>>> = [];
 
-    public readonly features: Array<ManagedFeature<TechnologyElement, FP>> = [];
+    public readonly features: ManagedFeature[] = [];
 
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
@@ -149,12 +148,12 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withFeature<T extends TechnologyElement>(feature: ManagedFeature<TechnologyElement, FP>): ProjectAnalyzerBuilder {
+    public withFeature<T extends TechnologyElement>(feature: ManagedFeature): ProjectAnalyzerBuilder {
         this.features.push(feature);
         return this;
     }
 
-    public withFeatures<T extends TechnologyElement>(features: Array<ManagedFeature<TechnologyElement, FP>>): ProjectAnalyzerBuilder {
+    public withFeatures<T extends TechnologyElement>(features: ManagedFeature[]): ProjectAnalyzerBuilder {
         this.features.push(...features);
         return this;
     }
@@ -286,10 +285,10 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractify(feature: ManagedFeature<any, any>): Promise<FP[]> {
-            const extracted = isExtractedTechnologyFeature(feature) ?
-                await feature.extract(p) :
-                await feature.consequence(analysis);
+        async function extractify(feature: ManagedFeature): Promise<FP[]> {
+            const extracted = isDerivedFeature(feature) ?
+                await feature.derive(analysis) :
+                await feature.extract(p);
             return !!extracted ? toArray(extracted) : [];
         }
 
