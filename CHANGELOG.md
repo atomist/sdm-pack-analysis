@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -   Analysis is now also available on RunCondition. [#19](https://github.com/atomist/sdm-pack-analysis/issues/19)
 -   Expose Uhura goal status on full analysis. [#22](https://github.com/atomist/sdm-pack-analysis/issues/22)
 -   Add fingerprint support. [#23](https://github.com/atomist/sdm-pack-analysis/issues/23)
+-   Incorporate fingerprinting into analysis. [#29](https://github.com/atomist/sdm-pack-analysis/issues/29)
 
 ## [1.0.0](https://github.com/atomist/sdm-pack-seed/compare/0.1.0...1.0.0) - 2019-03-30
 
