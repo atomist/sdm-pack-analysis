@@ -60,6 +60,7 @@ export interface PhasedTechnologyScanner<T extends TechnologyElement> {
      * Perform a scan of the project.
      */
     scan: TechnologyScanner<T>;
+
 }
 
 export function isPhasedTechnologyScanner(a: any): a is PhasedTechnologyScanner<any> {

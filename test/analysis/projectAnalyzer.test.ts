@@ -27,6 +27,7 @@ import {
     Interpreter,
 } from "../../lib/analysis/Interpretation";
 import {
+    ProjectAnalyzer,
     Scorer,
     StackSupport,
 } from "../../lib/analysis/ProjectAnalyzer";
@@ -299,7 +300,58 @@ describe("projectAnalyzer", () => {
                 }))
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1});
+            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+        });
+
+        it("should add feature fingerprints", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const fp1 = {
+                name: "one",
+                version: "0.1.0",
+                abbreviation: "abc",
+                sha: "abcd",
+                data: "x",
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withFeature(
+                    {
+                        displayName: "thing",
+                        selector: () => true,
+                        extract: async () => {
+                            return fp1;
+                        },
+                        toDisplayableFingerprint: () => "foo",
+                    })
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+        });
+
+        it("should add consequent feature fingerprints", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const fp1 = {
+                name: "one",
+                version: "0.1.0",
+                abbreviation: "abc",
+                sha: "abcd",
+                data: "x",
+            };
+            const pa: ProjectAnalyzer = analyzerBuilder({} as any)
+                .withFeature(
+                    {
+                        displayName: "thing",
+                        selector: () => true,
+                        derive: async () => {
+                            return fp1;
+                        },
+                        toDisplayableFingerprint: () => "foo",
+                    })
+                .build();
+            assert.strictEqual(pa.features.length, 1);
+            const analysis = await pa.analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
         });
 
     });

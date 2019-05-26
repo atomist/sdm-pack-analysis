@@ -59,6 +59,11 @@ export interface Dependency {
  * Options with which the analysis was performed
  */
 export interface ProjectAnalysisOptions {
+
+    /**
+     * Whether to perform a full analysis, used for persistence
+     * rather than to determine delivery.
+     */
     full: boolean;
 }
 
@@ -67,7 +72,7 @@ export interface HasAnalysis {
 }
 
 /**
- * All fingerprints from individual scanners, in a record type.
+ * All fingerprints from individual scanners and features, in a record type.
  */
 export type ConsolidatedFingerprints = Record<string, Fingerprint>;
 
@@ -76,7 +81,7 @@ export type ConsolidatedFingerprints = Record<string, Fingerprint>;
  * An analysis doesn't involve decisions about how to process the project:
  * That is the role of an Interpretation. It merely provides the background information,
  * so that Interpreters don't need to refer to the project.
- * Analyses can be persisted.
+ * Analyses can be persisted as well as used for delivery.
  */
 export interface ProjectAnalysis extends HasMessages {
 
@@ -179,7 +184,7 @@ export interface TechnologyElement extends Classified {
      * Individual fingerprints if any, within this structure.
      * The names of fingerprints must be globally unique.
      */
-    readonly fingerprints?: Fingerprint[];
+    fingerprints?: Fingerprint[];
 
 }
 

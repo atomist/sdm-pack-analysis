@@ -23,10 +23,12 @@ import {
     Goal,
     SdmContext,
 } from "@atomist/sdm";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 import {
     Interpretation,
     Interpreter,
 } from "./Interpretation";
+import { ManagedFeature } from "./ManagedFeature";
 import {
     HasAnalysis,
     ProjectAnalysis,
@@ -118,6 +120,11 @@ export interface ProjectAnalyzer {
 
     readonly scanners: Array<ConditionalRegistration<ScannerAction<any>>>;
 
+    /**
+     * All features registered anywhere
+     */
+    readonly features: ManagedFeature[];
+
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
     readonly possibleAutofixes: AutofixRegistration[];
@@ -149,6 +156,11 @@ export interface StackSupport {
 
     interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
 
+    /**
+     * Return the features that can be managed in this project
+     */
+    features?: ManagedFeature[];
+
     scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 
     transformRecipeContributors: TransformRecipeContributionRegistration[];
@@ -172,6 +184,13 @@ export interface ProjectAnalyzerBuilder {
      * can be done only once.
      */
     withScanner<T extends TechnologyElement>(scanner: ScannerAction<T> | ConditionalRegistration<ScannerAction<T>>): ProjectAnalyzerBuilder;
+
+    /**
+     * Add a feature
+     */
+    withFeature<T extends TechnologyElement>(feature: ManagedFeature): ProjectAnalyzerBuilder;
+
+    withFeatures<T extends TechnologyElement>(features: ManagedFeature[]): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.

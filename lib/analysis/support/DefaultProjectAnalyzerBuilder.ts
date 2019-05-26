@@ -33,6 +33,12 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 
+import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
+import {
+    Feature,
+    FP,
+    isDerivedFeature,
+} from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
 import {
     Interpretation,
@@ -40,6 +46,9 @@ import {
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
+import {
+    ManagedFeature,
+} from "../ManagedFeature";
 import {
     ConsolidatedFingerprints,
     Dependency,
@@ -85,6 +94,8 @@ import { allMessages } from "./projectAnalysisUtils";
 export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAnalyzerBuilder {
 
     public readonly scanners: Array<ConditionalRegistration<PhasedTechnologyScanner<any>>> = [];
+
+    public readonly features: ManagedFeature[] = [];
 
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
@@ -141,6 +152,16 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
+    public withFeature<T extends TechnologyElement>(feature: ManagedFeature): ProjectAnalyzerBuilder {
+        this.features.push(feature);
+        return this;
+    }
+
+    public withFeatures<T extends TechnologyElement>(features: ManagedFeature[]): ProjectAnalyzerBuilder {
+        this.features.push(...features);
+        return this;
+    }
+
     public withInterpreter(raw: Interpreter | ConditionalRegistration<Interpreter>): this {
         const reg = isConditionalRegistration(raw) ? raw : runOnCondition(raw);
         const interpreter = reg.action;
@@ -178,6 +199,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         interpreters.forEach(i => this.withInterpreter(i));
         stackSupport.transformRecipeContributors.forEach(trc => this.withTransformRecipeContributor(trc));
         scorers.forEach(scorer => this.withScorer(scorer));
+        (stackSupport.features || []).forEach(f => this.withFeature(f));
         return this;
     }
 
@@ -245,12 +267,12 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             fingerprints,
         };
 
-        const scanned = (await Promise.all(this.scanners
+        const scans = (await Promise.all(this.scanners
             .filter(s => s.runWhen(options, sdmContext))
-            .map(s => s.action.scan(p, sdmContext, analysis, options))))
-            .filter(r => !!r);
+            .map(s => s.action.scan(p, sdmContext, analysis, options)),
+        )).filter(r => !!r);
 
-        for (const s of scanned) {
+        for (const s of scans) {
             elements[s.name] = s;
             if (!!s.services) {
                 _.merge(services, s.services);
@@ -265,6 +287,23 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             if (!!s.fingerprints) {
                 s.fingerprints.forEach((fp: any) => fingerprints[fp.name] = fp);
             }
+        }
+
+        async function extractify(feature: ManagedFeature): Promise<FP[]> {
+            const extracted = isDerivedFeature(feature) ?
+                await feature.derive(analysis) :
+                await (feature as Feature).extract(p);
+            return !!extracted ? toArray(extracted) : [];
+        }
+
+        // Fingerprint from all features after the rest of the analysis is complete
+        // Fingerprinting is done on every analysis
+        if (this.features) {
+            await Promise.all(this.features.map(
+                feature => extractify(feature)
+                    .then(fps =>
+                        fps.forEach(fp => analysis.fingerprints[fp.name] = fp),
+                    )));
         }
 
         if (options && options.full) {
