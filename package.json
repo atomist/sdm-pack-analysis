@@ -26,8 +26,9 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "dependencies": {
+    "@atomist/clj-editors": "^0.6.9-master.20190609043052",
     "@atomist/microgrammar": "^1.2.0",
-    "@atomist/sdm-pack-fingerprints": "^3.0.4-master.20190523230150",
+    "@atomist/sdm-pack-fingerprints": "^3.0.7-master.20190606180649",
     "@types/git-url-parse": "^9.0.0",
     "@types/package-json": "^4.0.1",
     "@types/yamljs": "^0.2.30",

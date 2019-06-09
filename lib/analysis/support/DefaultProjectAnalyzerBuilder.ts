@@ -50,7 +50,6 @@ import {
     ManagedFeature,
 } from "../ManagedFeature";
 import {
-    ConsolidatedFingerprints,
     Dependency,
     Elements,
     HasAnalysis,
@@ -255,7 +254,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         const services: Services = {};
         const dependencies: Dependency[] = [];
         const referencedEnvironmentVariables: string[] = [];
-        const fingerprints: ConsolidatedFingerprints = {};
+        const fingerprints: FP[] = [];
         const analysis: ProjectAnalysis = {
             id: p.id as RemoteRepoRef,
             options,
@@ -302,7 +301,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             await Promise.all(this.features.map(
                 feature => extractify(feature)
                     .then(fps =>
-                        fps.forEach(fp => analysis.fingerprints[fp.name] = fp),
+                        fps.forEach(fp => analysis.fingerprints.push(fp)),
                     )));
         }
 

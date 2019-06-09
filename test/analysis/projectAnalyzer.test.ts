@@ -35,6 +35,7 @@ import { SnipTransformRecipeContributor } from "../../lib/analysis/support/trans
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../../lib/analysis/TransformRecipeContributor";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 
 describe("projectAnalyzer", () => {
 
@@ -279,7 +280,7 @@ describe("projectAnalyzer", () => {
                 .withScanner(toyScanner)
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, {});
+            assert.deepStrictEqual(analysis.fingerprints, []);
         });
 
         it("should consolidate one fingerprint", async () => {
@@ -300,14 +301,15 @@ describe("projectAnalyzer", () => {
                 }))
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
         it("should add feature fingerprints", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
-            const fp1 = {
+            const fp1: FP = {
                 name: "one",
+                type: "thing",
                 version: "0.1.0",
                 abbreviation: "abc",
                 sha: "abcd",
@@ -316,6 +318,7 @@ describe("projectAnalyzer", () => {
             const analysis = await analyzerBuilder({} as any)
                 .withFeature(
                     {
+                        name: "thing",
                         displayName: "thing",
                         selector: () => true,
                         extract: async () => {
@@ -325,14 +328,15 @@ describe("projectAnalyzer", () => {
                     })
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
         it("should add consequent feature fingerprints", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
-            const fp1 = {
+            const fp1: FP = {
                 name: "one",
+                type: "thing",
                 version: "0.1.0",
                 abbreviation: "abc",
                 sha: "abcd",
@@ -341,6 +345,7 @@ describe("projectAnalyzer", () => {
             const pa: ProjectAnalyzer = analyzerBuilder({} as any)
                 .withFeature(
                     {
+                        name: "thing",
                         displayName: "thing",
                         selector: () => true,
                         derive: async () => {
@@ -351,7 +356,7 @@ describe("projectAnalyzer", () => {
                 .build();
             assert.strictEqual(pa.features.length, 1);
             const analysis = await pa.analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
     });
