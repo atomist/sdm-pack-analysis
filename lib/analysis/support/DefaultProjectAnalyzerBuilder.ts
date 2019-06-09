@@ -284,7 +284,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     ...s.referencedEnvironmentVariables.filter((e: string) => !referencedEnvironmentVariables.includes(e)));
             }
             if (!!s.fingerprints) {
-                s.fingerprints.forEach((fp: any) => fingerprints[fp.name] = fp);
+                s.fingerprints.push(...s.fingerprints);
             }
         }
 
