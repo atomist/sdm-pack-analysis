@@ -20,6 +20,7 @@ import {
     goals,
     PushListenerInvocation,
 } from "@atomist/sdm";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 import * as assert from "assert";
 import { analyzerBuilder } from "../../lib/analysis/analyzerBuilder";
 import {
@@ -35,7 +36,6 @@ import { SnipTransformRecipeContributor } from "../../lib/analysis/support/trans
 import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../../lib/analysis/TransformRecipeContributor";
-import { FP } from "@atomist/sdm-pack-fingerprints";
 
 describe("projectAnalyzer", () => {
 

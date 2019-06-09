@@ -24,10 +24,10 @@ import {
     HasDefaultValue,
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
-import { FP } from "@atomist/sdm-pack-fingerprints";
 
 /**
  * Definition of a service such as riak or mongodb
