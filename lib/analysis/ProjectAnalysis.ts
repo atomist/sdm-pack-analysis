@@ -27,6 +27,7 @@ import {
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
+import { FP } from "@atomist/clj-editors";
 
 /**
  * Definition of a service such as riak or mongodb
@@ -70,11 +71,6 @@ export interface ProjectAnalysisOptions {
 export interface HasAnalysis {
     analysis?: ProjectAnalysis;
 }
-
-/**
- * All fingerprints from individual scanners and features, in a record type.
- */
-export type ConsolidatedFingerprints = Record<string, Fingerprint>;
 
 /**
  * An analysis of the various facets of a project.
@@ -146,7 +142,7 @@ export interface ProjectAnalysis extends HasMessages {
      * Empty object if no fingerprints returned by any scanner.
      * Fingerprinting is performed on all pushes.
      */
-    readonly fingerprints: ConsolidatedFingerprints;
+    readonly fingerprints: FP[];
 
 }
 
