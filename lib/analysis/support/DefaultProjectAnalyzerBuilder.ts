@@ -302,7 +302,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             await Promise.all(this.features.map(
                 feature => extractify(feature)
                     .then(fps =>
-                        fps.forEach(fp => analysis.fingerprints[fp.name] = fp),
+                        fps.forEach(fp => analysis.fingerprints[fp.name] = {...fp, version: fp.version, abbreviation: fp.abbreviation}),
                     )));
         }
 
