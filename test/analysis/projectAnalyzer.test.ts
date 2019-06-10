@@ -279,7 +279,7 @@ describe("projectAnalyzer", () => {
                 .withScanner(toyScanner)
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, {});
+            assert.deepStrictEqual(analysis.fingerprints, []);
         });
 
         it("should consolidate one fingerprint", async () => {
@@ -300,7 +300,7 @@ describe("projectAnalyzer", () => {
                 }))
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
         it("should add feature fingerprints", async () => {
@@ -316,6 +316,7 @@ describe("projectAnalyzer", () => {
             const analysis = await analyzerBuilder({} as any)
                 .withFeature(
                     {
+                        name: "thing",
                         displayName: "thing",
                         selector: () => true,
                         extract: async () => {
@@ -325,7 +326,7 @@ describe("projectAnalyzer", () => {
                     })
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
         it("should add consequent feature fingerprints", async () => {
@@ -341,6 +342,7 @@ describe("projectAnalyzer", () => {
             const pa: ProjectAnalyzer = analyzerBuilder({} as any)
                 .withFeature(
                     {
+                        name: "thing",
                         displayName: "thing",
                         selector: () => true,
                         derive: async () => {
@@ -351,7 +353,7 @@ describe("projectAnalyzer", () => {
                 .build();
             assert.strictEqual(pa.features.length, 1);
             const analysis = await pa.analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, { one: fp1 });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
     });
