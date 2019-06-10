@@ -24,10 +24,6 @@ import {
     SdmContext,
 } from "@atomist/sdm";
 import { FP } from "@atomist/sdm-pack-fingerprints";
-import {
-    Interpretation,
-    Interpreter,
-} from "./Interpretation";
 import { ManagedFeature } from "./ManagedFeature";
 import {
     HasAnalysis,
@@ -82,7 +78,7 @@ export function isConditionalRegistration(a: any): a is ConditionalRegistration<
     return !!maybe.action;
 }
 
-export type Scorer = (i: Interpretation, ctx: SdmContext) => Promise<Score>;
+export type Scorer = (i: any, ctx: SdmContext) => Promise<Score>;
 
 /**
  * Result of classifying the project quickly to determine its nature.
@@ -114,9 +110,9 @@ export interface ProjectAnalyzer {
     /**
      * Interpret the project, analyzing it first if necessary
      */
-    interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext, options?: ProjectAnalysisOptions): Promise<Interpretation>;
+    interpret(p: Project | ProjectAnalysis, sdmContext: SdmContext, options?: ProjectAnalysisOptions): Promise<any>;
 
-    readonly interpreters: Array<ConditionalRegistration<Interpreter>>;
+    readonly interpreters: Array<ConditionalRegistration<any>>;
 
     readonly scanners: Array<ConditionalRegistration<ScannerAction<any>>>;
 
@@ -154,7 +150,7 @@ export interface StackSupport {
     scanners: Array<TechnologyScanner<any> | ConditionalRegistration<TechnologyScanner<any>>
         | PhasedTechnologyScanner<any> | ConditionalRegistration<PhasedTechnologyScanner<any>>>;
 
-    interpreters: Array<Interpreter | ConditionalRegistration<Interpreter>>;
+    interpreters: Array<any | ConditionalRegistration<any>>;
 
     /**
      * Return the features that can be managed in this project
@@ -200,7 +196,7 @@ export interface ProjectAnalyzerBuilder {
      * @param {Interpreter} interpreter
      * @return {ProjectAnalyzerBuilder}
      */
-    withInterpreter(interpreter: Interpreter | ConditionalRegistration<Interpreter>): ProjectAnalyzerBuilder;
+    withInterpreter(interpreter: any | ConditionalRegistration<any>): ProjectAnalyzerBuilder;
 
     /**
      * Add a scorer to this analyzer

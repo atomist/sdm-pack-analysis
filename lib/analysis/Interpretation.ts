@@ -29,7 +29,6 @@ import {
 import { PreferencesElement } from "../element/preferences/preferencesScanner";
 import { DeliveryPhases } from "./phases";
 import { ProjectAnalysis } from "./ProjectAnalysis";
-import { ProjectAnalyzer } from "./ProjectAnalyzer";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
 
@@ -97,7 +96,7 @@ export interface Interpreter {
      * Some interpreters need to create goals that invoke their own analysis.
      * This callback enables that.
      */
-    setAnalyzer?(analyzer: ProjectAnalyzer): void;
+    setAnalyzer?(analyzer: any): void;
 
     /**
      * Enrich the given interpretation
@@ -177,7 +176,7 @@ export function deliveryNotificationGoals(interpretation: Interpretation): Goals
     return notification;
 }
 
-export function checkGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
+export function checkGoals(interpretation: Interpretation, analyzer: any): Goals {
     const checks = goals("checks");
     const startup = controlGoals(interpretation);
     if (interpretation.autofixes.length > 0) {
@@ -196,7 +195,7 @@ export function checkGoals(interpretation: Interpretation, analyzer: ProjectAnal
     return checks;
 }
 
-export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
+export function buildGoals(interpretation: Interpretation, analyzer: any): Goals {
     const preCondition = checkGoals(interpretation, analyzer);
     const startup = controlGoals(interpretation);
     if (!!interpretation.buildGoals) {
@@ -209,14 +208,14 @@ export function buildGoals(interpretation: Interpretation, analyzer: ProjectAnal
 /**
  * Messaging goals. Only set if there are messages in this interpretation.
  */
-export function messagingGoals(hasMessages: HasMessages, analyzer: ProjectAnalyzer): Goals {
+export function messagingGoals(hasMessages: HasMessages, analyzer: any): Goals {
     if (hasMessages.messages.length > 0) {
         return goals("messages").plan(analyzer.messageGoal);
     }
     return undefined;
 }
 
-export function testGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
+export function testGoals(interpretation: Interpretation, analyzer: any): Goals {
     const preCondition = buildGoals(interpretation, analyzer) || checkGoals(interpretation, analyzer);
     const startup = controlGoals(interpretation);
     if (!!interpretation.testGoals) {
@@ -226,7 +225,7 @@ export function testGoals(interpretation: Interpretation, analyzer: ProjectAnaly
     return interpretation.testGoals;
 }
 
-export function containerGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
+export function containerGoals(interpretation: Interpretation, analyzer: any): Goals {
     const preCondition = testGoals(interpretation, analyzer) || buildGoals(interpretation, analyzer) || checkGoals(interpretation, analyzer);
     const startup = controlGoals(interpretation);
     if (!!interpretation.containerBuildGoals) {
@@ -236,7 +235,7 @@ export function containerGoals(interpretation: Interpretation, analyzer: Project
     return interpretation.containerBuildGoals;
 }
 
-export function releaseGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
+export function releaseGoals(interpretation: Interpretation, analyzer: any): Goals {
     const preCondition = containerGoals(interpretation, analyzer) || testGoals(interpretation, analyzer)
         || buildGoals(interpretation, analyzer) || checkGoals(interpretation, analyzer);
     const startup = controlGoals(interpretation);
@@ -247,7 +246,7 @@ export function releaseGoals(interpretation: Interpretation, analyzer: ProjectAn
     return interpretation.releaseGoals;
 }
 
-export function deployGoals(interpretation: Interpretation, analyzer: ProjectAnalyzer): Goals {
+export function deployGoals(interpretation: Interpretation, analyzer: any): Goals {
     const preCondition = releaseGoals(interpretation, analyzer) || containerGoals(interpretation, analyzer) || testGoals(interpretation, analyzer)
         || buildGoals(interpretation, analyzer) || checkGoals(interpretation, analyzer);
     const startup = controlGoals(interpretation);
