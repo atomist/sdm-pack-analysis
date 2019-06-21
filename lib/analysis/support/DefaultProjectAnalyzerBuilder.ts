@@ -424,7 +424,7 @@ async function performSeedAnalysis(
     const result = {
         transformRecipes,
     };
-    logger.info("Analysis for project at %s is %j, seed analysis is %j",
+    logger.debug("Analysis for project at %s is %j, seed analysis is %j",
         project.id.url, analysis, result);
     return result;
 }
