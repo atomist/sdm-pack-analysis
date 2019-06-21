@@ -19,6 +19,7 @@ import {
     RemoteRepoRef,
 } from "@atomist/automation-client";
 import { Fingerprint } from "@atomist/automation-client/lib/project/fingerprint/Fingerprint";
+import { FP } from "@atomist/clj-editors";
 import {
     CodeTransform,
     HasDefaultValue,
@@ -27,7 +28,6 @@ import {
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
-import { FP } from "@atomist/clj-editors";
 
 /**
  * Definition of a service such as riak or mongodb
