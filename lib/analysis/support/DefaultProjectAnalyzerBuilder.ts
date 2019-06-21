@@ -367,6 +367,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                 analysis.gitStatus = await p.gitStatus();
             } catch (err) {
                 // Don't fail on this
+                logger.error("Could not get gitStatus on " + p.id.repo + ": " + err.message);
             }
         }
         analysis.seedAnalysis = await performSeedAnalysis(p, analysis, this.transformRecipeContributorRegistrations, sdmContext);
