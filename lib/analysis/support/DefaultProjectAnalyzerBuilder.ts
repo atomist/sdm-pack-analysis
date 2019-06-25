@@ -293,10 +293,16 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
 
         async function extractify(feature: ManagedFeature): Promise<FP[]> {
-            const extracted = isDerivedFeature(feature) ?
-                await feature.derive(analysis) :
-                await (feature as Feature).extract(p);
-            return !!extracted ? toArray(extracted) : [];
+            try {
+                const extracted = isDerivedFeature(feature) ?
+                    await feature.derive(analysis) :
+                    await (feature as Feature).extract(p);
+                return !!extracted ? toArray(extracted) : [];
+            } catch (err) {
+                logger.error("Please check your configuration of feature %s. Error was %j",
+                    feature.name, err);
+                return [];
+            }
         }
 
         // Fingerprint from all features after the rest of the analysis is complete

@@ -352,6 +352,41 @@ describe("projectAnalyzer", () => {
             assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 
+        it("should continue processing feature fingerprints after error", async () => {
+            const pli: PushListenerInvocation = { push: {} } as any;
+            const p = InMemoryProject.of();
+            const fp1 = {
+                name: "one",
+                version: "0.1.0",
+                abbreviation: "abc",
+                sha: "abcd",
+                data: "x",
+            };
+            const analysis = await analyzerBuilder({} as any)
+                .withFeature(
+                    {
+                        name: "thing0",
+                        displayName: "thing0",
+                        selector: () => true,
+                        extract: async () => {
+                            throw new Error("Keep going");
+                        },
+                    })
+                .withFeature(
+                    {
+                        name: "thing",
+                        displayName: "thing",
+                        selector: () => true,
+                        extract: async () => {
+                            return fp1;
+                        },
+                        toDisplayableFingerprint: () => "foo",
+                    })
+                .build()
+                .analyze(p, pli, { full: true });
+            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
+        });
+
         it("should add consequent feature fingerprints", async () => {
             const pli: PushListenerInvocation = { push: {} } as any;
             const p = InMemoryProject.of();
