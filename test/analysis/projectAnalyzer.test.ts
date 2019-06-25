@@ -106,6 +106,27 @@ describe("projectAnalyzer", () => {
             });
         });
 
+        it("should continue after logging failure", async () => {
+            const p = InMemoryProject.of();
+            const analysis = await analyzerBuilder({} as any)
+                .withScanner(async () => {
+                    throw new Error("I always fail");
+                })
+                .withScanner(toyScanner)
+                .build()
+                .analyze(p, undefined);
+            assert.deepStrictEqual(analysis.elements.toy.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+            assert.deepStrictEqual(analysis.services, {
+                riak: {},
+                rabbitmq: {},
+                memcached: {},
+            });
+        });
+
         it("should merge environment variables without duplication", async () => {
             const p = InMemoryProject.of();
             const analysis = await analyzerBuilder({} as any).withScanner(toyScanner).withScanner(toy2Scanner).build()

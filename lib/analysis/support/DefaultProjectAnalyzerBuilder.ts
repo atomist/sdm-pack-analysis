@@ -268,7 +268,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         const scans = (await Promise.all(this.scanners
             .filter(s => s.runWhen(options, sdmContext))
-            .map(s => s.action.scan(p, sdmContext, analysis, options)),
+            .map(s => s.action.scan(p, sdmContext, analysis, options)
+                .catch(err => {
+                    logger.error("Please check your configuration for usage of @atomist/sdm-pack-analysis. Scan error: %j", err);
+                    return undefined;
+                })),
         )).filter(r => !!r);
 
         for (const s of scans) {
