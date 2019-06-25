@@ -36,6 +36,8 @@ import { TechnologyScanner } from "../../lib/analysis/TechnologyScanner";
 import { TechnologyStack } from "../../lib/analysis/TechnologyStack";
 import { TransformRecipeContributionRegistration } from "../../lib/analysis/TransformRecipeContributor";
 
+// tslint:disable:max-file-line-count
+
 describe("projectAnalyzer", () => {
 
     describe("relevance", () => {
