@@ -15,6 +15,7 @@
  */
 
 import {
+    AtomicFeature,
     DerivedFeature,
     Feature,
     FP,
@@ -27,4 +28,4 @@ export type AnalysisDerivedFeature<FPI extends FP = FP> = DerivedFeature<Project
  * This pack knows how to manage features that are directly extracted from
  * projects or extracted from ProjectAnalysis
  */
-export type ManagedFeature<FPI extends FP = FP> = Feature<FPI> | AnalysisDerivedFeature<FPI>;
+export type ManagedFeature<FPI extends FP = FP> = Feature<FPI> | AtomicFeature<FPI> | AnalysisDerivedFeature<FPI>;

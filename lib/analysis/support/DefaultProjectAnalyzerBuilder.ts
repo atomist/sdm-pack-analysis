@@ -35,8 +35,9 @@ import {
 
 import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 import {
+    AtomicFeature,
     Feature,
-    FP,
+    FP, isAtomicFeature,
     isDerivedFeature,
 } from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
@@ -305,11 +306,33 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
+        async function extractAtomic(feature: AtomicFeature, existingFingerprints: FP[]): Promise<FP[]> {
+            try {
+                const extracted = await feature.consolidate(existingFingerprints);
+                return !!extracted ? toArray(extracted) : [];
+            } catch (err) {
+                logger.error("Please check your configuration of feature %s.\n%s",
+                    feature.name, err);
+                return [];
+            }
+        }
+
         // Fingerprint from all features after the rest of the analysis is complete
         // Fingerprinting is done on every analysis
         if (this.features) {
-            await Promise.all(this.features.map(
-                feature => extractify(feature)
+            await Promise.all(this.features
+                .filter(f => !isAtomicFeature(f))
+                .map(feature => extractify(feature)
+                    .then(fps =>
+                        analysis.fingerprints.push(...fps),
+                    )));
+        }
+        // Compute Atomic features after other fingerprinting
+        // They should not depend on each other
+        if (this.features) {
+            await Promise.all(this.features
+                .filter(isAtomicFeature)
+                .map(feature => extractAtomic(feature, analysis.fingerprints)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),
                     )));
