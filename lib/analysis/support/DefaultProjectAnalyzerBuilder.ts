@@ -37,7 +37,8 @@ import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 import {
     AtomicFeature,
     Feature,
-    FP, isAtomicFeature,
+    FP,
+    isAtomicFeature,
     isDerivedFeature,
 } from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
