@@ -19,12 +19,12 @@ import {
     RemoteRepoRef,
 } from "@atomist/automation-client";
 import { Fingerprint } from "@atomist/automation-client/lib/project/fingerprint/Fingerprint";
-import { FP } from "@atomist/clj-editors";
 import {
     CodeTransform,
     HasDefaultValue,
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
+import { FP } from "@atomist/sdm-pack-fingerprints";
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";
