@@ -37,11 +37,11 @@
     "yamljs": "^0.3.0"
   },
   "peerDependencies": {
-    "@atomist/automation-client": ">=1.4.0",
-    "@atomist/sdm-pack-docker": ">=1.2.0",
+    "@atomist/automation-client": ">=1.6.0",
+    "@atomist/sdm-pack-docker": ">=2.0.0",
     "@atomist/sdm-pack-fingerprints": ">=3.0.8",
-    "@atomist/sdm": ">=1.5.0",
-    "@atomist/sdm-core": ">=1.5.0",
+    "@atomist/sdm": ">=1.6.0",
+    "@atomist/sdm-core": ">=1.6.0",
     "@atomist/slack-messages": ">=1.1.0",
     "@atomist/clj-editors": ">=0.7.1"
   },
@@ -49,7 +49,7 @@
     "@atomist/automation-client": "^1.6.1",
     "@atomist/sdm": "^1.6.0",
     "@atomist/sdm-core": "^1.6.0",
-    "@atomist/sdm-pack-docker": "^1.2.0",
+    "@atomist/sdm-pack-docker": "2.0.0-master.20190709171725",
     "@atomist/sdm-pack-fingerprints": "^3.1.4",
     "@atomist/slack-messages": "^1.1.1",
     "@atomist/clj-editors": "^0.7.4",

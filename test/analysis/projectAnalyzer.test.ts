@@ -341,7 +341,6 @@ describe("projectAnalyzer", () => {
                     {
                         name: "thing",
                         displayName: "thing",
-                        selector: () => true,
                         extract: async () => {
                             return fp1;
                         },
@@ -367,7 +366,6 @@ describe("projectAnalyzer", () => {
                     {
                         name: "thing0",
                         displayName: "thing0",
-                        selector: () => true,
                         extract: async () => {
                             throw new Error("Keep going");
                         },
@@ -376,7 +374,6 @@ describe("projectAnalyzer", () => {
                     {
                         name: "thing",
                         displayName: "thing",
-                        selector: () => true,
                         extract: async () => {
                             return fp1;
                         },
@@ -402,7 +399,6 @@ describe("projectAnalyzer", () => {
                     {
                         name: "thing",
                         displayName: "thing",
-                        selector: () => true,
                         derive: async () => {
                             return fp1;
                         },
