@@ -1,0 +1,914 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>DefaultProjectAnalyzerBuilder | @atomist/sdm-pack-analysis</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@atomist/sdm-pack-analysis</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="../modules/_lib_analysis_support_defaultprojectanalyzerbuilder_.html">&quot;lib/analysis/support/DefaultProjectAnalyzerBuilder&quot;</a>
+				</li>
+				<li>
+					<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html">DefaultProjectAnalyzerBuilder</a>
+				</li>
+			</ul>
+			<h1>Class DefaultProjectAnalyzerBuilder</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Implementation of both ProjectAnalyzer and ProjectAnalyzerBuilder.
+						Inspect repos to find tech stack and CI info</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">DefaultProjectAnalyzerBuilder</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html" class="tsd-signature-type">ProjectAnalyzer</a></li>
+					<li><a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#autofixgoal" class="tsd-kind-icon">autofix<wbr>Goal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#codeinspectiongoal" class="tsd-kind-icon">code<wbr>Inspection<wbr>Goal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#features" class="tsd-kind-icon">features</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#interpreters" class="tsd-kind-icon">interpreters</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#messagegoal" class="tsd-kind-icon">message<wbr>Goal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#possibleautofixes" class="tsd-kind-icon">possible<wbr>Autofixes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#possiblecodeinspections" class="tsd-kind-icon">possible<wbr>Code<wbr>Inspections</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#queuegoal" class="tsd-kind-icon">queue<wbr>Goal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#scanners" class="tsd-kind-icon">scanners</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#scorers" class="tsd-kind-icon">scorers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#sdm" class="tsd-kind-icon">sdm</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#transformrecipecontributorregistrations" class="tsd-kind-icon">transform<wbr>Recipe<wbr>Contributor<wbr>Registrations</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#analyze" class="tsd-kind-icon">analyze</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#build" class="tsd-kind-icon">build</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#classify" class="tsd-kind-icon">classify</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#enrichtofullanalysis" class="tsd-kind-icon">enrich<wbr>ToFull<wbr>Analysis</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#interpret" class="tsd-kind-icon">interpret</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#runinterpretation" class="tsd-kind-icon">run<wbr>Interpretation</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withfeature" class="tsd-kind-icon">with<wbr>Feature</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withfeatures" class="tsd-kind-icon">with<wbr>Features</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withinterpreter" class="tsd-kind-icon">with<wbr>Interpreter</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withscanner" class="tsd-kind-icon">with<wbr>Scanner</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withscorer" class="tsd-kind-icon">with<wbr>Scorer</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withstack" class="tsd-kind-icon">with<wbr>Stack</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withtransformrecipecontributor" class="tsd-kind-icon">with<wbr>Transform<wbr>Recipe<wbr>Contributor</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Default<wbr>Project<wbr>Analyzer<wbr>Builder<span class="tsd-signature-symbol">(</span>sdm<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SoftwareDeliveryMachine</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html" class="tsd-signature-type">DefaultProjectAnalyzerBuilder</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L117">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:117</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>sdm: <span class="tsd-signature-type">SoftwareDeliveryMachine</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html" class="tsd-signature-type">DefaultProjectAnalyzerBuilder</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="autofixgoal" class="tsd-anchor"></a>
+					<h3>autofix<wbr>Goal</h3>
+					<div class="tsd-signature tsd-kind-icon">autofix<wbr>Goal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Autofix</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#autofixgoal">autofixGoal</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L109">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:109</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="codeinspectiongoal" class="tsd-anchor"></a>
+					<h3>code<wbr>Inspection<wbr>Goal</h3>
+					<div class="tsd-signature tsd-kind-icon">code<wbr>Inspection<wbr>Goal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AutoCodeInspection</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#codeinspectiongoal">codeInspectionGoal</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L111">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:111</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="features" class="tsd-anchor"></a>
+					<h3>features</h3>
+					<div class="tsd-signature tsd-kind-icon">features<span class="tsd-signature-symbol">:</span> <a href="../modules/_lib_analysis_managedfeature_.html#managedfeature" class="tsd-signature-type">ManagedFeature</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#features">features</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L99">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:99</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="interpreters" class="tsd-anchor"></a>
+					<h3>interpreters</h3>
+					<div class="tsd-signature tsd-kind-icon">interpreters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpreter.html" class="tsd-signature-type">Interpreter</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#interpreters">interpreters</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L101">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:101</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="messagegoal" class="tsd-anchor"></a>
+					<h3>message<wbr>Goal</h3>
+					<div class="tsd-signature tsd-kind-icon">message<wbr>Goal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Goal</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#messagegoal">messageGoal</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L113">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:113</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="possibleautofixes" class="tsd-anchor"></a>
+					<h3>possible<wbr>Autofixes</h3>
+					<div class="tsd-signature tsd-kind-icon">possible<wbr>Autofixes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AutofixRegistration</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#possibleautofixes">possibleAutofixes</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L105">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:105</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="possiblecodeinspections" class="tsd-anchor"></a>
+					<h3>possible<wbr>Code<wbr>Inspections</h3>
+					<div class="tsd-signature tsd-kind-icon">possible<wbr>Code<wbr>Inspections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AutoInspectRegistration</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#possiblecodeinspections">possibleCodeInspections</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L107">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:107</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="queuegoal" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> queue<wbr>Goal</h3>
+					<div class="tsd-signature tsd-kind-icon">queue<wbr>Goal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Queue</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L117">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:117</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="scanners" class="tsd-anchor"></a>
+					<h3>scanners</h3>
+					<div class="tsd-signature tsd-kind-icon">scanners<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_technologyscanner_.phasedtechnologyscanner.html" class="tsd-signature-type">PhasedTechnologyScanner</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#scanners">scanners</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L97">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:97</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="scorers" class="tsd-anchor"></a>
+					<h3>scorers</h3>
+					<div class="tsd-signature tsd-kind-icon">scorers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_lib_analysis_projectanalyzer_.html#scorer" class="tsd-signature-type">Scorer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#scorers">scorers</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L115">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:115</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="sdm" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> sdm</h3>
+					<div class="tsd-signature tsd-kind-icon">sdm<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SoftwareDeliveryMachine</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L119">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:119</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="transformrecipecontributorregistrations" class="tsd-anchor"></a>
+					<h3>transform<wbr>Recipe<wbr>Contributor<wbr>Registrations</h3>
+					<div class="tsd-signature tsd-kind-icon">transform<wbr>Recipe<wbr>Contributor<wbr>Registrations<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_lib_analysis_transformrecipecontributor_.transformrecipecontributionregistration.html" class="tsd-signature-type">TransformRecipeContributionRegistration</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L103">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:103</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="analyze" class="tsd-anchor"></a>
+					<h3>analyze</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">analyze<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span>, sdmContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SdmContext</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#analyze">analyze</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L252">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:252</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return a CodeInspection gathering all data</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p: <span class="tsd-signature-type">Project</span></h5>
+								</li>
+								<li>
+									<h5>sdmContext: <span class="tsd-signature-type">SdmContext</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a><span class="tsd-signature-symbol"> =&nbsp;{ full: false }</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="build" class="tsd-anchor"></a>
+					<h3>build</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html" class="tsd-signature-type">ProjectAnalyzer</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#build">build</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L216">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:216</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Construct and return analyzer</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html" class="tsd-signature-type">ProjectAnalyzer</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="classify" class="tsd-anchor"></a>
+					<h3>classify</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">classify<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="../modules/_lib_analysis_technologyscanner_.html#fastproject" class="tsd-signature-type">FastProject</a>, sdmContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SdmContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalyzer_.classification.html" class="tsd-signature-type">Classification</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#classify">classify</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L227">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:227</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p: <a href="../modules/_lib_analysis_technologyscanner_.html#fastproject" class="tsd-signature-type">FastProject</a></h5>
+								</li>
+								<li>
+									<h5>sdmContext: <span class="tsd-signature-type">SdmContext</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_projectanalyzer_.classification.html" class="tsd-signature-type">Classification</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="enrichtofullanalysis" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> enrich<wbr>ToFull<wbr>Analysis</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">enrich<wbr>ToFull<wbr>Analysis<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span>, sdmContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SdmContext</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a>, analysis<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L395">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:395</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p: <span class="tsd-signature-type">Project</span></h5>
+								</li>
+								<li>
+									<h5>sdmContext: <span class="tsd-signature-type">SdmContext</span></h5>
+								</li>
+								<li>
+									<h5>options: <a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a></h5>
+								</li>
+								<li>
+									<h5>analysis: <a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="interpret" class="tsd-anchor"></a>
+					<h3>interpret</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">interpret<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a>, sdmContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SdmContext</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpretation.html" class="tsd-signature-type">Interpretation</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html">ProjectAnalyzer</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzer.html#interpret">interpret</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L241">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:241</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p: <span class="tsd-signature-type">Project</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a></h5>
+								</li>
+								<li>
+									<h5>sdmContext: <span class="tsd-signature-type">SdmContext</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a><span class="tsd-signature-symbol"> =&nbsp;{ full: false }</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpretation.html" class="tsd-signature-type">Interpretation</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="runinterpretation" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> run<wbr>Interpretation</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">run<wbr>Interpretation<span class="tsd-signature-symbol">(</span>analysis<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a>, sdmContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SdmContext</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpretation.html" class="tsd-signature-type">Interpretation</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L348">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:348</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>analysis: <a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysis.html" class="tsd-signature-type">ProjectAnalysis</a></h5>
+								</li>
+								<li>
+									<h5>sdmContext: <span class="tsd-signature-type">SdmContext</span></h5>
+								</li>
+								<li>
+									<h5>options: <a href="../interfaces/_lib_analysis_projectanalysis_.projectanalysisoptions.html" class="tsd-signature-type">ProjectAnalysisOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpretation.html" class="tsd-signature-type">Interpretation</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="withfeature" class="tsd-anchor"></a>
+					<h3>with<wbr>Feature</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Feature&lt;T&gt;<span class="tsd-signature-symbol">(</span>feature<span class="tsd-signature-symbol">: </span><a href="../modules/_lib_analysis_managedfeature_.html#managedfeature" class="tsd-signature-type">ManagedFeature</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withfeature">withFeature</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L156">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:156</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.technologyelement.html" class="tsd-signature-type">TechnologyElement</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>feature: <a href="../modules/_lib_analysis_managedfeature_.html#managedfeature" class="tsd-signature-type">ManagedFeature</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="withfeatures" class="tsd-anchor"></a>
+					<h3>with<wbr>Features</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Features&lt;T&gt;<span class="tsd-signature-symbol">(</span>features<span class="tsd-signature-symbol">: </span><a href="../modules/_lib_analysis_managedfeature_.html#managedfeature" class="tsd-signature-type">ManagedFeature</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withfeatures">withFeatures</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L161">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:161</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.technologyelement.html" class="tsd-signature-type">TechnologyElement</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>features: <a href="../modules/_lib_analysis_managedfeature_.html#managedfeature" class="tsd-signature-type">ManagedFeature</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withinterpreter" class="tsd-anchor"></a>
+					<h3>with<wbr>Interpreter</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Interpreter<span class="tsd-signature-symbol">(</span>raw<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_interpretation_.interpreter.html" class="tsd-signature-type">Interpreter</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpreter.html" class="tsd-signature-type">Interpreter</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withinterpreter">withInterpreter</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L166">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:166</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>raw: <a href="../interfaces/_lib_analysis_interpretation_.interpreter.html" class="tsd-signature-type">Interpreter</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_lib_analysis_interpretation_.interpreter.html" class="tsd-signature-type">Interpreter</a><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="withscanner" class="tsd-anchor"></a>
+					<h3>with<wbr>Scanner</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Scanner&lt;T&gt;<span class="tsd-signature-symbol">(</span>scanner<span class="tsd-signature-symbol">: </span><a href="../modules/_lib_analysis_technologyscanner_.html#scanneraction" class="tsd-signature-type">ScannerAction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_lib_analysis_technologyscanner_.html#scanneraction" class="tsd-signature-type">ScannerAction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withscanner">withScanner</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L142">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:142</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalysis_.technologyelement.html" class="tsd-signature-type">TechnologyElement</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scanner: <a href="../modules/_lib_analysis_technologyscanner_.html#scanneraction" class="tsd-signature-type">ScannerAction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_lib_analysis_technologyscanner_.html#scanneraction" class="tsd-signature-type">ScannerAction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withscorer" class="tsd-anchor"></a>
+					<h3>with<wbr>Scorer</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Scorer<span class="tsd-signature-symbol">(</span>scorer<span class="tsd-signature-symbol">: </span><a href="../modules/_lib_analysis_projectanalyzer_.html#scorer" class="tsd-signature-type">Scorer</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_lib_analysis_projectanalyzer_.html#scorer" class="tsd-signature-type">Scorer</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withscorer">withScorer</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L185">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:185</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scorer: <a href="../modules/_lib_analysis_projectanalyzer_.html#scorer" class="tsd-signature-type">Scorer</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_lib_analysis_projectanalyzer_.conditionalregistration.html" class="tsd-signature-type">ConditionalRegistration</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_lib_analysis_projectanalyzer_.html#scorer" class="tsd-signature-type">Scorer</a><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html" class="tsd-signature-type">ProjectAnalyzerBuilder</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withstack" class="tsd-anchor"></a>
+					<h3>with<wbr>Stack</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Stack<span class="tsd-signature-symbol">(</span>stackSupport<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_projectanalyzer_.stacksupport.html" class="tsd-signature-type">StackSupport</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withstack">withStack</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L190">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:190</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>stackSupport: <a href="../interfaces/_lib_analysis_projectanalyzer_.stacksupport.html" class="tsd-signature-type">StackSupport</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withtransformrecipecontributor" class="tsd-anchor"></a>
+					<h3>with<wbr>Transform<wbr>Recipe<wbr>Contributor</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Transform<wbr>Recipe<wbr>Contributor<span class="tsd-signature-symbol">(</span>trc<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_analysis_transformrecipecontributor_.transformrecipecontributionregistration.html" class="tsd-signature-type">TransformRecipeContributionRegistration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html">ProjectAnalyzerBuilder</a>.<a href="../interfaces/_lib_analysis_projectanalyzer_.projectanalyzerbuilder.html#withtransformrecipecontributor">withTransformRecipeContributor</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/atomist/sdm-pack-analysis/blob/1d602e7/lib/analysis/support/DefaultProjectAnalyzerBuilder.ts#L207">lib/analysis/support/DefaultProjectAnalyzerBuilder.ts:207</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>trc: <a href="../interfaces/_lib_analysis_transformrecipecontributor_.transformrecipecontributionregistration.html" class="tsd-signature-type">TransformRecipeContributionRegistration</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_interpretation_.html">"lib/analysis/<wbr>Interpretation"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_managedfeature_.html">"lib/analysis/<wbr>Managed<wbr>Feature"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_projectanalysis_.html">"lib/analysis/<wbr>Project<wbr>Analysis"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_projectanalyzer_.html">"lib/analysis/<wbr>Project<wbr>Analyzer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_score_.html">"lib/analysis/<wbr>Score"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_technologyscanner_.html">"lib/analysis/<wbr>Technology<wbr>Scanner"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_technologystack_.html">"lib/analysis/<wbr>Technology<wbr>Stack"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_transformrecipecontributor_.html">"lib/analysis/<wbr>Transform<wbr>Recipe<wbr>Contributor"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_analyzerbuilder_.html">"lib/analysis/analyzer<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_command_assess_.html">"lib/analysis/command/assess"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_phases_.html">"lib/analysis/phases"</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_defaultprojectanalyzerbuilder_.html">"lib/analysis/support/<wbr>Default<wbr>Project<wbr>Analyzer<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_enrichgoal_.html">"lib/analysis/support/enrich<wbr>Goal"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_interpretationdriven_.html">"lib/analysis/support/interpretation<wbr>Driven"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_messagegoal_.html">"lib/analysis/support/message<wbr>Goal"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_presencetestedelementscanner_.html">"lib/analysis/support/presence<wbr>Tested<wbr>Element<wbr>Scanner"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_projectanalysisutils_.html">"lib/analysis/support/project<wbr>Analysis<wbr>Utils"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_scoring_.html">"lib/analysis/support/scoring"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_transform_recipe_placeholdertransformrecipecontributor_.html">"lib/analysis/support/transform-<wbr>recipe/<wbr>Placeholder<wbr>Transform<wbr>Recipe<wbr>Contributor"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_analysis_support_transform_recipe_sniptransformrecipecontributor_.html">"lib/analysis/support/transform-<wbr>recipe/<wbr>Snip<wbr>Transform<wbr>Recipe<wbr>Contributor"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_element_preferences_preferencesscanner_.html">"lib/element/preferences/preferences<wbr>Scanner"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_pack_.html">"lib/pack"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html" class="tsd-kind-icon">Default<wbr>Project<wbr>Analyzer<wbr>Builder</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#autofixgoal" class="tsd-kind-icon">autofix<wbr>Goal</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#codeinspectiongoal" class="tsd-kind-icon">code<wbr>Inspection<wbr>Goal</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#features" class="tsd-kind-icon">features</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#interpreters" class="tsd-kind-icon">interpreters</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#messagegoal" class="tsd-kind-icon">message<wbr>Goal</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#possibleautofixes" class="tsd-kind-icon">possible<wbr>Autofixes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#possiblecodeinspections" class="tsd-kind-icon">possible<wbr>Code<wbr>Inspections</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#queuegoal" class="tsd-kind-icon">queue<wbr>Goal</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#scanners" class="tsd-kind-icon">scanners</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#scorers" class="tsd-kind-icon">scorers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#sdm" class="tsd-kind-icon">sdm</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#transformrecipecontributorregistrations" class="tsd-kind-icon">transform<wbr>Recipe<wbr>Contributor<wbr>Registrations</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#analyze" class="tsd-kind-icon">analyze</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#build" class="tsd-kind-icon">build</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#classify" class="tsd-kind-icon">classify</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#enrichtofullanalysis" class="tsd-kind-icon">enrich<wbr>ToFull<wbr>Analysis</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#interpret" class="tsd-kind-icon">interpret</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#runinterpretation" class="tsd-kind-icon">run<wbr>Interpretation</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withfeature" class="tsd-kind-icon">with<wbr>Feature</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withfeatures" class="tsd-kind-icon">with<wbr>Features</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withinterpreter" class="tsd-kind-icon">with<wbr>Interpreter</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withscanner" class="tsd-kind-icon">with<wbr>Scanner</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withscorer" class="tsd-kind-icon">with<wbr>Scorer</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withstack" class="tsd-kind-icon">with<wbr>Stack</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_lib_analysis_support_defaultprojectanalyzerbuilder_.defaultprojectanalyzerbuilder.html#withtransformrecipecontributor" class="tsd-kind-icon">with<wbr>Transform<wbr>Recipe<wbr>Contributor</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_lib_analysis_support_defaultprojectanalyzerbuilder_.html#isgitproject" class="tsd-kind-icon">is<wbr>Git<wbr>Project</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_lib_analysis_support_defaultprojectanalyzerbuilder_.html#performseedanalysis" class="tsd-kind-icon">perform<wbr>Seed<wbr>Analysis</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_lib_analysis_support_defaultprojectanalyzerbuilder_.html#runinspections" class="tsd-kind-icon">run<wbr>Inspections</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_lib_analysis_support_defaultprojectanalyzerbuilder_.html#runoncondition" class="tsd-kind-icon">run<wbr>OnCondition</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
