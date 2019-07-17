@@ -337,7 +337,7 @@ describe("projectAnalyzer", () => {
                 data: "x",
             };
             const analysis = await analyzerBuilder({} as any)
-                .withFeature(
+                .withAspect(
                     {
                         name: "thing",
                         displayName: "thing",
@@ -362,7 +362,7 @@ describe("projectAnalyzer", () => {
                 data: "x",
             };
             const analysis = await analyzerBuilder({} as any)
-                .withFeature(
+                .withAspect(
                     {
                         name: "thing0",
                         displayName: "thing0",
@@ -370,7 +370,7 @@ describe("projectAnalyzer", () => {
                             throw new Error("Keep going");
                         },
                     })
-                .withFeature(
+                .withAspect(
                     {
                         name: "thing",
                         displayName: "thing",
@@ -395,7 +395,7 @@ describe("projectAnalyzer", () => {
                 data: "x",
             };
             const pa: ProjectAnalyzer = analyzerBuilder({} as any)
-                .withFeature(
+                .withAspect(
                     {
                         name: "thing",
                         displayName: "thing",
@@ -405,7 +405,7 @@ describe("projectAnalyzer", () => {
                         toDisplayableFingerprint: () => "foo",
                     })
                 .build();
-            assert.strictEqual(pa.features.length, 1);
+            assert.strictEqual(pa.aspects.length, 1);
             const analysis = await pa.analyze(p, pli, { full: true });
             assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });

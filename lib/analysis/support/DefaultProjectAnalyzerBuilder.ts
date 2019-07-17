@@ -35,11 +35,11 @@ import {
 
 import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 import {
-    AtomicFeature,
-    Feature,
+    Aspect,
+    AtomicAspect,
     FP,
-    isAtomicFeature,
-    isDerivedFeature,
+    isAtomicAspect,
+    isDerivedAspect,
 } from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
 import {
@@ -48,9 +48,7 @@ import {
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
-import {
-    ManagedFeature,
-} from "../ManagedFeature";
+import { ManagedAspect } from "../ManagedAspect";
 import {
     Dependency,
     Elements,
@@ -96,7 +94,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly scanners: Array<ConditionalRegistration<PhasedTechnologyScanner<any>>> = [];
 
-    public readonly features: ManagedFeature[] = [];
+    public readonly aspects: ManagedAspect[] = [];
 
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
@@ -153,13 +151,13 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withFeature<T extends TechnologyElement>(feature: ManagedFeature): ProjectAnalyzerBuilder {
-        this.features.push(feature);
+    public withAspect<T extends TechnologyElement>(feature: ManagedAspect): ProjectAnalyzerBuilder {
+        this.aspects.push(feature);
         return this;
     }
 
-    public withFeatures<T extends TechnologyElement>(features: ManagedFeature[]): ProjectAnalyzerBuilder {
-        this.features.push(...features);
+    public withAspects<T extends TechnologyElement>(features: ManagedAspect[]): ProjectAnalyzerBuilder {
+        this.aspects.push(...features);
         return this;
     }
 
@@ -200,7 +198,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         interpreters.forEach(i => this.withInterpreter(i));
         stackSupport.transformRecipeContributors.forEach(trc => this.withTransformRecipeContributor(trc));
         scorers.forEach(scorer => this.withScorer(scorer));
-        (stackSupport.features || []).forEach(f => this.withFeature(f));
+        (stackSupport.features || []).forEach(f => this.withAspect(f));
         return this;
     }
 
@@ -294,11 +292,11 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractify(feature: ManagedFeature): Promise<FP[]> {
+        async function extractify(feature: ManagedAspect): Promise<FP[]> {
             try {
-                const extracted = isDerivedFeature(feature) ?
+                const extracted = isDerivedAspect(feature) ?
                     await feature.derive(analysis) :
-                    await (feature as Feature).extract(p);
+                    await (feature as Aspect).extract(p);
                 return !!extracted ? toArray(extracted) : [];
             } catch (err) {
                 logger.error("Please check your configuration of feature %s.\n%s",
@@ -307,7 +305,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractAtomic(feature: AtomicFeature, existingFingerprints: FP[]): Promise<FP[]> {
+        async function extractAtomic(feature: AtomicAspect, existingFingerprints: FP[]): Promise<FP[]> {
             try {
                 const extracted = await feature.consolidate(existingFingerprints);
                 return !!extracted ? toArray(extracted) : [];
@@ -320,9 +318,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         // Fingerprint from all features after the rest of the analysis is complete
         // Fingerprinting is done on every analysis
-        if (this.features) {
-            await Promise.all(this.features
-                .filter(f => !isAtomicFeature(f))
+        if (this.aspects) {
+            await Promise.all(this.aspects
+                .filter(f => !isAtomicAspect(f))
                 .map(feature => extractify(feature)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),
@@ -330,9 +328,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         }
         // Compute Atomic features after other fingerprinting
         // They should not depend on each other
-        if (this.features) {
-            await Promise.all(this.features
-                .filter(isAtomicFeature)
+        if (this.aspects) {
+            await Promise.all(this.aspects
+                .filter(isAtomicAspect)
                 .map(feature => extractAtomic(feature, analysis.fingerprints)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),

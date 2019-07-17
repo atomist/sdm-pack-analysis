@@ -121,4 +121,4 @@ export {
     PushMessageFactory,
 } from "./lib/analysis/support/messageGoal";
 
-export * from "./lib/analysis/ManagedFeature";
+export * from "./lib/analysis/ManagedAspect";

@@ -28,7 +28,7 @@ import {
     Interpretation,
     Interpreter,
 } from "./Interpretation";
-import { ManagedFeature } from "./ManagedFeature";
+import { ManagedAspect } from "./ManagedAspect";
 import {
     HasAnalysis,
     ProjectAnalysis,
@@ -121,9 +121,9 @@ export interface ProjectAnalyzer {
     readonly scanners: Array<ConditionalRegistration<ScannerAction<any>>>;
 
     /**
-     * All features registered anywhere
+     * All aspects registered anywhere
      */
-    readonly features: ManagedFeature[];
+    readonly aspects: ManagedAspect[];
 
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
@@ -159,7 +159,7 @@ export interface StackSupport {
     /**
      * Return the features that can be managed in this project
      */
-    features?: ManagedFeature[];
+    features?: ManagedAspect[];
 
     scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 
@@ -186,11 +186,11 @@ export interface ProjectAnalyzerBuilder {
     withScanner<T extends TechnologyElement>(scanner: ScannerAction<T> | ConditionalRegistration<ScannerAction<T>>): ProjectAnalyzerBuilder;
 
     /**
-     * Add a feature
+     * Add an aspect
      */
-    withFeature<T extends TechnologyElement>(feature: ManagedFeature): ProjectAnalyzerBuilder;
+    withAspect<T extends TechnologyElement>(aspect: ManagedAspect): ProjectAnalyzerBuilder;
 
-    withFeatures<T extends TechnologyElement>(features: ManagedFeature[]): ProjectAnalyzerBuilder;
+    withAspects<T extends TechnologyElement>(aspects: ManagedAspect[]): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.
