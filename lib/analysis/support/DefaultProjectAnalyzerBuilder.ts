@@ -292,26 +292,30 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractify(feature: ManagedAspect): Promise<FP[]> {
+        async function extractify(aspect: ManagedAspect): Promise<FP[]> {
             try {
-                const extracted = isDerivedAspect(feature) ?
-                    await feature.derive(analysis) :
-                    await (feature as Aspect).extract(p);
-                return !!extracted ? toArray(extracted) : [];
+                const extracted = isDerivedAspect(aspect) ?
+                    await aspect.derive(analysis) :
+                    await (aspect as Aspect).extract(p);
+                const result = !!extracted ? toArray(extracted) : [];
+                if (result.some(r => !r.name)) {
+                    logger.warn("Erroneous fingerprint from aspect %j", aspect);
+                }
+                return result;
             } catch (err) {
-                logger.error("Please check your configuration of feature %s.\n%s",
-                    feature.name, err);
+                logger.error("Please check your configuration of aspect %s.\n%s",
+                    aspect.name, err);
                 return [];
             }
         }
 
-        async function extractAtomic(feature: AtomicAspect, existingFingerprints: FP[]): Promise<FP[]> {
+        async function extractAtomic(aspect: AtomicAspect, existingFingerprints: FP[]): Promise<FP[]> {
             try {
-                const extracted = await feature.consolidate(existingFingerprints);
+                const extracted = await aspect.consolidate(existingFingerprints);
                 return !!extracted ? toArray(extracted) : [];
             } catch (err) {
-                logger.error("Please check your configuration of feature %s.\n%s",
-                    feature.name, err);
+                logger.error("Please check your configuration of aspect %s.\n%s",
+                    aspect.name, err);
                 return [];
             }
         }
@@ -321,7 +325,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         if (this.aspects) {
             await Promise.all(this.aspects
                 .filter(f => !isAtomicAspect(f))
-                .map(feature => extractify(feature)
+                .map(aspect => extractify(aspect)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),
                     )));
@@ -331,7 +335,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         if (this.aspects) {
             await Promise.all(this.aspects
                 .filter(isAtomicAspect)
-                .map(feature => extractAtomic(feature, analysis.fingerprints)
+                .map(aspect => extractAtomic(aspect, analysis.fingerprints)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),
                     )));
