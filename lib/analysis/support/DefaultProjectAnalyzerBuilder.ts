@@ -299,7 +299,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
                     await (aspect as Aspect).extract(p);
                 const result = !!extracted ? toArray(extracted) : [];
                 if (result.some(r => !r.name)) {
-                    logger.warn("Erroneous fingerprint from aspect %j", aspect);
+                    logger.warn("Erroneous fingerprint from aspect %j: %j", aspect, result);
                 }
                 return result;
             } catch (err) {
