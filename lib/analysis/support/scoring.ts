@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { Score, Scores } from "../Score";
+import {
+    Score,
+    Scores,
+} from "../Score";
 
 export type Weighting = 1 | 2 | 3;
 
