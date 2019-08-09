@@ -14,12 +14,30 @@
  * limitations under the License.
  */
 
-import { Scores } from "../Score";
+import { Score, Scores } from "../Score";
 
 export type Weighting = 1 | 2 | 3;
 
 export interface Scored {
     readonly scores: Scores;
+}
+
+/**
+ * Score the given object in the given context
+ * @param scoreFunctions scoring functions
+ * @param {T} toScore what to score
+ * @param {CONTEXT} context
+ * @return {Promise<Scores>}
+ */
+export async function scoresFor<T, CONTEXT>(scoreFunctions: Array<(t: T, c: CONTEXT) => Promise<Score>>,
+                                            toScore: T,
+                                            context: CONTEXT): Promise<Scores> {
+    const scores: Scores = {};
+    for (const scorer of scoreFunctions) {
+        const score = await scorer(toScore, context);
+        scores[score.name] = score;
+    }
+    return scores;
 }
 
 /**
@@ -29,18 +47,18 @@ export interface Scored {
 export type ScoreWeightings = Record<string, Weighting>;
 
 /**
- * Perform a weighted composite score for the given Interpretation.
+ * Perform a weighted composite score for the given scores.
  * Returns a real number from 0 to 5
  */
-export function weightedCompositeScore(i: Scored,
+export function weightedCompositeScore(scored: Scored,
                                        weightings: ScoreWeightings = {}): number | undefined {
-    const keys = Object.getOwnPropertyNames(i.scores);
+    const keys = Object.getOwnPropertyNames(scored.scores);
     if (keys.length === 0) {
         return undefined;
     }
     let compositeScore: number = 0.0;
     let divideBy = 0;
-    const scores = keys.map(k => i.scores[k]);
+    const scores = keys.map(k => scored.scores[k]);
     for (const score of scores) {
         const weighting = weightings[score.name] || 1;
         compositeScore += score.score * weighting;

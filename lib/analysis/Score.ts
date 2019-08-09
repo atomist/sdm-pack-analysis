@@ -21,11 +21,11 @@ export type FiveStar = 0 | 1 | 2 | 3 | 4 | 5;
  */
 export interface Score {
 
-    name: string;
+    readonly name: string;
 
-    category?: string;
+    readonly category?: string;
 
-    score: FiveStar;
+    readonly score: FiveStar;
 
 }
 

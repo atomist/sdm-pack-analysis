@@ -122,3 +122,6 @@ export {
 } from "./lib/analysis/support/messageGoal";
 
 export * from "./lib/analysis/ManagedAspect";
+
+export * from "./lib/analysis/Score";
+export * from "./lib/analysis/support/scoring";
