@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-import { Interpretation } from "../Interpretation";
+import { Scores } from "../Score";
 
 export type Weighting = 1 | 2 | 3;
+
+export interface Scored {
+    readonly scores: Scores;
+}
 
 /**
  * Weighting to apply to this name score. Default is 1.
@@ -28,7 +32,7 @@ export type ScoreWeightings = Record<string, Weighting>;
  * Perform a weighted composite score for the given Interpretation.
  * Returns a real number from 0 to 5
  */
-export function weightedCompositeScore(i: Interpretation,
+export function weightedCompositeScore(i: Scored,
                                        weightings: ScoreWeightings = {}): number | undefined {
     const keys = Object.getOwnPropertyNames(i.scores);
     if (keys.length === 0) {
