@@ -51,23 +51,48 @@ export async function scoresFor<T, CONTEXT>(scoreFunctions: Array<(t: T, c: CONT
  */
 export type ScoreWeightings = Record<string, Weighting>;
 
+export type WeightedScores = Record<string, Score & { weighting: Weighting }>;
+
+export interface WeightedScore {
+
+    /**
+     * Weighted score
+     */
+    weightedScore: number;
+
+    /**
+     * Individual component scores
+     */
+    weightedScores: WeightedScores;
+}
+
 /**
  * Perform a weighted composite score for the given scores.
  * Returns a real number from 0 to 5
  */
 export function weightedCompositeScore(scored: Scored,
-                                       weightings: ScoreWeightings = {}): number | undefined {
+                                       weightings: ScoreWeightings = {}): WeightedScore | undefined {
     const keys = Object.getOwnPropertyNames(scored.scores);
     if (keys.length === 0) {
         return undefined;
     }
+
+    const weightedScores: WeightedScores = {};
     let compositeScore: number = 0.0;
     let divideBy = 0;
     const scores = keys.map(k => scored.scores[k]);
     for (const score of scores) {
         const weighting = weightings[score.name] || 1;
+        weightedScores[score.name] = {
+            ...score,
+            weighting,
+        };
         compositeScore += score.score * weighting;
         divideBy += weighting;
     }
-    return compositeScore / divideBy;
+    const weightedScore = compositeScore / divideBy;
+    return {
+        weightedScore,
+        weightedScores,
+    };
 }

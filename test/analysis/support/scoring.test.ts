@@ -31,7 +31,7 @@ describe("scoring", () => {
         const i = newInterpretation();
         i.scores.thing = { name: "thing", score: 5 };
         const score = weightedCompositeScore(i);
-        assert.strictEqual(score, 5);
+        assert.strictEqual(score.weightedScore, 5);
     });
 
     it("should score with two evenly weighted scores", async () => {
@@ -40,7 +40,11 @@ describe("scoring", () => {
         i.scores.cat = { name: "cat", score: 3 };
 
         const score = weightedCompositeScore(i);
-        assert.strictEqual(score, 4);
+        assert.strictEqual(score.weightedScore, 4);
+        assert.deepStrictEqual(score.weightedScores, {
+            dog: { name: "dog", score: 5, weighting: 1 },
+            cat: { name: "cat", score: 3, weighting: 1 },
+        });
     });
 
     it("should score with two unevenly weighted scores", async () => {
@@ -49,7 +53,11 @@ describe("scoring", () => {
         i.scores.cat = { name: "cat", score: 3 };
 
         const score = weightedCompositeScore(i, { dog: 2 });
-        assert.strictEqual(score, (2 * 5 + 3) / 3);
+        assert.strictEqual(score.weightedScore, (2 * 5 + 3) / 3);
+        assert.deepStrictEqual(score.weightedScores, {
+            dog: { name: "dog", score: 5, weighting: 2 },
+            cat: { name: "cat", score: 3, weighting: 1 },
+        });
     });
 });
 
