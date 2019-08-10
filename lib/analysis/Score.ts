@@ -23,7 +23,15 @@ export interface Score {
 
     readonly name: string;
 
+    /**
+     * Category this score belongs to, if any
+     */
     readonly category?: string;
+
+    /**
+     * Explanation for this score, if available
+     */
+    readonly reason?: string;
 
     readonly score: FiveStar;
 
