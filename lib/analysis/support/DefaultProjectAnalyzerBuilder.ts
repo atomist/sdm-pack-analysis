@@ -36,10 +36,7 @@ import {
 import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 import {
     Aspect,
-    AtomicAspect,
     FP,
-    isAtomicAspect,
-    isDerivedAspect,
 } from "@atomist/sdm-pack-fingerprints";
 import * as _ from "lodash";
 import {
@@ -48,7 +45,6 @@ import {
     isAutofixRegisteringInterpreter,
     isCodeInspectionRegisteringInterpreter,
 } from "../Interpretation";
-import { ManagedAspect } from "../ManagedAspect";
 import {
     Dependency,
     Elements,
@@ -94,7 +90,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
     public readonly scanners: Array<ConditionalRegistration<PhasedTechnologyScanner<any>>> = [];
 
-    public readonly aspects: ManagedAspect[] = [];
+    public readonly aspects: Aspect[] = [];
 
     public readonly interpreters: Array<ConditionalRegistration<Interpreter>> = [];
 
@@ -151,12 +147,12 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         return this;
     }
 
-    public withAspect<T extends TechnologyElement>(feature: ManagedAspect): ProjectAnalyzerBuilder {
+    public withAspect<T extends TechnologyElement>(feature: Aspect): ProjectAnalyzerBuilder {
         this.aspects.push(feature);
         return this;
     }
 
-    public withAspects<T extends TechnologyElement>(features: ManagedAspect[]): ProjectAnalyzerBuilder {
+    public withAspects<T extends TechnologyElement>(features: Aspect[]): ProjectAnalyzerBuilder {
         this.aspects.push(...features);
         return this;
     }
@@ -292,11 +288,9 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractify(aspect: ManagedAspect): Promise<FP[]> {
+        async function extractify(aspect: Aspect): Promise<FP[]> {
             try {
-                const extracted = isDerivedAspect(aspect) ?
-                    await aspect.derive(analysis) :
-                    await (aspect as Aspect).extract(p);
+                const extracted = await aspect.extract(p);
                 const result = !!extracted ? toArray(extracted) : [];
                 if (result.some(r => !r.name)) {
                     logger.warn("Erroneous fingerprint from aspect %j: %j", aspect, result);
@@ -309,7 +303,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
             }
         }
 
-        async function extractAtomic(aspect: AtomicAspect, existingFingerprints: FP[]): Promise<FP[]> {
+        async function extractAtomic(aspect: Aspect, existingFingerprints: FP[]): Promise<FP[]> {
             try {
                 const extracted = await aspect.consolidate(existingFingerprints);
                 return !!extracted ? toArray(extracted) : [];
@@ -324,7 +318,6 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         // Fingerprinting is done on every analysis
         if (this.aspects) {
             await Promise.all(this.aspects
-                .filter(f => !isAtomicAspect(f))
                 .map(aspect => extractify(aspect)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),
@@ -334,7 +327,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
         // They should not depend on each other
         if (this.aspects) {
             await Promise.all(this.aspects
-                .filter(isAtomicAspect)
+                .filter(aspect => !!aspect.consolidate)
                 .map(aspect => extractAtomic(aspect, analysis.fingerprints)
                     .then(fps =>
                         analysis.fingerprints.push(...fps),

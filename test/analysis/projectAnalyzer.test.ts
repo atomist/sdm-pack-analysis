@@ -27,7 +27,6 @@ import {
     Interpreter,
 } from "../../lib/analysis/Interpretation";
 import {
-    ProjectAnalyzer,
     Scorer,
     StackSupport,
 } from "../../lib/analysis/ProjectAnalyzer";
@@ -381,32 +380,6 @@ describe("projectAnalyzer", () => {
                     })
                 .build()
                 .analyze(p, pli, { full: true });
-            assert.deepStrictEqual(analysis.fingerprints, [fp1]);
-        });
-
-        it("should add consequent feature fingerprints", async () => {
-            const pli: PushListenerInvocation = { push: {} } as any;
-            const p = InMemoryProject.of();
-            const fp1 = {
-                name: "one",
-                version: "0.1.0",
-                abbreviation: "abc",
-                sha: "abcd",
-                data: "x",
-            };
-            const pa: ProjectAnalyzer = analyzerBuilder({} as any)
-                .withAspect(
-                    {
-                        name: "thing",
-                        displayName: "thing",
-                        derive: async () => {
-                            return fp1;
-                        },
-                        toDisplayableFingerprint: () => "foo",
-                    })
-                .build();
-            assert.strictEqual(pa.aspects.length, 1);
-            const analysis = await pa.analyze(p, pli, { full: true });
             assert.deepStrictEqual(analysis.fingerprints, [fp1]);
         });
 

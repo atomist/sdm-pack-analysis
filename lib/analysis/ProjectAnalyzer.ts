@@ -23,12 +23,11 @@ import {
     Goal,
     SdmContext,
 } from "@atomist/sdm";
-import { FP } from "@atomist/sdm-pack-fingerprints";
+import { Aspect } from "@atomist/sdm-pack-fingerprints";
 import {
     Interpretation,
     Interpreter,
 } from "./Interpretation";
-import { ManagedAspect } from "./ManagedAspect";
 import {
     HasAnalysis,
     ProjectAnalysis,
@@ -123,7 +122,7 @@ export interface ProjectAnalyzer {
     /**
      * All aspects registered anywhere
      */
-    readonly aspects: ManagedAspect[];
+    readonly aspects: Aspect[];
 
     readonly scorers: Array<ConditionalRegistration<Scorer>>;
 
@@ -159,7 +158,7 @@ export interface StackSupport {
     /**
      * Return the features that can be managed in this project
      */
-    features?: ManagedAspect[];
+    features?: Aspect[];
 
     scorers?: Array<Scorer | ConditionalRegistration<Scorer>>;
 
@@ -188,9 +187,9 @@ export interface ProjectAnalyzerBuilder {
     /**
      * Add an aspect
      */
-    withAspect<T extends TechnologyElement>(aspect: ManagedAspect): ProjectAnalyzerBuilder;
+    withAspect<T extends TechnologyElement>(aspect: Aspect): ProjectAnalyzerBuilder;
 
-    withAspects<T extends TechnologyElement>(aspects: ManagedAspect[]): ProjectAnalyzerBuilder;
+    withAspects<T extends TechnologyElement>(aspects: Aspect[]): ProjectAnalyzerBuilder;
 
     /**
      * Add an interpreter that can interpret the analysis.
