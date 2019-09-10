@@ -330,6 +330,7 @@ describe("projectAnalyzer", () => {
             const p = InMemoryProject.of();
             const fp1 = {
                 name: "one",
+                type: "thing",
                 version: "0.1.0",
                 abbreviation: "abc",
                 sha: "abcd",
@@ -355,6 +356,7 @@ describe("projectAnalyzer", () => {
             const p = InMemoryProject.of();
             const fp1 = {
                 name: "one",
+                type: "thing",
                 version: "0.1.0",
                 abbreviation: "abc",
                 sha: "abcd",

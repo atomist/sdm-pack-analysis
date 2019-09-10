@@ -23,7 +23,7 @@ import {
     Goal,
     SdmContext,
 } from "@atomist/sdm";
-import { Aspect } from "@atomist/sdm-pack-fingerprints";
+import { Aspect } from "@atomist/sdm-pack-fingerprint";
 import {
     Interpretation,
     Interpreter,
