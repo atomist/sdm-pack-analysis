@@ -37,7 +37,7 @@ import { toArray } from "@atomist/sdm-core/lib/util/misc/array";
 import {
     Aspect,
     FP,
-} from "@atomist/sdm-pack-fingerprints";
+} from "@atomist/sdm-pack-fingerprint";
 import * as _ from "lodash";
 import {
     Interpretation,
@@ -290,7 +290,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         async function extractify(aspect: Aspect): Promise<FP[]> {
             try {
-                const extracted = await aspect.extract(p);
+                const extracted = await aspect.extract(p, {} as any);
                 const result = !!extracted ? toArray(extracted) : [];
                 if (result.some(r => !r.name)) {
                     logger.warn("Erroneous fingerprint from aspect %j: %j", aspect, result);
@@ -305,7 +305,7 @@ export class DefaultProjectAnalyzerBuilder implements ProjectAnalyzer, ProjectAn
 
         async function extractAtomic(aspect: Aspect, existingFingerprints: FP[]): Promise<FP[]> {
             try {
-                const extracted = await aspect.consolidate(existingFingerprints);
+                const extracted = await aspect.consolidate(existingFingerprints, p, {} as any);
                 return !!extracted ? toArray(extracted) : [];
             } catch (err) {
                 logger.error("Please check your configuration of aspect %s.\n%s",

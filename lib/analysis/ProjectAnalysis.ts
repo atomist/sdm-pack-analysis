@@ -24,7 +24,7 @@ import {
     HasDefaultValue,
     MappedParameterOrSecretDeclaration,
 } from "@atomist/sdm";
-import { FP } from "@atomist/sdm-pack-fingerprints";
+import { FP } from "@atomist/sdm-pack-fingerprint";
 import { DeliveryPhases } from "./phases";
 import { Scores } from "./Score";
 import { HasMessages } from "./support/messageGoal";

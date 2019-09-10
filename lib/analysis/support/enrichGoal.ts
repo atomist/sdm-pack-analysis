@@ -17,9 +17,9 @@
 import {
     EnrichGoal,
     PushListenerInvocation,
-    SdmGoalMessage,
     StatefulPushListenerInvocation,
 } from "@atomist/sdm";
+import { SdmGoalMessage } from "@atomist/sdm/lib/api/goal/SdmGoalMessage";
 import * as _ from "lodash";
 
 export const ElementsGoalsKey = "@atomist/sdm-pack-analysis/elements";
